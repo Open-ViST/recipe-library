@@ -1,0 +1,9 @@
+.ovr-code-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.ovr-code-head strong{margin-right:auto}.ovr-shell button{padding:8px 16px;min-height:44px}
+/* Keep the example title separate from its equal-size actions on small screens. */
+body.openvist-public-ui .ovr-shell .ovr-code-head{display:grid;grid-template-columns:minmax(0,1fr) 160px 160px;align-items:center;gap:12px;width:100%;box-sizing:border-box}
+body.openvist-public-ui .ovr-shell .ovr-code-head>strong{min-width:0;margin:0;overflow-wrap:anywhere}
+body.openvist-public-ui .ovr-shell .ovr-code-head>button{width:100%!important;height:48px!important;min-height:48px!important;padding:8px 12px!important;margin:0!important;font-size:14px!important;line-height:1.35!important}
+@media(max-width:680px){
+ body.openvist-public-ui .ovr-shell .ovr-code-head{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ body.openvist-public-ui .ovr-shell .ovr-code-head>strong{grid-column:1 / -1}
+}

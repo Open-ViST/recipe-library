@@ -31,6 +31,10 @@ jobs:
           node --check projects/link-auditor/wordpress/assets/entry.js
           node projects/link-auditor/wordpress/tests/ui.test.js
           node projects/link-auditor/wordpress/tests/copy-code.test.js
+      - name: Responsive button layout
+        run: |
+          npm install --prefix /tmp/ovla-browser playwright-core@1.58.2
+          NODE_PATH=/tmp/ovla-browser/node_modules node projects/link-auditor/wordpress/tests/responsive.test.js
       - name: Build public standalone download
         run: |
           python3 projects/link-auditor/build_self_hosted.py --output projects/link-auditor/wordpress/downloads/openvist-link-auditor-self-hosted-0.4.1.zip
