@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: OpenViST Tools
- * Description: Free local JSON and CSV tools. Input processing runs in browser workers.
+ * Description: Free local JSON and CSV tools. Processing runs locally in the browser.
  * Version: 0.2.0
  * Requires at least: 6.5
  * Requires PHP: 8.0

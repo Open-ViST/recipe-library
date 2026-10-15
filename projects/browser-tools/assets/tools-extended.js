@@ -84,7 +84,7 @@
       let canonical;
       try {
         const value = new URL(url);
-        if (!['http:','https:'].includes(value.protocol) || value.username || value.password || /[\x00-\x20]/.test(url) || url.length >= 2048) throw new Error();
+        if (!/^https?:\/\//i.test(url) || /%(?![0-9a-f]{2})/i.test(url) || !['http:','https:'].includes(value.protocol) || value.username || value.password || /[\x00-\x20]/.test(url) || url.length >= 2048) throw new Error();
         if (value.hash) issue('loc_contains_fragment');
         canonical = value.href; hosts.add(value.host);
       } catch (_) { issue('invalid_http_url'); }

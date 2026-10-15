@@ -50,9 +50,9 @@ test('Ignored nested fields and prototype-like column names do not modify protot
   assert.equal(r.text,'__proto__\r\nsafe\r\n');assert.equal({}.safe,undefined);
 });
 test('Sitemap checks duplicates, date validity and absolute URL syntax',()=>{
-  const r=inspect([entry('https://example.com/',['2026-02-31']),entry('https://EXAMPLE.com/'),entry('/relative')]);
+  const r=inspect([entry('https://example.com/',['2026-02-31']),entry('https://EXAMPLE.com/'),entry('/relative'),entry('https:example.com'),entry('https://example.com/%zz')]);
   assert.equal(r.duplicate_urls.length,1);assert.deepEqual(r.duplicate_urls[0].positions,[1,2]);
-  assert.ok(r.issues.some(x=>x.code==='invalid_lastmod'));assert.ok(r.issues.some(x=>x.code==='invalid_http_url'));
+  assert.ok(r.issues.some(x=>x.code==='invalid_lastmod'));assert.equal(r.issues.filter(x=>x.code==='invalid_http_url').length,3);
 });
 test('Sitemap accepts leap days and timezone timestamps, rejects malformed dates',()=>{
   for(const date of ['2024-02-29','2026-10-15T12:30:00Z','2026-10-15T12:30:00.123+02:00'])assert.equal(inspect([entry('https://example.com/',[date])]).issues.length,0);
