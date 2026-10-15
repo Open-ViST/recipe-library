@@ -2,14 +2,14 @@
 /**
  * Plugin Name: OpenViST Link Auditor Bridge
  * Description: Account-based link audits for verified domains, processed by the OpenViST VPS.
- * Version: 0.2.3
+ * Version: 0.2.4
  * Requires at least: 6.5
  * Requires PHP: 8.0
  * License: GPL-2.0-or-later
  */
 defined('ABSPATH')||exit;
 final class OVLA_Bridge {
-    const VERSION='0.2.3';
+    const VERSION='0.2.4';
     const NS='openvist-link-auditor/v1';
     public static function table(){global $wpdb;return $wpdb->prefix.'ovla_jobs';}
     public static function domains_table(){global $wpdb;return $wpdb->prefix.'ovla_domains';}
