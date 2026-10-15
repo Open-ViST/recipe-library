@@ -1,0 +1,49 @@
+name: Test Link Auditor
+on:
+  push:
+    branches: [main, link-auditor-public-beta]
+    paths: ['projects/link-auditor/**', '.github/workflows/test-link-auditor.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: local-test-only
+          MYSQL_DATABASE: ovla_test
+        ports: ['3306/tcp']
+        options: >-
+          --health-cmd="mysqladmin ping --password=local-test-only"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Python and JavaScript checks
+        run: |
+          python3 -m unittest discover -s projects/link-auditor/tests -v
+          node --check projects/link-auditor/wordpress/assets/pilot.js
+          node --check projects/link-auditor/wordpress/assets/entry.js
+          node projects/link-auditor/wordpress/tests/ui.test.js
+      - name: PHP syntax and contract checks
+        run: |
+          find projects/link-auditor/wordpress -name '*.php' -print0 | xargs -0 -n1 php -l
+          php projects/link-auditor/wordpress/tests/contract.php
+      - name: Disposable WordPress database integration
+        env:
+          MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          mkdir -p /tmp/ovla-wordpress
+          php /tmp/wp-cli.phar core download --path=/tmp/ovla-wordpress --version=6.8
+          php /tmp/wp-cli.phar config create --path=/tmp/ovla-wordpress --dbname=ovla_test --dbuser=root --dbpass=local-test-only --dbhost="127.0.0.1:$MYSQL_PORT" --skip-check
+          php /tmp/wp-cli.phar core install --path=/tmp/ovla-wordpress --url=https://openvist.test --title=Fixture --admin_user=testadmin --admin_password=fixture-only-password --admin_email=test@example.invalid --skip-email
+          cp -a projects/link-auditor/wordpress /tmp/ovla-wordpress/wp-content/plugins/openvist-link-auditor-bridge
+          php /tmp/wp-cli.phar plugin activate openvist-link-auditor-bridge --path=/tmp/ovla-wordpress
+          php /tmp/wp-cli.phar eval-file "$PWD/projects/link-auditor/wordpress/tests/wp-integration.php" --path=/tmp/ovla-wordpress

@@ -1,0 +1,13 @@
+[Unit]
+Description=Run one private WordPress Link Auditor job
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 %h/openvist/tools/openvist-link-auditor-0.4.0/bridge_worker.py work
+UMask=0077
+TimeoutStartSec=200
+KillMode=control-group
+MemoryMax=384M
+TasksMax=16
+CPUQuota=50%
+Environment=PYTHONUNBUFFERED=1

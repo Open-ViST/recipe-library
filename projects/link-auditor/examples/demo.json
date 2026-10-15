@@ -1,0 +1,59 @@
+{
+  "tool": "OpenViST Link Auditor",
+  "version": "0.3.0",
+  "started_from": "https://example.com/",
+  "generated_at": "2026-10-15T08:50:39.165641+00:00",
+  "summary": {
+    "ok": 2,
+    "missing": 1
+  },
+  "limits_reached": false,
+  "robots_errors": {},
+  "scope": {
+    "max_pages": 50,
+    "max_urls": 500,
+    "external": false
+  },
+  "results": [
+    {
+      "url": "https://example.com/",
+      "status": 200,
+      "outcome": "ok",
+      "redirects": [],
+      "final_url": "https://example.com/",
+      "body_truncated": false,
+      "sources": [
+        "https://example.com/"
+      ]
+    },
+    {
+      "url": "https://example.com/missing",
+      "status": 404,
+      "outcome": "missing",
+      "redirects": [],
+      "final_url": "https://example.com/missing",
+      "body_truncated": false,
+      "sources": [
+        "https://example.com/"
+      ]
+    },
+    {
+      "url": "https://example.com/old",
+      "status": 200,
+      "outcome": "ok",
+      "redirects": [
+        {
+          "from": "https://example.com/old",
+          "to": "https://example.com/new",
+          "status": 301
+        }
+      ],
+      "final_url": "https://example.com/new",
+      "body_truncated": false,
+      "sources": [
+        "https://example.com/"
+      ]
+    }
+  ],
+  "demo": "Synthetic local fixture; not a live website audit."
+}

@@ -1,0 +1,10 @@
+[Unit]
+Description=Check the private Link Auditor queue once a minute
+
+[Timer]
+OnBootSec=2min
+OnUnitInactiveSec=1min
+Unit=openvist-link-auditor.service
+
+[Install]
+WantedBy=timers.target
