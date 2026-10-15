@@ -18,12 +18,17 @@ def digest(value):
 def collect():
     recipes = []
     for page in range(1,101):
-        request = urllib.request.Request(ENDPOINT+'?page='+str(page), headers={'User-Agent':'OpenViST-Public-Library/1.0'})
+        request = urllib.request.Request(ENDPOINT+'?page='+str(page), headers={'User-Agent':'OpenViST-Public-Library/1.0', 'Accept':'application/json'})
         with urllib.request.urlopen(request,timeout=30) as response:
             raw = response.read(4_000_001)
+            response_type = response.headers.get('Content-Type', '')
+            response_url = response.url
         if len(raw)>4_000_000:
             raise ValueError('Catalogue page exceeds limit.')
-        value = json.loads(raw)
+        try:
+            value = json.loads(raw)
+        except (ValueError, UnicodeError) as error:
+            raise ValueError('Public catalogue returned non-JSON: '+response_type+' at '+response_url+'; prefix='+repr(raw[:180])) from error
         if value.get('schema')!='openvist.recipe-catalogue.v1':
             raise ValueError('Unexpected public catalogue schema.')
         recipes.extend(value['recipes'])
