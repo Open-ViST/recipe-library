@@ -710,6 +710,30 @@
       "code_sha256": "c08cd518c205dd32d5cd74321ab88121fe9cd7fc2bda5f48753e5e67a255c13f"
     },
     {
+      "slug": "count-u32-one-bits-rust",
+      "title": "Count set bits in canonical unsigned 32-bit values with Rust",
+      "language": "rust",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/count-u32-one-bits-rust/",
+      "code": "recipes/rust/count-u32-one-bits-rust/v0.1.0/recipe.rs",
+      "documentation": "recipes/rust/count-u32-one-bits-rust/v0.1.0/README.md",
+      "metadata": "recipes/rust/count-u32-one-bits-rust/v0.1.0/recipe.json",
+      "code_sha256": "50741142215f6850c38cea9a485510e68bf57df4752c2dca823783413734f769"
+    },
+    {
+      "slug": "decode-hex-octets-rust",
+      "title": "Decode lowercase hexadecimal octet lines with Rust",
+      "language": "rust",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/decode-hex-octets-rust/",
+      "code": "recipes/rust/decode-hex-octets-rust/v0.1.0/recipe.rs",
+      "documentation": "recipes/rust/decode-hex-octets-rust/v0.1.0/README.md",
+      "metadata": "recipes/rust/decode-hex-octets-rust/v0.1.0/recipe.json",
+      "code_sha256": "64044de1392ead4a560eade61d8d062dfc5e33267074a84abba7983eeb5c2c4c"
+    },
+    {
       "slug": "rust-stream-line-counts",
       "title": "Count Lines in a Local UTF-8 File or Standard Input",
       "language": "rust",

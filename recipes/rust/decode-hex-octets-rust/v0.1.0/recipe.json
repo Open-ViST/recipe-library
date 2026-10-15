@@ -1,0 +1,53 @@
+{
+  "slug": "decode-hex-octets-rust",
+  "kind": "static",
+  "title": "Decode lowercase hexadecimal octet lines with Rust",
+  "goal": "Convert two-character hexadecimal tokens into ordered byte values without interpreting them as text.",
+  "language": "rust",
+  "version": "0.1.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-14",
+  "intro": "Convert two-character hexadecimal tokens into ordered byte values without interpreting them as text. Work only with supplied input; this does not contact external services or modify input.",
+  "requirements": [
+    "Save as recipe.rs and compile with Rust 1.99.0 using: rustc --edition=2021 recipe.rs -o recipe",
+    "Run ./recipe with input supplied through stdin. No CLI arguments are accepted, including help flags.",
+    "Reads at most 65537 bytes and rejects input exceeding 65536 bytes. Requires strict UTF-8, rejects a leading UTF-8 BOM, and rejects every CR.",
+    "Splits only at LF and discards exactly empty segments. Before token classification, enforces at most 100 nonempty lines and at most 256 UTF-8 bytes per retained line. No trimming or normalization occurs.",
+    "Each retained line must be exactly two lowercase ASCII hexadecimal digits. Preserves order and duplicates, converting tokens into integer byte values without interpreting decoded bytes as text.",
+    "Empty input or input consisting only of LF characters produces {\"bytes\":[]}. Successful output is one JSON object followed by a newline, with exit status 0 and no stderr.",
+    "All input validation completes before successful stdout is written. Invalid arguments, invalid input, and stdin-read failures produce no stdout, exit 2, and write exactly error: invalid input followed by a newline to stderr, subject to the output-failure limitation below.",
+    "Uses only the standard library and permitted APIs; no Cargo, external crates, filesystem access, networking, or subprocesses."
+  ],
+  "limits": [
+    "Memory use is bounded by the 65537-byte input buffer, up to 100 borrowed line references and 100 decoded bytes, a JSON output buffer of at most 412 bytes, and standard-library buffering and allocation overhead.",
+    "Reading stdin may block while waiting for data or EOF. Inputs of 65536 bytes or fewer require EOF to establish completion.",
+    "Successful output contains decoded input values and may be sensitive. Error diagnostics never include input values.",
+    "Memory-allocation failures and output-write failures are outside the input-error guarantee. Output-write failures may leave partial stdout or prevent the fixed stderr diagnostic from being delivered; detected stdout-write failures exit 2."
+  ],
+  "steps": [
+    "Save the example as recipe.rs.",
+    "Compile with Rust 1.99.0 using rustc --edition=2021 recipe.rs -o recipe.",
+    "Prepare UTF-8 input.txt following the documented operation-specific conventions.",
+    "Run ./recipe < input.txt.",
+    "Inspect the JSON result. Exit 2 with exactly error: invalid input followed by a newline on stderr and no stdout identifies rejected input or stdin-read failure. Output-write failures may also exit nonzero, without that diagnostic and potentially after partial stdout; these are outside the input-error guarantee."
+  ],
+  "checks": [
+    "The example must produce the documented JSON result.",
+    "Empty stdin must produce the documented empty result.",
+    "Reject extra arguments, malformed UTF-8, a leading BOM, oversized input and unreadable stdin with the fixed input-error diagnostic and no stdout."
+  ],
+  "usage": "rustc --edition=2021 recipe.rs -o recipe\n./recipe < input.txt",
+  "example_input": "00\nff\n7f\n00\n",
+  "expected_output": "{\"bytes\":[0,255,127,0]}",
+  "tested_scope": "Six independent CLI fixtures and 17 supplementary cases are executed in pinned, offline Rust 1.99.0 containers. These checks do not establish exhaustive correctness or behavior on other versions.",
+  "sources": [
+    "https://doc.rust-lang.org/std/io/trait.Read.html",
+    "https://doc.rust-lang.org/std/primitive.str.html",
+    "https://doc.rust-lang.org/std/primitive.u32.html"
+  ],
+  "projects": [],
+  "url": "https://openvist.com/recipes/decode-hex-octets-rust/",
+  "code_file": "recipe.rs",
+  "code_sha256": "64044de1392ead4a560eade61d8d062dfc5e33267074a84abba7983eeb5c2c4c",
+  "published_record_sha256": "e4cacc550071e0df36f4550f40691fa57144853922b81a1d63d034e9441142c3"
+}

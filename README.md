@@ -67,6 +67,8 @@ Only publicly published recipes are included. Each version retains its exact cod
 | rust | [Count ASCII letter digit whitespace and other bytes with Rust](recipes/rust/count-ascii-byte-classes-rust/v0.1.0/README.md) | 0.1.0 |
 | rust | [Distinguish LF CRLF and bare CR endings with Rust](recipes/rust/count-line-ending-forms-rust/v0.1.0/README.md) | 0.1.0 |
 | rust | [Count literal equals signs per text line with Rust](recipes/rust/count-literal-equals-signs-rust/v0.1.0/README.md) | 0.1.0 |
+| rust | [Count set bits in canonical unsigned 32-bit values with Rust](recipes/rust/count-u32-one-bits-rust/v0.1.0/README.md) | 0.1.0 |
+| rust | [Decode lowercase hexadecimal octet lines with Rust](recipes/rust/decode-hex-octets-rust/v0.1.0/README.md) | 0.1.0 |
 | rust | [Count Lines in a Local UTF-8 File or Standard Input](recipes/rust/rust-stream-line-counts/v0.1.0/README.md) | 0.1.0 |
 | rust | [Audit Tabs in Saved Text](recipes/rust/saved-text-tab-audit/v0.1.0/README.md) | 0.1.0 |
 | rust | [Summarize Saved Text by Final-Character Group](recipes/rust/summarize-saved-text-by-final-character/v0.1.0/README.md) | 0.1.0 |
