@@ -58,11 +58,15 @@ final class OpenViST_Tools {
         });
         add_action('wp_sitemaps_init',static function($server){
             if(!class_exists('WP_Sitemaps_Provider'))return;
-            $server->registry->add_provider('openvist-tools',new class extends WP_Sitemaps_Provider {
+            $provider=new class extends WP_Sitemaps_Provider {
                 public function __construct(){$this->name='openvist-tools';$this->object_type='openvist-tools';}
-                public function get_url_list($page_num,$object_subtype='') {if((int)$page_num!==1)return []; $list=[['loc'=>OpenViST_Tools::url()]];foreach(OpenViST_Tools::catalogue() as $slug=>$tool)$list[]=['loc'=>OpenViST_Tools::url($slug)];return $list;}
-                public function get_max_num_pages($object_subtype=''){return 1;}
-            });
+                public function get_url_list($page_num,$object_subtype='') {if((int)$page_num!==1||(string)get_option('blog_public')!=='1')return []; $list=[['loc'=>OpenViST_Tools::url()]];foreach(OpenViST_Tools::catalogue() as $slug=>$tool)$list[]=['loc'=>OpenViST_Tools::url($slug)];return $list;}
+                public function get_max_num_pages($object_subtype=''){return (string)get_option('blog_public')==='1'?1:0;}
+            };
+            // The site's conservative sitemap plugin filters unknown providers.
+            // Restore only these four explicitly maintained public Tools URLs.
+            add_filter('wp_sitemaps_add_provider',static function($candidate,$name)use($provider){return $name==='openvist-tools'?$provider:$candidate;},120,2);
+            $server->registry->add_provider('openvist-tools',$provider);
         });
     }
     public static function metadata() {

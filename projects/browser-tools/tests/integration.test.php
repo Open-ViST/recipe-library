@@ -15,6 +15,8 @@ function esc_attr($value){return htmlspecialchars($value,ENT_QUOTES,'UTF-8');}
 function get_header(){echo '<header>Shared header</header>';}
 function get_footer(){echo '<footer>Shared footer</footer>';}
 function status_header($status){$GLOBALS['status']=$status;}
+function get_option($name){return $GLOBALS['blog_public']??'1';}
+class WP_Sitemaps_Provider {public $name;public $object_type;}
 function check($label,$ok){if(!$ok)throw new Exception($label);echo 'PASS '.$label."\n";}
 require dirname(__DIR__).'/openvist-tools.php';
 foreach(array_merge(['index'],array_keys(OpenViST_Tools::catalogue())) as $route){
@@ -31,4 +33,9 @@ check('Menu ordering',array_keys($menu)===['Directory','Recipes','Tools','Journa
 $query=new class {public $is_home=true,$is_page=true,$is_singular=true,$is_archive=true,$is_404=true,$settings=[];function is_main_query(){return true;}function get($name){return 'csv-comparator';}function set($name,$value){$this->settings[$name]=$value;}};
 $GLOBALS['hooks']['pre_get_posts'][0]($query);
 check('Virtual route does not impersonate homepage',!$query->is_home&&!$query->is_singular&&$query->settings['post__in']===[0]);
+$server=new stdClass();$server->registry=new class {public $provider;function add_provider($name,$provider){$candidate=false;foreach($GLOBALS['hooks']['wp_sitemaps_add_provider'] as $filter)$candidate=$filter($candidate,$name);$this->provider=$candidate;}};
+$GLOBALS['hooks']['wp_sitemaps_init'][0]($server);
+check('Tools sitemap survives conservative provider filter',count($server->registry->provider->get_url_list(1))===4);
+$GLOBALS['blog_public']='0';
+check('Private-site setting respected',$server->registry->provider->get_url_list(1)===[]&&$server->registry->provider->get_max_num_pages()===0);
 echo "All integration contract checks passed.\n";

@@ -45,7 +45,7 @@ are outside the plugin's local-processing guarantee.
 ## WordPress integration
 
 WordPress 6.5+, PHP 8.0+. Activation registers four virtual routes and refreshes
-rewrite rules. The plugin creates no posts, options, cron events or database
+rewrite rules. The plugin creates no posts, Tools-owned options, cron events or database
 tables, and does not alter recipe or listing publication schedules. Tools URLs
 are added to the native WordPress sitemap provider. Page titles, descriptions
 and canonical metadata are provided for these routes; the OpenViST Directory
