@@ -2,7 +2,7 @@
 /**
  * Plugin Name: OpenViST Tools
  * Description: Free local JSON and CSV tools. Input processing runs in browser workers.
- * Version: 0.1.0
+ * Version: 0.1.1
  * Requires at least: 6.5
  * Requires PHP: 8.0
  * Author: OpenViST
@@ -10,7 +10,7 @@
  */
 defined('ABSPATH') || exit;
 final class OpenViST_Tools {
-    const VERSION = '0.1.0';
+    const VERSION = '0.1.1';
     public static function catalogue() {
         return [
             'json-validator'=>['title'=>'JSON Validator & Formatter','intro'=>'Validate, format or minify JSON while preserving the original numeric tokens.','detail'=>'Duplicate object keys are rejected. Maximum nesting: 100 levels; maximum values: 100,000. Formatting preserves number and string spellings.'],

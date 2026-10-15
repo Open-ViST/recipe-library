@@ -1,4 +1,4 @@
-# OpenViST Tools 0.1.0
+# OpenViST Tools 0.1.1
 
 A WordPress plugin providing three free, browser-local data tools:
 
