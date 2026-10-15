@@ -33,6 +33,17 @@ def collect():
 
 def export(snapshot, root):
     root = Path(root)
+    if snapshot.get('schema') != 'openvist.recipe-catalogue.v1' or not snapshot.get('recipes'):
+        raise ValueError('Expected a nonempty public catalogue; nothing was written.')
+    if len(snapshot['recipes']) > 10000:
+        raise ValueError('Catalogue exceeds the export limit.')
+    def safe_target(path):
+        target = root/path
+        if target.is_symlink() or any(parent.is_symlink() for parent in target.parents):
+            raise ValueError('Symlink in export path: '+str(path))
+        return target
+    for name in ('LICENSE', 'README.md', 'catalogue.json', 'THIRD_PARTY_NOTICES.md'):
+        safe_target(Path(name))
     license_text = (root/'LICENSE').read_text()
     planned = {}
     index = []
@@ -95,7 +106,7 @@ def export(snapshot, root):
                       'metadata':(folder/'recipe.json').as_posix(),'code_sha256':item['code_sha256']})
     # Validate all collisions before writing any recipe. Published versions are immutable.
     for path,content in planned.items():
-        target=root/path
+        target=safe_target(path)
         if target.is_symlink() or (target.exists() and target.read_bytes()!=content):
             raise ValueError('Existing version differs; review and version it explicitly: '+str(path))
     for path,content in planned.items():

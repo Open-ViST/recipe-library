@@ -1,0 +1,41 @@
+name: Sync published OpenViST recipes
+
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: published-recipe-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    if: github.repository == 'Open-ViST/recipe-library' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out the public library
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: main
+      - name: Test the trusted exporter
+        run: python3 -m unittest discover -s tests -v
+      - name: Import the public catalogue without executing recipes
+        run: python3 tools/export_library.py --output .
+      - name: Commit published additions when present
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add -- recipes catalogue.json README.md THIRD_PARTY_NOTICES.md
+          if git diff --cached --quiet; then
+            echo 'The public library is already up to date.'
+            exit 0
+          fi
+          git config user.name 'OpenViST Library Bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Sync published OpenViST recipes'
+          git push origin HEAD:main
