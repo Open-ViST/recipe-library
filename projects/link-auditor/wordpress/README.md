@@ -1,4 +1,4 @@
-# OpenViST Link Auditor Bridge 0.2.1
+# OpenViST Link Auditor Bridge 0.2.2
 
 WordPress integration for the free, account-based Link Auditor beta. GPL-2.0-or-later.
 Requires WordPress 6.5+, PHP 8.0+ and MySQL/MariaDB advisory-lock support.
@@ -46,3 +46,5 @@ with WP-CLI only in the disposable `https://openvist.test` CI installation.
 ## Standalone download
 
 The release ZIP bundles `downloads/openvist-link-auditor-self-hosted-0.4.1.zip` and `downloads/SELF_HOSTING.md`. These are public MIT CLI files, with no worker credentials or WordPress integration. Reproduce the download from the parent project with `python3 build_self_hosted.py --output wordpress/downloads/openvist-link-auditor-self-hosted-0.4.1.zip`, then copy `SELF_HOSTING.md` into `wordpress/downloads/`. This update preserves the existing public availability setting and does not require replacing the hosted VPS worker.
+
+Version 0.2.2 adds accessible installation-code copying for guests and signed-in users, with honest copy-failure feedback, plus explicit OpenViST blue styling for the submit buttons to override the theme submit-button colour. Hosted limits and worker protocol are unchanged.

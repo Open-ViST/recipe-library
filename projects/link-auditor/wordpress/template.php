@@ -12,7 +12,7 @@
 <?php endif; ?>
 <section class="ovt-notes"><h2>Run it on your own VPS</h2><p>Download the independent Python tool and choose your own page count, time limit and request rate. No OpenViST account, API key, WordPress installation or paid service is needed. Reports stay on your machine. The account quotas apply only to the hosted OpenViST service.</p>
 <p><a class="ovla-download" href="<?php echo esc_url(plugins_url('downloads/openvist-link-auditor-self-hosted-0.4.1.zip',__FILE__)); ?>" download>Download self-hosted tool (ZIP) ↓</a> <a class="ovla-download" href="<?php echo esc_url(plugins_url('downloads/SELF_HOSTING.md',__FILE__)); ?>" download>Installation &amp; limits guide ↓</a> <a class="ovla-download" href="https://github.com/Open-ViST/recipe-library/blob/main/projects/link-auditor/SELF_HOSTING.md">Read guide on GitHub ↗</a></p>
-<details><summary>Installation and a larger-audit example</summary><p>Requires Python 3.11+. Upload the ZIP to your VPS home folder, then:</p><pre><code>mkdir -p ~/openvist-tools
+<details><summary>Installation and a larger-audit example</summary><p>Requires Python 3.11+. Upload the ZIP to your VPS home folder, then:</p><div class="ovla-code-toolbar"><button type="button" class="ovla-copy" data-ovla-copy="ovla-install-code" hidden>Copy code</button><span role="status" aria-live="polite"></span></div><pre class="ovla-code" id="ovla-install-code"><code>mkdir -p ~/openvist-tools
 python3 -m zipfile -e ~/openvist-link-auditor-self-hosted-0.4.1.zip ~/openvist-tools
 cd ~/openvist-tools/openvist-link-auditor-self-hosted-0.4.1
 python3 run_audit.py --deadline 600 -- https://example.com/ \

@@ -2,14 +2,14 @@
 /**
  * Plugin Name: OpenViST Link Auditor Bridge
  * Description: Account-based link audits for verified domains, processed by the OpenViST VPS.
- * Version: 0.2.1
+ * Version: 0.2.2
  * Requires at least: 6.5
  * Requires PHP: 8.0
  * License: GPL-2.0-or-later
  */
 defined('ABSPATH')||exit;
 final class OVLA_Bridge {
-    const VERSION='0.2.1';
+    const VERSION='0.2.2';
     const NS='openvist-link-auditor/v1';
     public static function table(){global $wpdb;return $wpdb->prefix.'ovla_jobs';}
     public static function domains_table(){global $wpdb;return $wpdb->prefix.'ovla_domains';}
@@ -81,6 +81,7 @@ final class OVLA_Bridge {
             if(class_exists('OpenViST_Tools')&&OpenViST_Tools::route()==='index'){wp_enqueue_script('ovla-entry',plugins_url('assets/entry.js',__FILE__),[],self::VERSION,true);wp_add_inline_script('ovla-entry','window.ovlaEntry='.wp_json_encode(self::url()).';','before');}
             if(!self::route())return;
             wp_enqueue_style('ovla-pilot',plugins_url('assets/pilot.css',__FILE__),[],self::VERSION);
+            wp_enqueue_script('ovla-copy-code',plugins_url('assets/copy-code.js',__FILE__),[],self::VERSION,true);
             if(self::access()){wp_enqueue_script('ovla-pilot',plugins_url('assets/pilot.js',__FILE__),[],self::VERSION,true);wp_add_inline_script('ovla-pilot','window.ovlaConfig='.wp_json_encode(['api'=>rest_url(self::NS),'nonce'=>wp_create_nonce('wp_rest')]).';','before');}
         });
         add_action('rest_api_init',[__CLASS__,'routes']);
