@@ -62,6 +62,20 @@ class BridgeTests(unittest.TestCase):
         def timeout(*a,**k):raise subprocess.TimeoutExpired(a[0],120)
         self.assertEqual(work(self.root,FakeClient(),timeout)['state'],'timed_out')
 
+    def test_unverified_external_domain_is_not_audited(self):
+        class ExternalClient(FakeClient):
+            def request(self, endpoint, payload=None):
+                if endpoint=='claim':return {'id':ID,'lease':LEASE,'state':'running','protocol':2,'kind':'audit','url':'https://example.com/','proof':'openvist-audit-verification='+'c'*64,'trusted_local':True}
+                return super().request(endpoint,payload)
+        calls=[]
+        def rejected(command,**kwargs):
+            calls.append(command)
+            self.assertEqual(kwargs['timeout'],15)
+            self.assertTrue(command[1].endswith('domain_proof.py'))
+            return subprocess.CompletedProcess(command,1)
+        self.assertEqual(work(self.root,ExternalClient(),rejected)['state'],'failed')
+        self.assertEqual(len(calls),1)
+
     def test_credentials_private_and_fixed_origin(self):
         path=self.root/'config.json';path.write_text(json.dumps({'base_url':'https://openvist.com','username':'user','application_password':'test-only'}));path.chmod(0o600)
         self.assertIsInstance(Client(path),Client)

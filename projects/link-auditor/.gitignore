@@ -1,5 +1,8 @@
 __pycache__/
-*.py[cod]
-.venv/
-link-audit*.json
-link-audit*.html
+*.pyc
+*.new
+wordpress.json
+config.json
+queue.sqlite*
+bridge-jobs/
+reports/
