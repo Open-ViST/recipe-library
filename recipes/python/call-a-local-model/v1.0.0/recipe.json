@@ -1,0 +1,44 @@
+{
+  "slug": "call-a-local-model",
+  "kind": "localai",
+  "title": "Call an installed local model",
+  "goal": "Send a bounded chat request to your own LocalAI service and inspect the returned assistant text.",
+  "version": "1.0.0",
+  "reviewed_at": "2026-10-06",
+  "intro": "A local API call becomes useful after a model and backend are installed and responding. This example keeps the service on loopback, sets an explicit output cap and reads the first assistant message. Changing the model field changes the request, but does not install a model or prove it supports every endpoint.",
+  "requirements": [
+    "Python 3.10 or later and a running LocalAI service on 127.0.0.1:8080.",
+    "A model already installed and listed by the service’s /v1/models endpoint.",
+    "Hardware resources and a model licence appropriate for your use."
+  ],
+  "limits": [
+    "The model must already be installed; the placeholder intentionally stops before a request.",
+    "Running locally still consumes hardware, storage and maintenance time.",
+    "This loopback example does not configure remote access, authentication, streaming or tool compatibility."
+  ],
+  "steps": [
+    "Follow the LocalAI installation instructions and confirm the service is available locally.",
+    "List the installed models and replace YOUR_INSTALLED_MODEL with the exact model ID.",
+    "Choose a token cap, inspect the code and run the file against your own service.",
+    "Check the output and backend logs. Record your model, runtime and hardware before comparing results or exposing the service to another application."
+  ],
+  "checks": [
+    "The destination remains 127.0.0.1; changing a model cannot redirect the request.",
+    "The placeholder is rejected and the maximum token setting is one of the documented choices.",
+    "Missing assistant text causes an explicit error instead of a fabricated response."
+  ],
+  "tested_scope": "Code syntax, placeholder rejection, token caps and mocked local responses checked locally. No LocalAI runtime or model was started.",
+  "sources": [
+    "https://localai.io/docs/installation/linux/",
+    "https://localai.io/docs/features/text-generation/"
+  ],
+  "projects": [
+    "localai"
+  ],
+  "language": "python",
+  "license": "MIT",
+  "url": "https://openvist.com/recipes/call-a-local-model/",
+  "code_file": "recipe.py",
+  "code_sha256": "f549e0161165270c904c35701878aa51423b3242669314be6aedc13958a0115b",
+  "published_record_sha256": "da944696fc374d7ac68b205437947a934a1c51ecd247d50eff43ce64e5fc069d"
+}

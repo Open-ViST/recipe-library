@@ -1,0 +1,51 @@
+{
+  "slug": "audit-identifier-value-conflicts-python",
+  "kind": "static",
+  "title": "Find conflicting values assigned to record IDs with Python",
+  "goal": "Identify IDs associated with more than one distinct text value in supplied records.",
+  "language": "python",
+  "version": "0.1.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-14",
+  "intro": "Identify IDs associated with more than one distinct text value in supplied records. This is a local data check under the documented conventions; it does not execute tools or contact a service.",
+  "requirements": [
+    "Save the code as recipe.py and run python3.12 recipe.py. Supply the JSON document through stdin, then signal EOF. No arguments, including a help option, are accepted.",
+    "Uses only json, sys and math. Reads stdin only; does not open input paths, write files, execute external commands or access a network.",
+    "Input must be a JSON array of objects with nonempty string fields id and value. Additional fields are ignored after parsing. There are no integer fields; numeric and boolean IDs or values are rejected.",
+    "Strings are compared exactly without trimming, case folding or Unicode normalization. Conflicts and distinct values are sorted by Python string ordering. Identical repeated pairs do not create conflicts.",
+    "Duplicate JSON object keys follow json's last-key-wins convention. Integer tokens are parsed as a null sentinel because no integer fields are supported, avoiding integer-conversion digit limits in ignored fields. Nonfinite constants and floating-point overflow are rejected anywhere in the document.",
+    "An empty array produces {\"conflicts\":[]}; empty stdin is invalid JSON.",
+    "Success exits 0 and writes exactly one JSON object followed by a newline, with no stderr. Invalid arguments, invalid input and stdin read failures exit 2 with no stdout and the generic diagnostic error: invalid input on stderr. Output strings use JSON Unicode escapes where needed."
+  ],
+  "limits": [
+    "Reads at most 65537 bytes and rejects input exceeding 65536 bytes. Requires strict UTF-8 and rejects a leading UTF-8 BOM.",
+    "Accepts at most 100 records. Each id and value must contain 1–80 Python string characters, not bytes.",
+    "The parsed document, grouped values and serialized output are held in memory. Additional fields still consume parsing memory. Python JSON parsing depth and available memory can limit acceptance.",
+    "Stdin can block while waiting for EOF.",
+    "Successful output includes selected IDs and values, which may be sensitive. Error diagnostics do not disclose input values.",
+    "Output-write failures are outside the stated exit-code and diagnostic guarantee."
+  ],
+  "steps": [
+    "Use Python 3.12. Save the code as recipe.py.",
+    "Save the supplied JSON example as input.json, encoded as UTF-8 without a BOM.",
+    "Run: python3 recipe.py < input.json",
+    "Compare the output with the expected result; handle exit code 2 as invalid input."
+  ],
+  "checks": [
+    "The supplied example must match the documented JSON output.",
+    "Error cases must exit 2 with no stdout. Review sensitive successful output before sharing it."
+  ],
+  "usage": "python3 recipe.py < input.json",
+  "example_input": "[{\"id\": \"a\", \"value\": \"x\"}, {\"id\": \"a\", \"value\": \"y\"}]",
+  "expected_output": "{\"conflicts\": [{\"id\": \"a\", \"values\": [\"x\", \"y\"]}]}",
+  "tested_scope": "Six independent CLI fixtures and 30 curated supplementary checks passed in the pinned offline Python 3.12 container. This does not establish exhaustive correctness, production performance or compatibility with an external provider.",
+  "sources": [
+    "https://docs.python.org/3.12/library/json.html",
+    "https://docs.python.org/3.12/library/sys.html"
+  ],
+  "projects": [],
+  "url": "https://openvist.com/recipes/audit-identifier-value-conflicts-python/",
+  "code_file": "recipe.py",
+  "code_sha256": "5a1841838f8c8c57eee92e3093c237fa68d498523c4a0094d90b4f254428c070",
+  "published_record_sha256": "e52eef35da02dfac59e30e6c53c30560d61a94bd77a5ea3b39d45e8fcbf248a0"
+}

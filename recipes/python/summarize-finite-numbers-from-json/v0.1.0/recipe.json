@@ -1,0 +1,51 @@
+{
+  "slug": "summarize-finite-numbers-from-json",
+  "kind": "static",
+  "title": "Summarize finite numbers in a local JSON array",
+  "goal": "Read a local JSON array of finite numbers, reject booleans and other invalid values, and print its count, minimum, maximum, and arithmetic mean.",
+  "language": "python",
+  "version": "0.1.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-11",
+  "intro": "Use this small offline CLI to summarize numeric observations already saved in a JSON file, or supplied through standard input. It does not contact or test an external service, and the result describes only the provided data.",
+  "requirements": [
+    "Python 3.12 is the intended runner; the cited Python 3.12 documentation describes the standard-library `json` module and finite-value concerns for statistical data.",
+    "Provide a UTF-8 JSON file path or pipe one JSON document to stdin. The top-level value must be an array.",
+    "Every array item must be a finite integer or float. Booleans, strings, null, arrays, objects, NaN, and infinities are rejected.",
+    "The summary is only about the saved values supplied to the program; it is not a live-service check or financial advice."
+  ],
+  "limits": [
+    "This reports descriptive statistics for only the values supplied; it does not establish whether observations are representative or current.",
+    "The mean may be sensitive to outliers. No filtering, coercion, or missing-value imputation is performed.",
+    "Parsing untrusted JSON can consume significant CPU or memory; use appropriately small local input files.",
+    "A finite input set can still produce an unrepresentable floating-point mean for extreme values; that case is reported as an error."
+  ],
+  "steps": [
+    "Save the code as `summarize_numbers.py`.",
+    "Create a synthetic fixture containing `[2, 4, 6]` and run `python3.12 summarize_numbers.py observations.json`.",
+    "Confirm the displayed count, minimum, maximum, and mean match the fixture.",
+    "Try an empty array, malformed JSON, a non-array top-level value, a boolean or string element, and a non-finite number; confirm empty input is explicit and invalid input exits with an error.",
+    "Run with a nonexistent file path and confirm the missing-file error is written to stderr."
+  ],
+  "checks": [
+    "Run the normal synthetic example and verify all four output lines exactly.",
+    "Run with `[]` and verify `count: 0` and `n/a` for min, max, and mean.",
+    "Run malformed JSON and confirm a clear stderr message and nonzero exit status.",
+    "Run `[true]`, `[\"3\"]`, `[null]`, and `[NaN]`; confirm each is rejected rather than coerced.",
+    "Run a top-level object such as `{}` and confirm it is rejected as not an array.",
+    "Use a nonexistent fixture path and confirm the missing-file condition is reported."
+  ],
+  "usage": "Save as `summarize_numbers.py`, then run `python3.12 summarize_numbers.py observations.json` or pipe input with `printf '[2, 4, 6]\\n' | python3.12 summarize_numbers.py`. The intended runner is Python 3.12; no other minimum-version claim is made. There are no network calls, retries, or timeout requirement.",
+  "example_input": "[2, 4, 6]",
+  "expected_output": "count: 3\nmin: 2\nmax: 6\nmean: 4.0",
+  "tested_scope": "Executed 6 synthetic local fixture cases in isolated CPython 3.12.15 on GitHub Actions, without network access. Declared exit codes, output assertions and input integrity checks passed. Live services, installed third-party packages and production behavior remain outside scope. Editorial approval is still required.",
+  "sources": [
+    "https://docs.python.org/3.12/library/statistics.html",
+    "https://docs.python.org/3.12/library/json.html"
+  ],
+  "projects": [],
+  "url": "https://openvist.com/recipes/summarize-finite-numbers-from-json/",
+  "code_file": "summarize_numbers.py",
+  "code_sha256": "6f3c84cb3b6c8d0e448eb511d8162b7dc326b56ae28ee27fe8a96f7148b39acf",
+  "published_record_sha256": "b3908aecd69e73881b390dc228ac168590c00e3180bfe7c25fa1f465616ac6b3"
+}

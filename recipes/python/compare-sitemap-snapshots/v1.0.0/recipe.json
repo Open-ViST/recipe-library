@@ -1,0 +1,42 @@
+{
+  "slug": "compare-sitemap-snapshots",
+  "kind": "static",
+  "title": "Compare two saved sitemap snapshots",
+  "goal": "Find added, removed and duplicate URLs in two sitemap urlsets without crawling the website.",
+  "version": "1.0.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-06",
+  "intro": "Read two UTF-8 sitemap files already saved on your machine. The script requires the sitemap namespace, checks absolute HTTP(S) URLs and one protocol and host per file, rejects DTD and entity declarations, and compares complete URL strings. Query parameters remain part of the identity.",
+  "requirements": [
+    "Python 3.10 or later; standard library only.",
+    "Two saved UTF-8 XML sitemap urlsets with the standard sitemap namespace.",
+    "Files up to 8 MiB and 50,000 URL entries each."
+  ],
+  "limits": [
+    "Sitemap indexes are not expanded. Download the individual urlsets separately.",
+    "Only URL membership is compared; lastmod, priority and changefreq do not affect the result.",
+    "Sitemap presence indicates discovery information, not actual search-engine indexing, traffic or ranking."
+  ],
+  "steps": [
+    "Save the earlier and current urlset files in your working folder.",
+    "Run: python sitemap_diff.py before.xml after.xml > sitemap-diff.json",
+    "Inspect added and removed URL lists and the count of unchanged URLs.",
+    "Check duplicate URL lists and investigate unexpected removals."
+  ],
+  "checks": [
+    "Use fixtures containing one added URL, one removed URL and one unchanged URL.",
+    "Confirm query strings and duplicate URLs are preserved in comparison.",
+    "Invalid XML, DTDs, wrong namespaces, credentials, fragments, mixed hosts and large files must fail with a nonzero exit status."
+  ],
+  "tested_scope": "Executed locally with deterministic fixtures and CLI checks on Python 3.12.14. The three scripts pass 22 tests covering valid output, invalid input and size limits. No network or provider call was made.",
+  "sources": [
+    "https://www.sitemaps.org/protocol.html",
+    "https://docs.python.org/3/library/xml.etree.elementtree.html"
+  ],
+  "projects": [],
+  "language": "python",
+  "url": "https://openvist.com/recipes/compare-sitemap-snapshots/",
+  "code_file": "recipe.py",
+  "code_sha256": "ab016b824b4e760512916d903d41791f8779a280a70ee7cd4297000f509ee75b",
+  "published_record_sha256": "41db1fbb818c5af6399d574675ea01188a930ec7378114c61cb6989d432ace1a"
+}

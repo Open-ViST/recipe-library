@@ -1,0 +1,50 @@
+{
+  "slug": "validate-hex-event-ids",
+  "kind": "static",
+  "title": "Validate Hexadecimal Event IDs and Find Duplicates",
+  "goal": "Read a JSON array of hexadecimal event ID strings from a UTF-8 file or standard input, validate each value, normalize valid IDs to lowercase without an optional leading `0x`, and report duplicate positions. Do not convert IDs to numbers or claim chain validity.",
+  "language": "javascript",
+  "version": "0.1.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-12",
+  "intro": "This read-only Node.js 22 command-line recipe checks an input array of event IDs. It accepts hexadecimal strings with or without a `0x` prefix, normalizes valid strings for case-insensitive duplicate detection, and reports one-based positions. Validation here means only that a value is a nonempty hexadecimal string; it does not establish any blockchain-specific format or validity.",
+  "requirements": [
+    "Intended runner: Node.js 22.",
+    "No package installation is required; the recipe uses CommonJS and Node.js built-ins.",
+    "Input must be UTF-8 JSON whose top-level value is an array."
+  ],
+  "limits": [
+    "The rule accepts one or more hexadecimal digits after an optional case-insensitive `0x` prefix; it does not impose a fixed byte length.",
+    "An empty string and a prefix without following hex digits are invalid.",
+    "Duplicate comparison uses lowercase text with the optional prefix removed; it performs no numeric conversion.",
+    "This validates only textual hexadecimal syntax, not event existence, chain membership, or any chain-specific ID rules.",
+    "The program reads the entire input into memory and is intended for bounded JSON inputs.",
+    "Input values are treated only as data; the program does not execute them or modify files."
+  ],
+  "steps": [
+    "Save the supplied code in a `.cjs` file.",
+    "Prepare a JSON array containing event ID strings and select a file path or `-` for stdin.",
+    "Run the Node.js command and inspect the JSON report and exit status.",
+    "Use the reported positions to correct or review invalid and repeated values."
+  ],
+  "checks": [
+    "Run the example fixture and compare the JSON report with the expected output.",
+    "Try entries that vary only by letter case or optional prefix and confirm they are reported as duplicates with one-based positions.",
+    "Try empty strings, non-hex characters, and non-string array members; confirm they are listed by position as invalid.",
+    "Try malformed JSON and a non-array JSON top level; confirm the command writes an actionable error to stderr and exits nonzero.",
+    "Run once with a file path and once with `-` plus piped input to verify both input modes."
+  ],
+  "usage": "Save the code as `validate-hex-event-ids.cjs`, then run `node validate-hex-event-ids.cjs ids.json`. Use `node validate-hex-event-ids.cjs - < ids.json` to read standard input. The program prints a JSON report; it exits 0 when all entries are valid, 2 when one or more entries are invalid, and 1 for usage, file, or JSON parse errors.",
+  "example_input": "[\"0xAb12\", \"ff00\", \"0xab12\", \"G1\"]",
+  "expected_output": "{\n  \"valid\": false,\n  \"normalized\": [\n    \"ab12\",\n    \"ff00\",\n    \"ab12\",\n    null\n  ],\n  \"invalid\": [\n    {\n      \"position\": 4,\n      \"valueType\": \"string\"\n    }\n  ],\n  \"duplicates\": [\n    {\n      \"normalizedId\": \"ab12\",\n      \"firstPosition\": 1,\n      \"duplicatePosition\": 3\n    }\n  ]\n}",
+  "tested_scope": "Executed 6 synthetic local fixture cases in isolated Node.js 22.23.3 on GitHub Actions, without network access. Declared exit codes, output assertions and input integrity checks passed. Live services, installed third-party packages and production behavior remain outside scope. Editorial approval is still required.",
+  "sources": [
+    "https://nodejs.org/docs/latest-v22.x/api/fs.html",
+    "https://nodejs.org/docs/latest-v22.x/api/process.html"
+  ],
+  "projects": [],
+  "url": "https://openvist.com/recipes/validate-hex-event-ids/",
+  "code_file": "validate-hex-event-ids.cjs",
+  "code_sha256": "b4ce4415cb8a7a103ba4a04d8aed03fb8aeb64b3d6c186b7153a14b10e17dd8a",
+  "published_record_sha256": "903228ebc676b4dbb558be1bdf0d4f4fd5f72f101fa79e61bc310215afc711fb"
+}

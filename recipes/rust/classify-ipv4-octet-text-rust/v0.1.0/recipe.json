@@ -1,0 +1,55 @@
+{
+  "slug": "classify-ipv4-octet-text-rust",
+  "kind": "static",
+  "title": "Classify canonical dotted IPv4 text with Rust",
+  "goal": "Check decimal address spelling under an explicit rule without DNS resolution or network activity.",
+  "language": "rust",
+  "version": "0.1.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-14",
+  "intro": "Check decimal address spelling under an explicit rule without DNS resolution or network activity. Work only with supplied input; this does not contact external services or modify input.",
+  "requirements": [
+    "Save as recipe.rs and compile with Rust 1.99.0 using: rustc --edition=2021 recipe.rs -o recipe",
+    "Run ./recipe with input supplied through stdin. No CLI arguments are accepted, including help flags.",
+    "Reads at most 65537 bytes and rejects input exceeding 65536 bytes. Requires strict UTF-8, rejects a leading UTF-8 BOM, and rejects every CR byte.",
+    "Splits only at LF, discards exactly empty segments, and preserves all other text without trimming or normalization. Allows at most 100 nonempty lines, each at most 256 UTF-8 bytes. All validation precedes classification and successful stdout.",
+    "Each retained line produces one boolean in input order. True means exactly four ASCII decimal octets in 0..255, separated by dots, with no leading zeroes except the single digit 0. Signs, spaces, non-ASCII digits, and other address spellings produce false rather than input rejection.",
+    "Special, private, and reserved addresses are classified solely by spelling. No DNS resolution, networking, grouping, or deduplication occurs.",
+    "Success exits 0 and writes exactly one JSON object followed by a newline, with no stderr. Empty input or input containing only LF bytes produces {\"valid\":[]}.",
+    "Invalid arguments, invalid input, and stdin-read failures exit 2, write no stdout, and emit exactly error: invalid input followed by a newline on stderr, subject to the failure limitations below. Diagnostics never contain input values."
+  ],
+  "limits": [
+    "Stdin may block while waiting for EOF or enough bytes to establish that the size limit was exceeded.",
+    "Memory use is bounded by the input-size limit: O(65537) input storage, up to 100 borrowed line references, and at most 612 bytes of JSON output, plus allocator capacity and standard-library I/O overhead. No duplicate line strings are stored.",
+    "Successful output reveals the number and order of nonempty lines and their classification results; treat that information as potentially sensitive.",
+    "Memory-allocation failures and output-write or flush failures are outside the input-error guarantee. Output failures may leave partial output; detected stdout failures exit 2 without attempting an input-error diagnostic. Stderr failures may prevent delivery of the diagnostic.",
+    "Only standard-library facilities are used. The program performs no filesystem access, networking, subprocess creation, dynamic loading, or environment-variable access.",
+    "This checks spelling only, not routing, ownership, public reachability or address safety."
+  ],
+  "steps": [
+    "Save the example as recipe.rs.",
+    "Compile with Rust 1.99.0 using rustc --edition=2021 recipe.rs -o recipe.",
+    "Prepare UTF-8 input.txt following the documented operation-specific conventions.",
+    "Run ./recipe < input.txt.",
+    "Inspect the JSON result. Exit 2 with exactly error: invalid input followed by a newline on stderr and no stdout identifies rejected input or stdin-read failure. Output-write failures may also exit nonzero, without that diagnostic and potentially after partial stdout; these are outside the input-error guarantee."
+  ],
+  "checks": [
+    "The example must produce the documented JSON result.",
+    "Empty stdin must produce the documented empty result.",
+    "Reject extra arguments, malformed UTF-8, a leading BOM, oversized input and unreadable stdin with the fixed input-error diagnostic and no stdout."
+  ],
+  "usage": "rustc --edition=2021 recipe.rs -o recipe\n./recipe < input.txt",
+  "example_input": "127.0.0.1\n255.255.255.255\n256.0.0.1",
+  "expected_output": "{\"valid\":[true,true,false]}",
+  "tested_scope": "Six independent CLI fixtures and 17 supplementary cases are executed in pinned, offline Rust 1.99.0 containers. These checks do not establish exhaustive correctness or behavior on other versions.",
+  "sources": [
+    "https://doc.rust-lang.org/std/io/trait.Read.html",
+    "https://doc.rust-lang.org/std/primitive.str.html",
+    "https://doc.rust-lang.org/std/primitive.u32.html"
+  ],
+  "projects": [],
+  "url": "https://openvist.com/recipes/classify-ipv4-octet-text-rust/",
+  "code_file": "recipe.rs",
+  "code_sha256": "bfc3ef6d5c9078eff54000370c75ab9becf34e3040b5dd1ef8814e0fac41fb84",
+  "published_record_sha256": "c984f0e39b8226bc14bdbb96b8163cbb46d328c13b07be245dbe870e4fe9ba72"
+}

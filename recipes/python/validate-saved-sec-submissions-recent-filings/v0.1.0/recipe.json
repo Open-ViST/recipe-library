@@ -1,0 +1,53 @@
+{
+  "slug": "validate-saved-sec-submissions-recent-filings",
+  "kind": "static",
+  "title": "Validate and summarize recent filings in a saved SEC submissions JSON",
+  "goal": "Read a saved SEC submissions JSON file, validate the parallel recent-filing arrays for form, filing date, accession number and primary document, then print aligned records or a clear validation error.",
+  "language": "python",
+  "version": "0.1.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-11",
+  "intro": "The SEC documents that a submissions response keeps recent filing history in compact columnar arrays, and Python 3.12 documents the standard JSON decoder needed to read a saved response. This offline recipe checks that the four requested arrays are present and equally long before pairing their entries. It does not contact the SEC or infer anything about a company or product.",
+  "requirements": [
+    "Intended runner: Python 3.12; no third-party packages or network access are required. This is not a claim of a tested minimum Python version.",
+    "Provide a local UTF-8 JSON file or pipe JSON to stdin using `-`; the input must represent an SEC submissions object with `filings.recent`.",
+    "For non-empty records, each selected array entry must be a string. The code does not validate date formats, accession-number formats, or document names beyond that type check."
+  ],
+  "limits": [
+    "Only summarizes `filings.recent`; it does not read older filing-history files mentioned by SEC documentation.",
+    "This offline processor does not establish whether a saved response is current, complete, authentic, or actually retrieved from the SEC.",
+    "The recipe rejects unequal array lengths and non-string values in records, but does not impose additional SEC schema rules.",
+    "A missing file, unreadable file, malformed JSON, missing object path, missing array, or invalid record produces an error on stderr and exit status 2.",
+    "There are no network calls, so no timeout or retry behavior applies.",
+    "The Python JSON documentation cautions that parsing untrusted, very large JSON can consume significant CPU and memory; use appropriately bounded local input."
+  ],
+  "steps": [
+    "Save the proposed code as `sec_recent.py`.",
+    "Create a small synthetic JSON fixture using the four arrays shown in `example_input`.",
+    "Run the fixture with `python3.12 sec_recent.py fixture.json` and check that each output row keeps the fields from the same array index together.",
+    "Run the same fixture through stdin with `python3.12 sec_recent.py - < fixture.json` and compare the output.",
+    "Change one array to a different length and confirm the program rejects it rather than pairing incomplete rows.",
+    "Set all four arrays to empty lists and confirm it prints the explicit empty-record message."
+  ],
+  "checks": [
+    "Use a normal synthetic fixture with two rows; verify the four displayed fields remain aligned by index and the count is two.",
+    "Use a fixture whose four arrays are all empty; verify `No recent filing records.` is printed.",
+    "Use a fixture with unequal array lengths; verify an error identifies the observed lengths and no filing summary is printed.",
+    "Use malformed JSON and a top-level JSON array; verify each is rejected with an actionable error.",
+    "Use a fixture with a missing array and another with a non-string record field; verify both are rejected.",
+    "Pass a nonexistent path; verify a read error is reported and the process exits nonzero."
+  ],
+  "usage": "Run with Python 3.12: `python3.12 sec_recent.py saved-submissions.json`. To read from stdin, use `python3.12 sec_recent.py - < saved-submissions.json`.",
+  "example_input": "{\"filings\":{\"recent\":{\"form\":[\"10-K\",\"8-K\"],\"filingDate\":[\"2025-02-20\",\"2025-03-01\"],\"accessionNumber\":[\"0000000000-25-000001\",\"0000000000-25-000002\"],\"primaryDocument\":[\"annual.htm\",\"event.htm\"]}}}",
+  "expected_output": "Recent filing records: 2\n1. 10-K | 2025-02-20 | 0000000000-25-000001 | annual.htm\n2. 8-K | 2025-03-01 | 0000000000-25-000002 | event.htm",
+  "tested_scope": "Executed 6 synthetic local fixture cases in isolated CPython 3.12.15 on GitHub Actions, without network access. Declared exit codes, output assertions and input integrity checks passed. Live services, installed third-party packages and production behavior remain outside scope. Editorial approval is still required.",
+  "sources": [
+    "https://www.sec.gov/search-filings/edgar-application-programming-interfaces",
+    "https://docs.python.org/3.12/library/json.html"
+  ],
+  "projects": [],
+  "url": "https://openvist.com/recipes/validate-saved-sec-submissions-recent-filings/",
+  "code_file": "sec_recent.py",
+  "code_sha256": "4aabd2503a24b5a6c06d2f6f0999ec87ca348b0e7d8d5c21cac8e600848217c0",
+  "published_record_sha256": "b11208ab0358d0eccb4900003709f3ec08a6d28e0cb90df79b2f5de4efc707f5"
+}

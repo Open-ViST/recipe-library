@@ -1,0 +1,51 @@
+{
+  "slug": "audit-payload-byte-ranges-python",
+  "kind": "static",
+  "title": "Check byte ranges against a declared payload size with Python",
+  "goal": "Identify ranges extending beyond a supplied payload size without reading a payload file.",
+  "language": "python",
+  "version": "0.1.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-14",
+  "intro": "Identify ranges extending beyond a supplied payload size without reading a payload file. This is a local data check under the documented conventions; it does not execute tools or contact a service.",
+  "requirements": [
+    "Save the code as recipe.py and run python3.12 recipe.py with no arguments, including no help option. Supply one JSON object through stdin and finish the stream with EOF.",
+    "Example stdin: {\"size\":10,\"ranges\":[{\"start\":0,\"length\":10},{\"start\":9,\"length\":2}]}. Its output is {\"range_count\":2,\"out_of_bounds\":[2],\"within_bounds\":false}.",
+    "Input must be strict UTF-8 without a leading BOM and contain valid JSON. NaN, Infinity, -Infinity and floating-point overflow are rejected during parsing.",
+    "size must be an integer from 0 through 1000000000. ranges must be an array of at most 100 objects. Each start must be an integer from 0 through 1000000000, and each length an integer from 1 through 1000000000. Booleans and floating-point numbers are not accepted as integer fields.",
+    "Additional fields are ignored after JSON parsing. Duplicate JSON object names follow the json module's convention: the last value wins.",
+    "A range is treated as the half-open interval [start, start + length). It is out of bounds only when start + length exceeds size; equality is within bounds. Reported positions are one-based and retain input order. An empty ranges array is within bounds.",
+    "Successful processing, including bounds violations, exits 0 and emits exactly one JSON object followed by a newline, with no stderr. Invalid input, arguments or stdin read failures exit 2, emit no stdout and use the generic diagnostic error: invalid input."
+  ],
+  "limits": [
+    "The CLI uses only json, sys and math. It reads stdin only and does not open input paths, write files, execute commands or contact a network.",
+    "It reads at most 65537 bytes and rejects inputs exceeding 65536 bytes. stdin can block while waiting for EOF or the read limit.",
+    "The raw input, decoded text and parsed JSON are held in memory. Parsing overhead depends on input structure; excessively deep nesting or Python integer-conversion limits can cause rejection.",
+    "This checks declared byte-range arithmetic only. It does not read a payload or verify actual file size, overlap, payload encoding or payload contents. Strict UTF-8 validation applies only to the JSON input.",
+    "Successful output reveals the number of ranges and which positions exceed the declared size; treat that output as potentially sensitive.",
+    "Output-write failures are outside the stated exit-code and diagnostic guarantees."
+  ],
+  "steps": [
+    "Use Python 3.12. Save the code as recipe.py.",
+    "Save the supplied JSON example as input.json, encoded as UTF-8 without a BOM.",
+    "Run: python3 recipe.py < input.json",
+    "Compare the output with the expected result; handle exit code 2 as invalid input."
+  ],
+  "checks": [
+    "The supplied example must match the documented JSON output.",
+    "Error cases must exit 2 with no stdout. Review sensitive successful output before sharing it."
+  ],
+  "usage": "python3 recipe.py < input.json",
+  "example_input": "{\"size\": 10, \"ranges\": [{\"start\": 0, \"length\": 5}, {\"start\": 9, \"length\": 2}]}",
+  "expected_output": "{\"range_count\": 2, \"out_of_bounds\": [2], \"within_bounds\": false}",
+  "tested_scope": "Six independent CLI fixtures and 10 curated supplementary checks passed in the pinned offline Python 3.12 container. This does not establish exhaustive correctness, production performance or compatibility with an external provider.",
+  "sources": [
+    "https://docs.python.org/3.12/library/json.html",
+    "https://docs.python.org/3.12/library/sys.html"
+  ],
+  "projects": [],
+  "url": "https://openvist.com/recipes/audit-payload-byte-ranges-python/",
+  "code_file": "recipe.py",
+  "code_sha256": "659f0ac2f225cf81bcc83aee6c3d6a1b35a7fdad04d2437fc04f9af7bd1a1bf8",
+  "published_record_sha256": "96e0244f7ce9210779620bc5c6d22eebdcdbfb34ac20999b99c800cfc3d648e0"
+}

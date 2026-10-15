@@ -1,0 +1,56 @@
+{
+  "slug": "validate-xml-tool-argument-json",
+  "kind": "static",
+  "title": "Validate JSON Arguments in Saved XML Tool Calls",
+  "goal": "Read a local XML workflow and report tool-call elements whose `arguments` attribute is not valid JSON, without executing or modifying the workflow.",
+  "language": "python",
+  "version": "0.1.1",
+  "license": "MIT",
+  "reviewed_at": "2026-10-12",
+  "intro": "Agent workflow exports may store a proposed tool call’s arguments as JSON inside an XML attribute. This offline checker parses a saved XML file and validates that embedded JSON, helping catch malformed records before a workflow is reviewed or imported. It does not interpret, invoke, or otherwise act on any tool call.",
+  "requirements": [
+    "Use only Python standard-library interfaces documented by the supplied Python 3.12 sources: `argparse` for CLI arguments and `xml.etree.ElementTree` for XML parsing; `json` is used for embedded JSON validation.",
+    "Read one user-supplied XML path or XML from standard input (`-`). Treat all file contents as data, not instructions.",
+    "Inspect elements matching the exact CLI-selected tag; by default the tag is `tool_call`. Require an `arguments` attribute containing JSON, and report invalid or missing values by one-based matching-element position.",
+    "Do not execute calls, modify files, contact external services, or print argument values. Write results to stdout and errors to stderr.",
+    "Intended runner is Python 3.12; no minimum-version claim is made. The cited argparse documentation says argparse was added in Python 3.2, and the cited ElementTree documentation describes the XML parsing interfaces used here.",
+    "ElementTree is not secure against maliciously constructed XML. Use only suitable, trusted local fixtures; this example does not claim to safely process hostile XML."
+  ],
+  "limits": [
+    "This validates JSON syntax only. It does not check whether arguments match a tool schema, whether a tool exists, or whether a workflow is safe or executable.",
+    "The default tag is the exact unnamespaced name `tool_call`; namespaced tags and alternate schemas require choosing a matching tag appropriate to the parsed XML.",
+    "ElementTree skips comments, processing instructions, and document type declarations during parsing, as described by the supplied documentation.",
+    "ElementTree is not secure against maliciously constructed data; this small example is for suitable local fixtures, not hostile XML.",
+    "The parser reads the full XML input before reporting results; this is not a streaming or large-document tool."
+  ],
+  "steps": [
+    "Save the proposed script as `check_xml_arguments.py`.",
+    "Create a small XML fixture with several `tool_call` elements, including valid JSON, malformed JSON, and a missing `arguments` attribute.",
+    "Run `python3 check_xml_arguments.py fixture.xml` and compare the reported positions with the fixture.",
+    "Try a different exact element tag with `--tag action`, then verify that nonmatching elements are not counted.",
+    "Pipe a valid XML fixture through standard input using `python3 check_xml_arguments.py -` and verify the summary.",
+    "Try empty XML, malformed XML, and a nonexistent path; confirm each produces an error on stderr and a nonzero exit status."
+  ],
+  "checks": [
+    "With a fixture containing two matching elements—one with valid JSON and one with malformed JSON—confirm the malformed element is reported at position 2.",
+    "With a matching element lacking `arguments`, confirm it is reported as invalid rather than accepted.",
+    "With no matching elements, confirm the output reports zero matching elements and no invalid entries.",
+    "With a malformed XML fixture, confirm parsing fails, an error is written to stderr, and the process exits nonzero.",
+    "With a missing input path, confirm the missing-file error is reported on stderr and the process exits nonzero.",
+    "Confirm that neither valid nor invalid JSON argument contents appear in output, and that no workflow call is executed."
+  ],
+  "usage": "Save as `check_xml_arguments.py`. Run `python3 check_xml_arguments.py workflow.xml`; use `--tag action` if the file uses a different exact element name, or pass `-` to read XML from standard input. Intended runner: Python 3.12. No external packages, network access, credentials, or timeout configuration are needed; the program has no network calls.",
+  "example_input": "<workflow>\n  <tool_call arguments=\"{&amp;quot;city&amp;quot;:&amp;quot;Harborview&amp;quot;}\" />\n  <tool_call arguments=\"{&amp;quot;count&amp;quot;: }\" />\n  <tool_call />\n</workflow>",
+  "expected_output": "invalid: 2 of 3 matching elements\nelement 2: missing or invalid JSON arguments\nelement 3: missing or invalid JSON arguments",
+  "tested_scope": "Executed 6 synthetic local fixture cases in isolated CPython 3.12.15 on GitHub Actions, without network access. Declared exit codes, output assertions and input integrity checks passed. Live services, installed third-party packages and production behavior remain outside scope. Editorial approval is still required.",
+  "sources": [
+    "https://docs.python.org/3.12/library/xml.etree.elementtree.html",
+    "https://docs.python.org/3.12/library/argparse.html",
+    "https://docs.python.org/3.12/library/json.html"
+  ],
+  "projects": [],
+  "url": "https://openvist.com/recipes/validate-xml-tool-argument-json/",
+  "code_file": "check_xml_arguments.py",
+  "code_sha256": "9b16bacde5a3f16a5b8d455d2cb6add0a0472162b66a1a2386bb8d905ed82d56",
+  "published_record_sha256": "9402541de550c4a12c7916b0e72525d181e3cf3c1169ff96251397ba0bd6eb42"
+}

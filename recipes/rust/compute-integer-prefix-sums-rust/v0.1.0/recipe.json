@@ -1,0 +1,54 @@
+{
+  "slug": "compute-integer-prefix-sums-rust",
+  "kind": "static",
+  "title": "Compute bounded integer prefix sums with Rust",
+  "goal": "Accumulate each numeric prefix in input order using a representation wide enough for the maximum total.",
+  "language": "rust",
+  "version": "0.1.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-14",
+  "intro": "Accumulate each numeric prefix in input order using a representation wide enough for the maximum total. Work only with supplied input; this does not contact external services or modify input.",
+  "requirements": [
+    "Save as recipe.rs and compile with Rust 1.99.0 using: rustc --edition=2021 recipe.rs -o recipe",
+    "Run ./recipe with input supplied through stdin. No CLI arguments are accepted, including help flags. Only the standard library is used.",
+    "Reads at most 65537 bytes and rejects input exceeding 65536 bytes. Requires strict UTF-8, rejects a leading UTF-8 BOM, and rejects every CR.",
+    "Splits only on LF and discards exactly empty segments. Before numeric classification, enforces at most 100 nonempty lines and at most 256 UTF-8 bytes per retained line. No trimming, normalization, sorting, or deduplication occurs.",
+    "Each retained line must be canonical ASCII decimal in 0..1000000, without signs, spaces, or leading zeroes except for 0 itself.",
+    "Accumulates prefixes in input order using u64. The maximum total is 100000000. Empty input or input containing only LF characters produces {\"sums\":[]}.",
+    "After complete validation, success writes exactly one JSON object followed by a newline, writes no stderr, and exits 0.",
+    "Invalid arguments, invalid input, or stdin-read failures produce no stdout, attempt to write exactly error: invalid input followed by a newline to stderr, and exit 2. Diagnostics never include input values."
+  ],
+  "limits": [
+    "Memory use is O(B + L + J), where B is the bounded input buffer, L is at most 100 retained-line references and prefix sums, and J is the small generated JSON string. Allocator capacity and standard I/O buffering add overhead.",
+    "Stdin can block while awaiting more data or EOF. The read cap prevents consuming more than 65537 bytes but does not impose a time limit.",
+    "Successful output contains every prefix sum and can reveal the original values through differences; treat it as sensitive when the input is sensitive.",
+    "Memory-allocation failures and output-write failures, including stderr-write failures, are outside the input-error guarantee. A stdout-write failure can leave partial output; the program exits 2 without adding a diagnostic.",
+    "The program reads only stdin and writes only stdout/stderr. It performs no filesystem access, networking, subprocess execution, or dynamic loading."
+  ],
+  "steps": [
+    "Save the example as recipe.rs.",
+    "Compile with Rust 1.99.0 using rustc --edition=2021 recipe.rs -o recipe.",
+    "Prepare UTF-8 input.txt following the documented operation-specific conventions.",
+    "Run ./recipe < input.txt.",
+    "Inspect the JSON result. Exit 2 with exactly error: invalid input followed by a newline on stderr and no stdout identifies rejected input or stdin-read failure. Output-write failures may also exit nonzero, without that diagnostic and potentially after partial stdout; these are outside the input-error guarantee."
+  ],
+  "checks": [
+    "The example must produce the documented JSON result.",
+    "Empty stdin must produce the documented empty result.",
+    "Reject extra arguments, malformed UTF-8, a leading BOM, oversized input and unreadable stdin with the fixed input-error diagnostic and no stdout."
+  ],
+  "usage": "rustc --edition=2021 recipe.rs -o recipe\n./recipe < input.txt",
+  "example_input": "2\n0\n3\n1",
+  "expected_output": "{\"sums\":[2,2,5,6]}",
+  "tested_scope": "Six independent CLI fixtures and 18 supplementary cases are executed in pinned, offline Rust 1.99.0 containers. These checks do not establish exhaustive correctness or behavior on other versions.",
+  "sources": [
+    "https://doc.rust-lang.org/std/io/trait.Read.html",
+    "https://doc.rust-lang.org/std/primitive.str.html",
+    "https://doc.rust-lang.org/std/primitive.u32.html"
+  ],
+  "projects": [],
+  "url": "https://openvist.com/recipes/compute-integer-prefix-sums-rust/",
+  "code_file": "recipe.rs",
+  "code_sha256": "a616c19f3bba4677da76979a04cbb04d3590240970379b5d8efeb7294bd221ad",
+  "published_record_sha256": "9aa378f0d9333994ff3f2c3a0d47b066759e3af25095bd9f639a1225861c2115"
+}

@@ -1,0 +1,47 @@
+{
+  "slug": "query-market-data-by-id",
+  "kind": "coingecko",
+  "title": "Query market data with stable asset IDs",
+  "goal": "Build a compact CoinGecko request using asset IDs, a target currency and an update timestamp.",
+  "version": "1.0.0",
+  "reviewed_at": "2026-10-06",
+  "intro": "A ticker may identify more than one asset. This example uses the provider’s stable asset IDs and asks for last_updated_at alongside the requested currency. The code requires the Demo API plan and sends its key in a header. It prints the returned data and stops if a requested asset or price is missing.",
+  "requirements": [
+    "Python 3.10 or later and access to the CoinGecko Demo API.",
+    "A Demo API key supplied by your own environment as COINGECKO_DEMO_API_KEY.",
+    "CoinGecko asset IDs checked against the provider’s coins list. Contract identity still comes from the relevant network and official project."
+  ],
+  "limits": [
+    "The page does not display live market prices or make a market-data request.",
+    "Provider IDs are not contract addresses. Match the chain and contract separately when needed.",
+    "A timestamp is evidence to inspect, not an automatic guarantee that a price is current. Do not treat the sample as trading guidance."
+  ],
+  "steps": [
+    "Choose one to ten asset IDs and select USD or EUR in the builder.",
+    "Inspect the query. The example removes duplicate IDs and includes an update timestamp.",
+    "Configure the Demo API key in your local environment and run the file once.",
+    "Check last_updated_at and missing fields before using a returned value. Apply the provider’s attribution, rate and caching requirements to a deployed application."
+  ],
+  "checks": [
+    "Duplicate IDs produce one requested asset each.",
+    "The key is a request header and does not enter the generated URL.",
+    "Missing assets and HTTP failures are surfaced; no price is filled in from a placeholder."
+  ],
+  "tested_scope": "Code syntax, query encoding, duplicate handling, request headers and mocked provider responses checked locally. No live provider request was made.",
+  "sources": [
+    "https://docs.coingecko.com/demo/reference/simple-price",
+    "https://docs.coingecko.com/demo/reference/coins-list"
+  ],
+  "projects": [
+    "coingecko",
+    "bitcoin",
+    "ethereum",
+    "solana"
+  ],
+  "language": "python",
+  "license": "MIT",
+  "url": "https://openvist.com/recipes/query-market-data-by-id/",
+  "code_file": "recipe.py",
+  "code_sha256": "0b2c09dc5477a2576df724faa96642465dd3c3ceea076b28265da8f761baf59e",
+  "published_record_sha256": "0ed8d0cfd589ec197a817565435588920b3cbb453235450a2af61d28da54084a"
+}

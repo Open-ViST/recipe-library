@@ -1,0 +1,46 @@
+{
+  "slug": "summarize-bitcoin-rpc-method-names",
+  "kind": "static",
+  "title": "List Bitcoin Core RPC method names from saved reference text",
+  "goal": "Read a user-supplied local copy of the Bitcoin developer reference and print the distinct RPC method names explicitly named in its RPC API Reference section.",
+  "version": "0.1.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-09",
+  "intro": "The Bitcoin developer documentation lists named RPCs, including blockchain and control RPCs. This offline recipe extracts names from a saved text copy; it does not query Bitcoin Core, validate RPC behavior, or test a node.",
+  "requirements": [
+    "Python 3.12 was used for the recorded GitHub Actions fixture tests. The example uses only the Python standard library; compatibility with other Python versions was not established by those tests.",
+    "A local UTF-8 text fixture with the exact markers `RPC API Reference` and `Network Status`, and method entries directly before `Argument #` or `Result`. These are parser input requirements, not a guaranteed export format of the linked websites. No Bitcoin node, credentials, packages, or network access are needed."
+  ],
+  "limits": [
+    "This is a bounded offline text extraction, not an RPC client or a test of Bitcoin Core.",
+    "The parser requires the two exact section markers in a prepared local fixture. It has not been validated against an unmodified text export of the current reference website.",
+    "Names are inferred from text immediately preceding `Argument #` or `Result`; unusual formatting or unrelated matching text can affect results.",
+    "The recipe does not interpret method arguments, return values, or version availability. The supplied documents do not establish an exact Bitcoin Core version requirement."
+  ],
+  "steps": [
+    "Prepare a local UTF-8 fixture using method names documented in the official RPC reference. Include the exact section markers and entry format described below; an arbitrary saved web page is not guaranteed to match this parser.",
+    "Save the example as `list_rpc_names.py`.",
+    "Run `python list_rpc_names.py reference.txt`, replacing the argument with the path to the saved text.",
+    "Review the printed, alphabetically sorted, distinct method names; they are extracted from this file only, not verified against a running service."
+  ],
+  "checks": [
+    "Use a synthetic text fixture containing both section markers and entries such as `getblock Argument #1` and `getdifficulty Result`; check that each distinct extracted name prints once, in alphabetical order.",
+    "Try a fixture with the section markers but no matching method entries; confirm the program reports the no-methods error to stderr and exits with status 2.",
+    "Try an empty file and a nonexistent path; confirm each reports an error and exits with status 2.",
+    "Remove either required section marker from a nonempty fixture; confirm the corresponding missing-marker or missing-boundary error appears, with no partial output.",
+    "Check that stdout contains only extracted names and that no remote service is contacted or modified."
+  ],
+  "tested_scope": "Executed 6 synthetic local fixture cases in isolated CPython on GitHub Actions, without network access. Declared exit codes, output assertions and input integrity checks passed. Live services, installed third-party packages and production behavior remain outside scope. Editorial approval is still required.",
+  "sources": [
+    "https://developer.bitcoin.org/",
+    "https://bitcoin.org/"
+  ],
+  "projects": [
+    "bitcoin"
+  ],
+  "language": "python",
+  "url": "https://openvist.com/recipes/summarize-bitcoin-rpc-method-names/",
+  "code_file": "recipe.py",
+  "code_sha256": "bef48f59b33a66a93d92dd547a94027661390034118a271bbc720ecdd61575bd",
+  "published_record_sha256": "4ebdf8cc84dc6dab68516b6f09fa35d1c8e213969fb811a25b6009b8609860fd"
+}

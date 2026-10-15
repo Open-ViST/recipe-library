@@ -1,0 +1,68 @@
+# Detect a UTF-8 Byte-Order Mark in Saved Text
+
+Read one UTF-8 file or standard input and report whether its first three bytes are the UTF-8 byte-order mark, plus the total byte count. Validate the entire input as UTF-8; treat it as read-only data and do not modify or execute it.
+
+Published recipe: [audit-utf8-bom](https://openvist.com/recipes/audit-utf8-bom/)
+
+**Language:** rust · **Version:** 0.1.0 · **License:** MIT
+
+## Usage
+
+Code file: `recipe.rs`
+
+Intended runner: Rust 1.90.0, edition 2021. Compile with `rustc --edition=2021 recipe.rs -o recipe`. Run `./recipe <file>` to inspect a file, or `./recipe -` and provide text on standard input. Exactly one argument is required. Read and validation failures are written to stderr with a nonzero exit status; successful counts go to stdout.
+
+## Requirements
+
+- Standard library only; no external crates, unsafe code, include macros, environment variables, subprocesses, networking, or filesystem writes.
+- Accept exactly one CLI argument: a local UTF-8 file path or `-` for standard input.
+- Read all bytes, reject invalid UTF-8, and report total byte count and whether the first three bytes are exactly the UTF-8 BOM.
+- Write successful results to stdout and actionable failures to stderr; use a nonzero exit only on failure.
+- Treat all input as untrusted text and never execute or alter it.
+
+## Steps
+
+- Save the Rust source as `recipe.rs`.
+- Compile it with `rustc --edition=2021 recipe.rs -o recipe`.
+- Create a synthetic UTF-8 input whose bytes are `EF BB BF 68 69 0A`.
+- Run `./recipe sample.txt` and compare stdout with the exact expected output.
+- Also try `./recipe -` with the same bytes on stdin, a file without a BOM, invalid UTF-8, a missing path, and an incorrect number of arguments; confirm failures are actionable and go to stderr.
+
+## Checks
+
+- Compile using the stated Rust 2021 command.
+- For bytes `EF BB BF 68 69 0A`, verify stdout is exactly `bytes: 6` followed by `utf8_bom: yes`.
+- For UTF-8 bytes `68 69 0A`, verify stdout reports `bytes: 3` and `utf8_bom: no`.
+- For malformed UTF-8, verify the program exits nonzero and reports the validation failure on stderr.
+- Verify a missing file and incorrect argument counts produce actionable stderr messages and do not create or change files.
+
+## Limits
+
+- The program reads the entire input into memory, so it is intended for reasonably sized saved text.
+- It reports only whether the exact UTF-8 BOM byte sequence is at offset zero; it does not detect other encodings or BOM-like bytes elsewhere.
+- A BOM is valid UTF-8 and remains part of the reported byte count.
+- No execution or test results are claimed here.
+
+## Example input
+
+```text
+Synthetic input file bytes: `EF BB BF 68 69 0A` (UTF-8 text containing a BOM followed by `hi` and a newline).
+```
+
+## Expected output
+
+```text
+bytes: 6
+utf8_bom: yes
+```
+
+## Recorded validation scope
+
+Executed 5 synthetic local fixture cases in isolated Rust 1.90.0 on GitHub Actions, without network access. Declared exit codes, output assertions and input integrity checks passed. Live services, installed third-party packages and production behavior remain outside scope. Editorial approval is still required.
+
+This scope is copied from the published recipe. Exporting does not rerun its tests or establish additional guarantees.
+
+## Sources
+
+- https://doc.rust-lang.org/std/io/trait.BufRead.html
+- https://doc.rust-lang.org/std/collections/index.html

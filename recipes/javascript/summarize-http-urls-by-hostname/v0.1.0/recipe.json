@@ -1,0 +1,49 @@
+{
+  "slug": "summarize-http-urls-by-hostname",
+  "kind": "static",
+  "title": "Group HTTP(S) URLs by Hostname from a Local Text File",
+  "goal": "Read a UTF-8 text file or standard input, parse each nonempty line as an absolute HTTP(S) URL, and print a JSON object of hostname counts. Reject malformed lines without fetching any URL.",
+  "language": "javascript",
+  "version": "0.1.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-12",
+  "intro": "This Node.js 22 CommonJS recipe counts the hostnames in a newline-delimited list of URLs. It accepts a file path or `-` for standard input, ignores blank lines, and reports malformed nonblank lines with their one-based line numbers. It only parses URL text; it never makes network requests.",
+  "requirements": [
+    "Node.js 22; no external packages are used.",
+    "A UTF-8 newline-delimited text file, or a stream piped to stdin.",
+    "Each nonblank line must contain one absolute HTTP or HTTPS URL. Leading and trailing whitespace on a line is ignored."
+  ],
+  "limits": [
+    "Blank lines are ignored; comments and other nonblank text are treated as URLs and rejected if invalid.",
+    "The WHATWG URL parser defines normalization, including lowercasing hostnames and internationalized-domain handling. Counts do not include ports or distinguish HTTP from HTTPS.",
+    "This reads the entire input into memory and is intended for reasonably sized local text files.",
+    "If any nonblank line is invalid or uses a non-HTTP(S) scheme, the command reports errors and produces no count output.",
+    "The file contents are treated only as data. The program does not fetch, resolve, or otherwise contact any URL."
+  ],
+  "steps": [
+    "Save the CommonJS code to `url-host-summary.js`.",
+    "Put one absolute HTTP(S) URL on each line of a text file, or prepare input on stdin.",
+    "Run `node url-host-summary.js <file-path>` or `node url-host-summary.js - < <file-path>`.",
+    "Inspect the hostname-count JSON on stdout. Correct any rejected lines using the line numbers reported on stderr, then run again."
+  ],
+  "checks": [
+    "Run the supplied example and confirm its output matches `expected_output`.",
+    "Try a file containing the same hostname with different casing and ports; confirm it produces one hostname key with the combined count.",
+    "Try `mailto:sample` or malformed URL text on a line; confirm the command reports its one-based line number to stderr and exits nonzero.",
+    "Run with `-` and pipe the same fixture through stdin; confirm the result matches file input.",
+    "Review the script to confirm it contains no networking or filesystem-write operations."
+  ],
+  "usage": "Save the code as `url-host-summary.js`. Run `node url-host-summary.js urls.txt` to read a UTF-8 file, or `node url-host-summary.js - < urls.txt` to read stdin. The program prints JSON to stdout; input and validation failures are written to stderr and exit nonzero. Intended runner: Node.js 22.",
+  "example_input": "https://example.com/docs\nhttp://example.com:8080/status\nhttps://api.example.net/v1\n",
+  "expected_output": "{\n  \"api.example.net\": 1,\n  \"example.com\": 2\n}\n",
+  "tested_scope": "Executed 5 synthetic local fixture cases in isolated Node.js 22.23.3 on GitHub Actions, without network access. Declared exit codes, output assertions and input integrity checks passed. Live services, installed third-party packages and production behavior remain outside scope. Editorial approval is still required.",
+  "sources": [
+    "https://nodejs.org/docs/latest-v22.x/api/url.html",
+    "https://nodejs.org/docs/latest-v22.x/api/process.html"
+  ],
+  "projects": [],
+  "url": "https://openvist.com/recipes/summarize-http-urls-by-hostname/",
+  "code_file": "url-host-summary.js",
+  "code_sha256": "2314a392e3df63aa01898ae6e5d7893e0187b5027c02e603eaea15de760e8844",
+  "published_record_sha256": "8d5c5c932bc460d6261286f01046f8af8ab8a9513816f7a212b6688365268c1d"
+}

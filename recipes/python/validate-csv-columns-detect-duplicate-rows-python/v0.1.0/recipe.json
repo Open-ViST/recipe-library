@@ -1,0 +1,47 @@
+{
+  "slug": "validate-csv-columns-detect-duplicate-rows-python",
+  "kind": "static",
+  "title": "Validate CSV columns and detect duplicate rows with Python",
+  "goal": "Check required CSV columns and identify exact duplicate rows before an import.",
+  "language": "python",
+  "version": "0.1.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-13",
+  "intro": "Inspect modest comma-separated CSV inputs without changing them. This standard-library function checks the header and record width, then reports repeated rows against their first occurrence.",
+  "requirements": [
+    "Python 3.12; no external dependencies.",
+    "Decoded CSV text using comma separators.",
+    "Pass required column names as a list of strings."
+  ],
+  "limits": [
+    "Compares complete rows exactly, including whitespace and letter case.",
+    "Does not validate data types or identifier uniqueness.",
+    "Accepts decoded text, not a file path; encoding is the caller's responsibility.",
+    "Record numbers count CSV records, not physical lines.",
+    "Memory grows with distinct rows; use modest inputs.",
+    "Header-only input is valid. Additional columns are allowed."
+  ],
+  "steps": [
+    "Save the example code as recipe.py.",
+    "Import inspect_csv and pass the CSV text and required column names.",
+    "Inspect rows and duplicates in the returned dictionary.",
+    "Handle ValueError and csv.Error before proceeding with an import."
+  ],
+  "checks": [
+    "Seven test methods passed in the pinned Python Docker image.",
+    "Covered Unicode, BOM, duplicates, quoted commas and newlines.",
+    "Covered header-only input, invalid structure and unclosed quotes."
+  ],
+  "usage": "from recipe import inspect_csv\nresult = inspect_csv(\"id,name\\n1,Jose\\n1,Jose\\n\", [\"id\", \"name\"])\nprint(result)",
+  "expected_output": "{'rows': 2, 'duplicates': [{'record': 3, 'first_record': 2}]}",
+  "tested_scope": "Seven unittest methods passed in an isolated Python 3.12 Docker container with networking disabled. Covers the listed fixtures; does not establish performance for large files or support for every CSV dialect.",
+  "sources": [
+    "https://docs.python.org/3.12/library/csv.html",
+    "https://docs.python.org/3.12/library/io.html"
+  ],
+  "projects": [],
+  "url": "https://openvist.com/recipes/validate-csv-columns-detect-duplicate-rows-python/",
+  "code_file": "recipe.py",
+  "code_sha256": "4fe4d6155ddd79abf37cb05c67aeac1bdb35d5bdde960f42cdd7711a46728549",
+  "published_record_sha256": "07b6fdfdd943fcc2e9395e296618307b2761c8edb55f94b6931da8c1d523c0f6"
+}

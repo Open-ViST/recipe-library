@@ -1,0 +1,46 @@
+{
+  "slug": "read-solana-balance",
+  "kind": "solana",
+  "title": "Build a read-only Solana balance tool",
+  "goal": "Create a small balance reader with an explicit network, public account and commitment level.",
+  "version": "1.0.0",
+  "reviewed_at": "2026-10-06",
+  "intro": "An agent tool should expose a narrow operation and validate its arguments before making a request. This function reads a public account through Solana’s getBalance method and returns the integer amount in lamports with the RPC context. It can be connected to a tool-calling application after its inputs and errors have been tested.",
+  "requirements": [
+    "Python 3.10 or later; this example uses only its standard library.",
+    "A base58 public account address that decodes to 32 bytes.",
+    "Access to the selected Solana RPC endpoint. Public endpoints have rate limits."
+  ],
+  "limits": [
+    "This recipe does not sign or submit transactions and does not need a private key.",
+    "Devnet and Mainnet beta are separate networks. A balance on one is not a balance on the other.",
+    "Keep lamports as an integer. The preview validates the address shape and length, not the account’s purpose or existence."
+  ],
+  "steps": [
+    "Start on Devnet and choose the commitment required by your application.",
+    "Change the account field and inspect the generated request and validation function.",
+    "Run the file and keep the network, commitment, lamports and context together.",
+    "Before attaching the function to an agent, define the allowed arguments and handle RPC errors, timeouts and rate limits in the host application."
+  ],
+  "checks": [
+    "Only getBalance is requested; no transaction or signing method is present.",
+    "Invalid addresses and unsupported networks are rejected before a network request.",
+    "Large lamport values remain integers, and a JSON-RPC error stops processing."
+  ],
+  "tested_scope": "Code syntax, address validation, network selection and mocked RPC responses checked locally. No agent integration or live RPC execution is claimed.",
+  "sources": [
+    "https://solana.com/docs/rpc/http/getbalance",
+    "https://solana.com/docs/rpc",
+    "https://developers.openai.com/api/docs/guides/function-calling"
+  ],
+  "projects": [
+    "solana",
+    "openai-agents-sdk"
+  ],
+  "language": "python",
+  "license": "MIT",
+  "url": "https://openvist.com/recipes/read-solana-balance/",
+  "code_file": "recipe.py",
+  "code_sha256": "7b1831c4c5f2f0c32bed11b89bfad5e95b6daad0a400cf19dc40fe957cb9f566",
+  "published_record_sha256": "f2ed5560dc15de068194a2615debbe5f6ed7ab203395aed00db5bf8a48bc3761"
+}

@@ -1,0 +1,50 @@
+{
+  "slug": "audit-tool-name-collisions-javascript",
+  "kind": "static",
+  "title": "Find case-insensitive collisions in tool names with JavaScript",
+  "goal": "Audit tool identifiers under an explicit local ASCII naming convention and report collisions after lowercase normalization.",
+  "language": "javascript",
+  "version": "0.1.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-14",
+  "intro": "Audit a small JSON array of tool names using a local ASCII convention. Normalize accepted names to lowercase and report one-based positions for collisions. This does not execute tools or validate a provider-specific naming policy.",
+  "requirements": [
+    "Save as audit-tools.cjs and run with Node.js 22: node audit-tools.cjs. Supply one JSON array through stdin, then signal EOF. No CLI arguments or help option are accepted.",
+    "Uses only node:fs, solely for bounded, read-only reads from stdin. Reads at most 65537 bytes and rejects input exceeding 65536 bytes before JSON parsing.",
+    "Decodes strict UTF-8 with global TextDecoder and fatal:true. Native JSON.parse syntax rules apply, including rejection of a preserved leading BOM.",
+    "Accepts only strings of 1–64 ASCII characters: an initial letter followed by letters, digits, underscores or hyphens. An empty array is valid.",
+    "Successful output is one JSON object containing normalized names in original order and collisions sorted by ASCII name, with ascending one-based positions. Map-based counting safely handles constructor and prototype.",
+    "Valid input exits 0 without stderr. Invalid arguments, stdin errors or invalid input exit 2 with a generic diagnostic on stderr and no stdout, traceback or input values."
+  ],
+  "limits": [
+    "This is an audit under a local naming convention, not a guarantee of compatibility with any AI provider. It does not execute tools.",
+    "The entire parsed input and generated output are held in memory. Stdin can block until EOF.",
+    "Successful output contains names, which may be sensitive.",
+    "Output-write failures are outside the input-validation error guarantee.",
+    "Use the provider-specific documentation separately when integrating a real tool API."
+  ],
+  "steps": [
+    "Use Node.js 22. Save the CommonJS example as audit-tools.cjs.",
+    "Save a UTF-8 JSON array of names as names.json, at most 65536 bytes.",
+    "Run: node audit-tools.cjs < names.json",
+    "Inspect normalized names and collision positions. Resolve collisions before integrating the names with your own application."
+  ],
+  "checks": [
+    "For the supplied example, lookup collides at positions 1 and 2.",
+    "Inspect the naming convention and compare it with your application requirements.",
+    "Handle exit code 2 as invalid input or arguments. Successful output contains the names."
+  ],
+  "usage": "node audit-tools.cjs < names.json",
+  "example_input": "[\"Lookup\",\"lookup\",\"Send\"]",
+  "expected_output": "{\"normalized\":[\"lookup\",\"lookup\",\"send\"],\"collisions\":[{\"name\":\"lookup\",\"positions\":[1,2]}]}",
+  "tested_scope": "Six independent CLI fixtures and ten curated supplementary checks passed in pinned offline Node.js 22 Docker, including stdin read errors and leading-BOM rejection. These checks do not establish exhaustive correctness or compatibility with any tool provider.",
+  "sources": [
+    "https://nodejs.org/docs/latest-v22.x/api/fs.html",
+    "https://nodejs.org/download/release/v22.23.3/docs/api/util.html"
+  ],
+  "projects": [],
+  "url": "https://openvist.com/recipes/audit-tool-name-collisions-javascript/",
+  "code_file": "audit-tools.cjs",
+  "code_sha256": "5470f002a256cb03fb3621df8be0765e211e74136ce7aea7b09b820e6e240e7f",
+  "published_record_sha256": "cd64e5208cfaf6f8ddc573dd553ef7141933686fc62e2d1ba2c8d1118612c009"
+}

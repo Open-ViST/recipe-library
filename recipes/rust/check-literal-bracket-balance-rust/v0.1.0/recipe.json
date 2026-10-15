@@ -1,0 +1,54 @@
+{
+  "slug": "check-literal-bracket-balance-rust",
+  "kind": "static",
+  "title": "Check literal bracket nesting in text lines with Rust",
+  "goal": "Validate matched round square and curly brackets while treating all other scalars as ordinary text.",
+  "language": "rust",
+  "version": "0.1.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-14",
+  "intro": "Validate matched round square and curly brackets while treating all other scalars as ordinary text. Work only with supplied input; this does not contact external services or modify input.",
+  "requirements": [
+    "Save as recipe.rs. Compile with Rust 1.99.0 using: rustc --edition=2021 recipe.rs -o recipe",
+    "Run with no arguments, supplying text on stdin: ./recipe < input.txt. All arguments, including help flags, are rejected.",
+    "Reads at most 65537 bytes from stdin and rejects input exceeding 65536 bytes. Requires strict UTF-8, rejects a leading UTF-8 BOM, and rejects every CR, including CRLF.",
+    "Splits only on LF and discards exactly empty segments. Whitespace-only segments remain. Before bracket classification, rejects more than 100 retained lines or any retained line exceeding 256 UTF-8 bytes. No trimming, normalization, grouping, or deduplication occurs.",
+    "Checks each retained line independently with a stack for (), [] and {}. Every other Unicode scalar is ordinary text, including quotes, backslashes, and any non-leading BOM. Wrong closers and unmatched brackets produce false.",
+    "Success exits 0 and writes exactly one JSON object followed by LF, with no stderr. Empty input or input containing only LF characters produces {\"balanced\":[]}.",
+    "Invalid arguments, invalid input, and stdin-read failures exit 2 without stdout and report exactly error: invalid input followed by LF on stderr, subject to the allocation and output-failure limitations below. Diagnostics never contain input values."
+  ],
+  "limits": [
+    "Stdin can block while waiting for data or EOF. No timeout is provided. The read bound limits bytes consumed, not elapsed time.",
+    "Memory use is bounded by the input buffer holding at most 65537 bytes, references to at most 100 lines, a temporary stack of at most 256 characters, and the small JSON output buffer. Allocator capacity and standard-library I/O buffering add overhead.",
+    "Successful output does not reproduce line text, but reveals the number and order of retained lines and their bracket-balance results; treat that information as potentially sensitive.",
+    "Memory-allocation failures and stdout/stderr write or flush failures are outside the input-error guarantee. An output failure may leave partial output or prevent the diagnostic from being delivered; detected stdout failures exit 2.",
+    "Uses only the standard library, stdin, stdout, and stderr. Argument inspection is used only to reject arguments, and process exit is used only to set status. No filesystem, networking, subprocess, dynamic-loading, or unsafe operations are used.",
+    "This checks literal brackets, not programming-language syntax or quoted-string semantics."
+  ],
+  "steps": [
+    "Save the example as recipe.rs.",
+    "Compile with Rust 1.99.0 using rustc --edition=2021 recipe.rs -o recipe.",
+    "Prepare UTF-8 input.txt following the documented operation-specific conventions.",
+    "Run ./recipe < input.txt.",
+    "Inspect the JSON result. Exit 2 with exactly error: invalid input followed by a newline on stderr and no stdout identifies rejected input or stdin-read failure. Output-write failures may also exit nonzero, without that diagnostic and potentially after partial stdout; these are outside the input-error guarantee."
+  ],
+  "checks": [
+    "The example must produce the documented JSON result.",
+    "Empty stdin must produce the documented empty result.",
+    "Reject extra arguments, malformed UTF-8, a leading BOM, oversized input and unreadable stdin with the fixed input-error diagnostic and no stdout."
+  ],
+  "usage": "rustc --edition=2021 recipe.rs -o recipe\n./recipe < input.txt",
+  "example_input": "([])\n([)]\nplain",
+  "expected_output": "{\"balanced\":[true,false,true]}",
+  "tested_scope": "Six independent CLI fixtures and 16 supplementary cases are executed in pinned, offline Rust 1.99.0 containers. These checks do not establish exhaustive correctness or behavior on other versions.",
+  "sources": [
+    "https://doc.rust-lang.org/std/io/trait.Read.html",
+    "https://doc.rust-lang.org/std/primitive.str.html",
+    "https://doc.rust-lang.org/std/primitive.u32.html"
+  ],
+  "projects": [],
+  "url": "https://openvist.com/recipes/check-literal-bracket-balance-rust/",
+  "code_file": "recipe.rs",
+  "code_sha256": "a896c5e09dfcebc1526a45933b597d1e8f24397435256f8006651dabfc8cdaf7",
+  "published_record_sha256": "1e3cba6b49943f7c661e6d863f5202ad7bcded993730b31ebd93b73f2fc056e6"
+}

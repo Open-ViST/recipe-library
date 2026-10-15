@@ -1,0 +1,50 @@
+{
+  "slug": "find-interval-overlaps-python",
+  "kind": "static",
+  "title": "Find overlaps between bounded integer intervals with Python",
+  "goal": "Report overlapping half-open intervals using original one-based positions.",
+  "language": "python",
+  "version": "0.1.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-14",
+  "intro": "Report overlapping half-open intervals using original one-based positions. This is a local data check under the documented conventions; it does not execute tools or contact a service.",
+  "requirements": [
+    "Save the code as recipe.py and run python3.12 recipe.py with JSON supplied on stdin. No arguments, including a help option, are accepted. The CLI imports only json, sys and math.",
+    "Input must be an array of at most 20 objects. Each object must contain start and end as integers, excluding booleans, from 0 through 1000000000 inclusive, with start < end. Additional fields are ignored after JSON parsing.",
+    "Intervals are half-open: [start, end). Touching endpoints do not overlap. Positions are the original one-based array positions, and results are ordered by first and then second. Offsets are unitless, not dates or timezone values.",
+    "Success exits 0 and writes exactly one JSON object to stdout without stderr. An empty input array returns {\"overlaps\":[]}. Invalid input, arguments or stdin read failures exit 2 with no stdout and the generic lowercase stderr diagnostic error: invalid input.",
+    "Input is decoded as strict UTF-8. A leading UTF-8 BOM, malformed JSON, NaN, Infinity, -Infinity and floating-point overflow are rejected. Python's JSON convention for duplicate object keys applies: the last occurrence is used.",
+    "The CLI reads stdin only; it does not open input paths, write files, execute external commands or contact a network."
+  ],
+  "limits": [
+    "Reads at most 65537 bytes and rejects input exceeding 65536 bytes, including whitespace. Stdin can block while waiting for EOF.",
+    "The input bytes, decoded text, parsed JSON and results are held in memory. The byte limit bounds source input size, not exact memory consumption; parsed structures add overhead.",
+    "At most 190 interval pairs are checked and at most 190 overlap records are returned.",
+    "Successful output reveals original positions and overlapping ranges and may therefore be sensitive.",
+    "Output-write failures, including stdout flush failures, are outside the stated exit-code and diagnostic guarantee.",
+    "The interpreter's integer-conversion and JSON nesting limits can also cause input rejection. No provider integration, production suitability or uniqueness is claimed."
+  ],
+  "steps": [
+    "Use Python 3.12. Save the code as recipe.py.",
+    "Save the supplied JSON example as input.json, encoded as UTF-8 without a BOM.",
+    "Run: python3 recipe.py < input.json",
+    "Compare the output with the expected result; handle exit code 2 as invalid input."
+  ],
+  "checks": [
+    "The supplied example must match the documented JSON output.",
+    "Error cases must exit 2 with no stdout. Review sensitive successful output before sharing it."
+  ],
+  "usage": "python3 recipe.py < input.json",
+  "example_input": "[{\"start\": 0, \"end\": 5}, {\"start\": 3, \"end\": 7}]",
+  "expected_output": "{\"overlaps\": [{\"first\": 1, \"second\": 2, \"start\": 3, \"end\": 5}]}",
+  "tested_scope": "Six independent CLI fixtures and 10 curated supplementary checks passed in the pinned offline Python 3.12 container. This does not establish exhaustive correctness, production performance or compatibility with an external provider.",
+  "sources": [
+    "https://docs.python.org/3.12/library/json.html",
+    "https://docs.python.org/3.12/library/sys.html"
+  ],
+  "projects": [],
+  "url": "https://openvist.com/recipes/find-interval-overlaps-python/",
+  "code_file": "recipe.py",
+  "code_sha256": "a9c6b17e8951f79a3bc3805d48aaa65a9eff9e712d9efbb9d3ccbe90cde52920",
+  "published_record_sha256": "d60dccb624e2a8f704d17501605dc1dc4acfddf9b1e6f567b803f518c7852730"
+}

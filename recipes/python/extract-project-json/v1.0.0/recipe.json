@@ -1,0 +1,45 @@
+{
+  "slug": "extract-project-json",
+  "kind": "structured",
+  "title": "Extract a small project record as JSON",
+  "goal": "Turn a short description into a typed record and adjust the fields you want to keep.",
+  "version": "1.0.0",
+  "reviewed_at": "2026-10-06",
+  "intro": "A typed record helps the next part of an application work with predictable field names. This example uses an explicit Pydantic model and the Responses parsing helper. Add requirements or source URLs to change the generated schema. Structured output controls the format; the source text still determines what can be supported.",
+  "requirements": [
+    "Python 3.10 or later, the official OpenAI Python SDK and Pydantic 2.",
+    "Your own provider API access and a configured runtime environment. The downloaded script makes one paid request.",
+    "A small source description. Do not put private account details into the example."
+  ],
+  "limits": [
+    "A schema is a format guarantee, not factual verification.",
+    "Refusals, incomplete responses and network failures still need handling. This example stops instead of retrying silently.",
+    "The model, service tier and output cap are explicit. Check the provider’s current pricing before running."
+  ],
+  "steps": [
+    "Inspect the default code, then toggle the optional fields and compare the Project model.",
+    "Install the dependencies in an isolated Python environment and configure your provider access using its secure settings.",
+    "Run the file once. Keep the parsed result only when the response completed and a parsed object exists.",
+    "Compare every value with the original text. Empty lists are appropriate when a requirement or source was not stated."
+  ],
+  "checks": [
+    "The Project fields match the selected checkboxes.",
+    "A completed response has a parsed object, and missing facts were not invented.",
+    "The request is made only in your Python environment; copying and previewing the code make no request."
+  ],
+  "tested_scope": "Code syntax and all four field combinations checked locally. The API example was tested with a mocked SDK response, not executed against the provider.",
+  "sources": [
+    "https://developers.openai.com/api/docs/guides/structured-outputs?api-mode=responses",
+    "https://github.com/openai/openai-python/blob/main/helpers.md"
+  ],
+  "projects": [
+    "openai",
+    "chatgpt"
+  ],
+  "language": "python",
+  "license": "MIT",
+  "url": "https://openvist.com/recipes/extract-project-json/",
+  "code_file": "recipe.py",
+  "code_sha256": "c90b60d0a5d11a9310dbe66749e676970485bf0782dc6e33423613082f6e908a",
+  "published_record_sha256": "c07f3f8ddadb164b89856df21d8d4b9c70041550182c9e9e98fa9fbfc5074e62"
+}

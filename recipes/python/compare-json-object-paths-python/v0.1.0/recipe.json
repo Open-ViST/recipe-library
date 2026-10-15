@@ -1,0 +1,51 @@
+{
+  "slug": "compare-json-object-paths-python",
+  "kind": "static",
+  "title": "Compare two JSON objects and report changed paths with Python",
+  "goal": "Find added, removed and changed JSON object paths without fetching an API or altering either input.",
+  "language": "python",
+  "version": "0.1.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-14",
+  "intro": "Compare two saved JSON objects without contacting an API or changing either file. Report sorted paths for added, removed and changed values. Objects are compared recursively; arrays are treated as complete values.",
+  "requirements": [
+    "Python 3.12 on Linux; standard library only.",
+    "Two UTF-8 regular files containing top-level JSON objects.",
+    "At most 1 MiB per file. Final-component symlinks are rejected."
+  ],
+  "limits": [
+    "Linux-specific open flags. Rejects final-component symlinks, directories and non-regular files. Intermediate directories may contain symlinks; use trusted paths. This is not a host filesystem sandbox.",
+    "Deeply nested inputs or unusually long integer literals may exceed Python runtime limits and are rejected with exit 2.",
+    "Integers and finite floats use Python numeric equality, so 1 and 1.0 compare equal. Floating-point parsing follows Python's rounding behavior.",
+    "Both documents are parsed in memory. Memory use can exceed their combined file sizes.",
+    "This output is a difference summary, not a JSON Patch or a lossless reconstruction.",
+    "Arrays are atomic: a changed element reports the array path, not its index.",
+    "Added or removed objects report their own path without expanding descendants."
+  ],
+  "steps": [
+    "Save the example code as compare_json.py.",
+    "Save the original object as before.json and the new object as after.json.",
+    "Run: python3 compare_json.py before.json after.json",
+    "Inspect the added, removed and changed arrays. Validation errors exit with code 2."
+  ],
+  "checks": [
+    "Six independent fixtures passed in an offline CPython 3.12.15 Docker container.",
+    "Checked identical objects, additions/removals, nested changes, escaped paths, boolean-versus-number arrays and duplicate-key rejection.",
+    "The fixture input files remained unchanged."
+  ],
+  "usage": "python3 compare_json.py before.json after.json",
+  "example_input": "before.json: {\"name\":\"A\",\"enabled\":true}\nafter.json: {\"name\":\"B\",\"enabled\":true,\"count\":2}",
+  "expected_output": "{\"added\": [\"/count\"], \"removed\": [], \"changed\": [\"/name\"]}",
+  "tested_scope": "Six independent CLI fixtures passed in pinned, offline CPython 3.12.15 Docker. Additional Linux regression checks passed as part of the VPS test suite, covering size boundaries, invalid JSON, non-finite values and non-regular files. This does not establish behavior on other operating systems or exhaustive correctness.",
+  "sources": [
+    "https://docs.python.org/3.12/library/json.html",
+    "https://docs.python.org/3.12/library/os.html",
+    "https://docs.python.org/3.12/library/stat.html",
+    "https://www.rfc-editor.org/rfc/rfc6901"
+  ],
+  "projects": [],
+  "url": "https://openvist.com/recipes/compare-json-object-paths-python/",
+  "code_file": "compare_json.py",
+  "code_sha256": "fd4e0101677d3b96881147046b67c9070e573e1c8b6092ebc8fa8b809e50e40e",
+  "published_record_sha256": "1dad72b1e9a181593233e6bdc5e7695ebaeff5d159be6a2ffd3c9b8881741042"
+}

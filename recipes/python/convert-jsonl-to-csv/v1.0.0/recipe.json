@@ -1,0 +1,42 @@
+{
+  "slug": "convert-jsonl-to-csv",
+  "kind": "static",
+  "title": "Convert JSON Lines to a predictable CSV",
+  "goal": "Export a small JSONL file with explicit columns, correct quoting and checks for invalid records.",
+  "version": "1.0.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-06",
+  "intro": "Select the columns you need before converting. The script reads and validates the entire bounded input before emitting CSV, rejects duplicate JSON keys and non-finite numbers, quotes commas and line breaks, and prefixes formula-like strings with an apostrophe. Missing or null fields become blank cells.",
+  "requirements": [
+    "Python 3.10 or later; standard library only.",
+    "UTF-8 JSONL with one JSON object per nonblank line.",
+    "Choose 1–32 distinct column names; input is limited to 8 MiB and 10,000 records."
+  ],
+  "limits": [
+    "Only selected top-level fields are exported. Nested objects and lists become JSON text; the conversion is not a lossless JSON backup.",
+    "Strings beginning with formula markers after whitespace get an apostrophe. Actual negative numbers remain numeric. This can alter display and must be checked in the target spreadsheet.",
+    "The whole bounded input is validated before output. An output-stream failure can still interrupt a write."
+  ],
+  "steps": [
+    "Inspect the input and choose the desired column order.",
+    "Run: python jsonl_csv.py records.jsonl --columns name,url,category > records.csv",
+    "Keep the output path different from the input path: shell redirection truncates an existing output before the script starts.",
+    "Open the CSV and verify its header, row count and expected cells."
+  ],
+  "checks": [
+    "Test commas, newlines, Unicode, missing fields and nested JSON.",
+    "Malformed JSON, duplicate keys and non-object records must fail without partial CSV.",
+    "Non-finite or overflowing numbers, excessive records and large input must return a nonzero exit status."
+  ],
+  "tested_scope": "Executed locally with deterministic fixtures and CLI checks on Python 3.12.14. The three scripts pass 22 tests covering valid output, invalid input and size limits. No network or provider call was made.",
+  "sources": [
+    "https://docs.python.org/3/library/csv.html",
+    "https://docs.python.org/3/library/json.html"
+  ],
+  "projects": [],
+  "language": "python",
+  "url": "https://openvist.com/recipes/convert-jsonl-to-csv/",
+  "code_file": "recipe.py",
+  "code_sha256": "6d83dd7258af5cd22a2e5545632ce27c903e71dc052cfee470a3021d16a73dd3",
+  "published_record_sha256": "566ccb5bfde23001b214583ee39f0b566ffe213727bb13f960384c29b27e5ea1"
+}

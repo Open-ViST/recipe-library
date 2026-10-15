@@ -1,0 +1,70 @@
+{
+  "slug": "rust-stream-line-counts",
+  "kind": "static",
+  "title": "Count Lines in a Local UTF-8 File or Standard Input",
+  "goal": "Create a Rust 2021 CLI that streams one UTF-8 file or standard input (`-`) and reports total, blank, and nonblank line counts. Propagate I/O and UTF-8 errors instead of silently truncating input.",
+  "language": "rust",
+  "version": "0.1.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-12",
+  "intro": "This recipe adapts Rust by Example’s MIT-licensed buffered line reader into a small line-counting CLI. It accepts exactly one path, or `-` to read standard input, and prints three counts in a stable format. Blank lines are lines whose contents contain only Unicode whitespace; a final line without a newline is still counted.",
+  "requirements": [
+    "Use only Rust standard-library APIs.",
+    "Accept exactly one argument: a UTF-8 file path or `-` for standard input.",
+    "Stream input through a buffered reader and do not collect all lines.",
+    "Count a final unterminated line as a line.",
+    "Classify a line as blank when every character is Unicode whitespace; the empty string is blank.",
+    "Treat invalid UTF-8 and read failures as errors; do not silently return partial counts.",
+    "Print counts to stdout in the documented stable order and send actionable errors to stderr.",
+    "Do not modify the input file or treat its contents as instructions."
+  ],
+  "limits": [
+    "The program counts lines; it does not retain or print line contents.",
+    "A line containing only Unicode whitespace is considered blank; other Unicode classification details follow Rust's `char::is_whitespace`.",
+    "The standard `BufRead::lines` API decodes each line as UTF-8, so malformed input is an error.",
+    "Counts use `u64`; inputs exceeding that count are outside the intended practical use.",
+    "No behavior for concurrent input changes or special device files beyond ordinary standard-library I/O guarantees is promised."
+  ],
+  "steps": [
+    "Save the single-file program as `recipe.rs`.",
+    "Compile it with `rustc --edition=2021 recipe.rs -o recipe` using the intended Rust 1.90.0 runner.",
+    "Run `./recipe PATH` with a UTF-8 fixture, or pipe fixture text to `./recipe -`.",
+    "Compare stdout with the documented `total`, `blank`, and `nonblank` format.",
+    "Check error handling with a nonexistent path and with malformed UTF-8 input."
+  ],
+  "checks": [
+    "Run `./recipe -` with empty stdin and confirm the output is exactly `total: 0`, `blank: 0`, `nonblank: 0`, each on its own line.",
+    "Run the synthetic Unicode example through stdin and confirm the documented exact output.",
+    "Test a file containing a final nonempty line without a trailing newline and verify that it is counted.",
+    "Try a nonexistent file path; confirm an actionable stderr error and nonzero exit status.",
+    "Feed malformed UTF-8 through stdin; confirm the program reports an error and does not print partial counts as a successful result.",
+    "Invoke with zero or multiple arguments and confirm the usage message is written to stderr."
+  ],
+  "usage": "Intended runner: Rust 1.90.0, edition 2021. Compile with `rustc --edition=2021 recipe.rs -o recipe`. Run `./recipe PATH` to read a file or `./recipe -` to read standard input. The output format is exactly three lines, in order: `total: N`, `blank: N`, `nonblank: N`. Errors are written to stderr and use a nonzero exit status.",
+  "example_input": "Synthetic stdin input, supplied to `./recipe -`:\n\n<empty line>\nRust\n  \n雪\n\nThe input has four lines: an empty line, `Rust`, a line containing two spaces, and `雪` (with a final newline).",
+  "expected_output": "total: 4\nblank: 2\nnonblank: 2",
+  "tested_scope": "Executed 5 synthetic local fixture cases in isolated Rust 1.90.0 on GitHub Actions, without network access. Declared exit codes, output assertions and input integrity checks passed. Live services, installed third-party packages and production behavior remain outside scope. Editorial approval is still required.",
+  "sources": [
+    "https://doc.rust-lang.org/stable/rust-by-example/std_misc/file/read_lines.html",
+    "https://doc.rust-lang.org/std/io/trait.BufRead.html",
+    "https://github.com/rust-lang/rust-by-example/blob/dcc14f912bf8790792a2df082eddc82ab2539229/src/std_misc/file/read_lines.md",
+    "https://github.com/rust-lang/rust-by-example/blob/dcc14f912bf8790792a2df082eddc82ab2539229/LICENSE-MIT"
+  ],
+  "projects": [],
+  "provenance": {
+    "schema": "openvist.upstream.v1",
+    "repository": "rust-lang/rust-by-example",
+    "commit": "dcc14f912bf8790792a2df082eddc82ab2539229",
+    "blob_sha": "c5b7bd274a963f78eb69974bfe961c6f20c87a13",
+    "license": "MIT",
+    "license_choice": "MIT from MIT OR Apache-2.0",
+    "license_blob_sha": "ac0fda00385af1cd74acd663ea8fc73c56a94fd3",
+    "license_notice": "Copyright (c) 2014 Jorge Aparicio\n\nPermission is hereby granted, free of charge, to any\nperson obtaining a copy of this software and associated\ndocumentation files (the \"Software\"), to deal in the\nSoftware without restriction, including without\nlimitation the rights to use, copy, modify, merge,\npublish, distribute, sublicense, and/or sell copies of\nthe Software, and to permit persons to whom the Software\nis furnished to do so, subject to the following\nconditions:\n\nThe above copyright notice and this permission notice\nshall be included in all copies or substantial portions\nof the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF\nANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED\nTO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A\nPARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT\nSHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY\nCLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION\nOF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR\nIN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER\nDEALINGS IN THE SOFTWARE.\n",
+    "license_url": "https://github.com/rust-lang/rust-by-example/blob/dcc14f912bf8790792a2df082eddc82ab2539229/LICENSE-MIT",
+    "url": "https://github.com/rust-lang/rust-by-example/blob/dcc14f912bf8790792a2df082eddc82ab2539229/src/std_misc/file/read_lines.md"
+  },
+  "url": "https://openvist.com/recipes/rust-stream-line-counts/",
+  "code_file": "recipe.rs",
+  "code_sha256": "d4e96a82d3b17ecd6d09c124cbb4e184a9de34963304ada2f481f2c33ce3869c",
+  "published_record_sha256": "b98684fa2a18360a2d11f3eb4fc727e87749f8409ccba70afba811753539181d"
+}

@@ -1,0 +1,52 @@
+{
+  "slug": "audit-config-assignment-keys-javascript",
+  "kind": "static",
+  "title": "Find repeated keys in configuration assignments with JavaScript",
+  "goal": "Audit a JSON list of key=value assignments without printing their values.",
+  "language": "javascript",
+  "version": "0.1.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-14",
+  "intro": "Audit a JSON list of key=value assignments without printing their values. This is a local data check under the documented conventions; it does not execute tools or contact a service.",
+  "requirements": [
+    "Save the code as recipe.cjs and run node recipe.cjs using Node.js 22, supplying the JSON document through stdin. No CLI arguments or help option are accepted.",
+    "Only node:fs is loaded, and its only operation is bounded readSync calls on stdin descriptor 0. The CLI does not open input paths, write files, execute external commands or contact a network.",
+    "Input must be a JSON array containing at most 100 strings. Each string must contain an equals sign; the first equals sign separates the key from the value.",
+    "Keys contain 1–64 ASCII characters: an ASCII letter followed by ASCII letters, digits or underscores. Matching is full-string, including rejection of a final newline. Keys are case-sensitive and are not trimmed or normalized.",
+    "Empty values and additional equals signs in values are allowed. Values are never included in output or diagnostics.",
+    "Successful processing exits 0 and emits exactly one JSON object, followed by a newline, with no stderr. The repeated array contains only keys occurring at least twice, sorted by ASCII key, with ascending one-based positions.",
+    "Invalid arguments, invalid input and stdin read failures exit 2, emit no stdout and use the generic lowercase stderr diagnostic error: invalid request."
+  ],
+  "limits": [
+    "The CLI reads at most 65537 bytes and rejects input exceeding 65536 bytes. It can reject oversized input without waiting for EOF.",
+    "UTF-8 decoding is strict. TextDecoder uses fatal:true and ignoreBOM:true, preserving a leading BOM so JSON.parse rejects it. Native JSON.parse semantics apply.",
+    "The parsed input is held in memory alongside the byte buffer, decoded text and grouping data. Memory use includes runtime and parser overhead, not just the input byte count.",
+    "Stdin may block while waiting for data or EOF.",
+    "Successful output reveals repeated key names and their positions, which may be sensitive even though assignment values are excluded.",
+    "This does not parse shell syntax, expand variables or load an environment.",
+    "Output-write failures are excluded from the exit-status, stdout and stderr guarantees."
+  ],
+  "steps": [
+    "Use Node.js 22 CommonJS. Save the code as recipe.cjs.",
+    "Save the supplied JSON example as input.json, encoded as UTF-8 without a BOM.",
+    "Run: node recipe.cjs < input.json",
+    "Compare the output with the expected result; handle exit code 2 as invalid input."
+  ],
+  "checks": [
+    "The supplied example must match the documented JSON output.",
+    "Error cases must exit 2 with no stdout. Review sensitive successful output before sharing it."
+  ],
+  "usage": "node recipe.cjs < input.json",
+  "example_input": "[\"TOKEN=secret\", \"HOST=local\", \"TOKEN=other\"]",
+  "expected_output": "{\"repeated\": [{\"key\": \"TOKEN\", \"positions\": [1, 3]}]}",
+  "tested_scope": "Six independent CLI fixtures and 10 curated supplementary checks passed in the pinned offline Node.js 22 CommonJS container. This does not establish exhaustive correctness, production performance or compatibility with an external provider.",
+  "sources": [
+    "https://nodejs.org/docs/latest-v22.x/api/fs.html",
+    "https://nodejs.org/download/release/v22.23.3/docs/api/util.html"
+  ],
+  "projects": [],
+  "url": "https://openvist.com/recipes/audit-config-assignment-keys-javascript/",
+  "code_file": "recipe.cjs",
+  "code_sha256": "9838b2d0c9b4e4483ac3eae12008f95403aea048b0c00fc36229e6560a0b1004",
+  "published_record_sha256": "aba2736460e6fa6403929e2fec7c79e41eb68fa9834f74f404242a1248cfd37f"
+}

@@ -1,0 +1,68 @@
+# Inspect Agent Workflow Nodes in a Local XML File
+
+Read a saved XML workflow file and print the tag names and attributes of elements selected by an exact tag name, without executing or modifying the workflow.
+
+Published recipe: [inspect-xml-agent-workflow-nodes](https://openvist.com/recipes/inspect-xml-agent-workflow-nodes/)
+
+**Language:** python · **Version:** 0.1.0 · **License:** MIT
+
+## Usage
+
+Code file: `inspect_workflow.py`
+
+Save the code as `inspect_workflow.py`, then run `python3.12 inspect_workflow.py workflow.xml action`. The file is read locally as UTF-8; output is written to stdout and diagnostics to stderr. No network call or retry is made.
+
+## Requirements
+
+- Intended runner: Python 3.12; no tested minimum Python version is claimed.
+- Only the Python standard-library argparse, pathlib, sys, json, and xml.etree.ElementTree modules are used.
+- Input is a local UTF-8 XML file and an exact, nonblank element tag argument; there are no credentials or external services.
+- The code reads the complete file before parsing. It specifies no timeout because it makes no network calls.
+
+## Steps
+
+- Save the program as `inspect_workflow.py`.
+- Create a synthetic local XML fixture containing matching and nonmatching elements, including action-like elements with harmless attributes.
+- Run `python3.12 inspect_workflow.py fixture.xml action` and check that only matching elements appear, in document traversal order.
+- Run `python3.12 inspect_workflow.py fixture.xml missing-tag` and check that the output is an empty JSON array.
+- Try an empty file and malformed XML; verify the tool reports a parse error to stderr and exits with status 2.
+- Try a nonexistent path and a non-UTF-8 fixture; verify a clear input error is sent to stderr with status 2.
+
+## Checks
+
+- Run the synthetic matching case and verify the JSON is a list containing the two `action` nodes and their attributes, with no element text.
+- Run with a tag absent from a valid fixture and verify stdout is exactly `[]`.
+- Run against a malformed XML fixture and verify a parse diagnostic, nonzero status 2, and no JSON result.
+- Run with a missing path and with invalid UTF-8 input; verify each fails clearly rather than silently producing partial output.
+- Review the fixture to ensure its action-like contents are inert sample data; the program must only parse and print selected structure.
+
+## Limits
+
+- ElementTree is documented as not secure against maliciously constructed XML. Use only trusted, appropriately bounded local fixtures; this tool is not a hardened parser for hostile XML.
+- The complete input is loaded into memory before parsing, so it is intended for small files, not large exports.
+- The tag match is exact and namespace-qualified names must be supplied in ElementTree's expanded-name form when applicable.
+- The output contains attributes only; it does not validate workflow schemas, establish what an agent runtime would do, or execute any action.
+- An empty file is not a well-formed XML document and produces a parse error; a valid document with no matching tag yields `[]`.
+
+## Example input
+
+```text
+<workflow><action name="read-state" mode="preview"/><action name="submit" mode="disabled"/><note>Do not execute this file.</note></workflow>
+```
+
+## Expected output
+
+```text
+[{"attributes": {"mode": "preview", "name": "read-state"}, "tag": "action"}, {"attributes": {"mode": "disabled", "name": "submit"}, "tag": "action"}]
+```
+
+## Recorded validation scope
+
+Executed 6 synthetic local fixture cases in isolated CPython 3.12.15 on GitHub Actions, without network access. Declared exit codes, output assertions and input integrity checks passed. Live services, installed third-party packages and production behavior remain outside scope. Editorial approval is still required.
+
+This scope is copied from the published recipe. Exporting does not rerun its tests or establish additional guarantees.
+
+## Sources
+
+- https://docs.python.org/3.12/library/xml.etree.elementtree.html
+- https://docs.python.org/3.12/library/argparse.html

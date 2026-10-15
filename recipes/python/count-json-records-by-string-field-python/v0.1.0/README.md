@@ -1,0 +1,73 @@
+# Count JSON records by an explicit string field with Python
+
+Group a small JSON array of objects by one selected top-level text field and report sorted group counts without modifying the input.
+
+Published recipe: [count-json-records-by-string-field-python](https://openvist.com/recipes/count-json-records-by-string-field-python/)
+
+**Language:** python · **Version:** 0.1.0 · **License:** MIT
+
+## Usage
+
+Code file: `count_records.py`
+
+python3 count_records.py status < records.json
+
+## Requirements
+
+- Save as count_records.py and run: python3.12 count_records.py FIELD < input.json. The program reads only stdin; shell redirection supplies the input.
+- Provide exactly one nonempty, literal top-level field name. Quote names containing whitespace. Use -- before a name beginning with a hyphen, for example: python3.12 count_records.py -- --category < input.json. Dots and slashes have no path meaning. There is no help option.
+- Uses only argparse, json, math and sys. Reads at most 65537 bytes and rejects input exceeding 65536 bytes. Decoding uses strict UTF-8.
+- Requires a JSON array of objects. Rejects duplicate object keys at every depth, non-finite constants, floats that overflow to infinity, and selected fields that are missing or are not nonempty strings.
+- Preserves selected strings without trimming, case folding or Unicode normalization. Outputs one JSON object containing records and groups, with distinct groups sorted by Python string ordering. An empty array produces zero records and an empty groups array.
+- Successful processing exits 0 without stderr. Invalid arguments or input exit 2 with an error on stderr and no stdout or traceback. Error messages do not include record values. Input is not modified.
+
+## Steps
+
+- Save the example as count_records.py.
+- Prepare a UTF-8 JSON array of objects, at most 65536 bytes.
+- Run: python3 count_records.py status < records.json
+- Inspect records and the sorted groups array. Each value appears once with its occurrence count.
+- Handle exit code 2 as invalid or unreadable input.
+
+## Checks
+
+- Six independent CLI fixtures passed in offline CPython 3.12.15 Docker.
+- Checked grouping counts, empty arrays, exact Unicode and case behavior, missing fields, non-string fields and duplicate keys.
+- Nine additional unittest methods passed in the same pinned image, covering byte boundaries, UTF-8 and JSON errors, non-finite numbers, nested duplicate keys, native parser limits, arguments, literal field names, invalid record types and exact string preservation.
+
+## Limits
+
+- All records are parsed in memory. Stdin can block until EOF, unless the read limit is reached first.
+- Python parser limits apply, including nesting depth and integer-token length; inputs exceeding those limits are rejected.
+- Successful output intentionally includes the selected group values and can contain sensitive data. JSON escaping changes representation, not the string values.
+- Counts describe only the supplied data. This is not a database query engine.
+- Output-write failures are outside the input-error guarantee.
+- The entire input and parsed values are held in memory. Memory use can exceed the input byte size.
+- Standard input may block while waiting for data or EOF. The byte limit is not a timeout.
+- Output write failures are outside the input-validation error guarantee.
+- Selected group values can contain sensitive information; inspect the output before sharing it.
+
+## Example input
+
+```text
+[{"status":"open"},{"status":"closed"},{"status":"open"}]
+```
+
+## Expected output
+
+```text
+{"records":3,"groups":[{"value":"closed","count":1},{"value":"open","count":2}]}
+```
+
+## Recorded validation scope
+
+Six independent CLI fixtures and nine additional boundary-test methods passed in pinned, offline CPython 3.12.15 Docker. These checks do not establish exhaustive correctness, performance for arbitrary inputs, or behavior on other Python versions.
+
+This scope is copied from the published recipe. Exporting does not rerun its tests or establish additional guarantees.
+
+## Sources
+
+- https://docs.python.org/3.12/library/json.html
+- https://docs.python.org/3.12/library/sys.html
+- https://docs.python.org/3.12/library/math.html
+- https://docs.python.org/3.12/library/argparse.html
