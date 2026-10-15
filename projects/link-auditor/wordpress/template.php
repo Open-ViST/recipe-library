@@ -2,6 +2,7 @@
 <main id="main-content" class="ovt-shell ovla-shell">
 <nav aria-label="Breadcrumb"><a href="<?php echo esc_url(home_url('/tools/')); ?>">Tools</a> / Link Auditor</nav>
 <header class="ovt-hero"><p>OPENVIST TOOLS · FREE BETA</p><h1>Check links on your website.</h1><p>Find missing pages, inspect redirects and distinguish access restrictions from broken links. Get a private report from a bounded HTTP audit.</p><p><a class="ovla-download" href="https://github.com/Open-ViST/recipe-library/tree/main/projects/link-auditor">Source code and tests on GitHub ↗</a></p></header>
+<?php if(is_callable(['OpenViST_Directory_UI','render_share_controls']))echo OpenViST_Directory_UI::render_share_controls(0,OVLA_Bridge::url(),'OpenViST Link Auditor'); ?>
 <?php if(!OVLA_Bridge::access()): ?>
 <section class="ovt-workbench"><h2>Start with your website</h2><p>Sign in with your OpenViST account, verify control of your domain, then request an audit. Reports are visible only to your account.</p><a class="ovla-download" href="<?php echo esc_url(home_url('/account/login/').'?redirect='.rawurlencode(OVLA_Bridge::url())); ?>">Sign in to use Link Auditor →</a><?php if(!OVLA_Bridge::enabled()): ?><p>Public submissions are currently paused while this beta is being prepared.</p><?php endif; ?></section>
 <?php else: ?>

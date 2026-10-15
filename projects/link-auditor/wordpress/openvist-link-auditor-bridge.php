@@ -69,6 +69,12 @@ final class OVLA_Bridge {
         add_filter('pre_get_document_title',static function($t){return self::route()?'Link Auditor — Check links on your website | OpenViST':$t;},999);
         add_filter('openvist_brand_metadata_enabled',static function($on){return self::route()?false:$on;});
         add_action('wp_head',static function(){if(!self::route())return;echo '<link rel="canonical" href="'.esc_url(self::url()).'">' . "\n";echo '<meta name="description" content="Check HTTP links on a verified website. Free bounded audits with private results, clear limits and open-source code.">' . "\n";echo '<meta property="og:title" content="OpenViST Link Auditor"><meta property="og:description" content="Check links on a verified website with a free, bounded audit."><meta property="og:url" content="'.esc_url(self::url()).'"><meta property="og:type" content="website"><meta name="twitter:card" content="summary">';},2);
+        add_action('wp_head',static function(){
+            if(!self::route())return;
+            $asset='openvist-directory-ui/assets/brand/openvist-logo-square-512x512.png';
+            $image=file_exists(WP_PLUGIN_DIR.'/'.$asset)?plugins_url($asset):get_site_icon_url(512);
+            if($image)echo '<meta property="og:image" content="'.esc_url($image).'"><meta property="og:image:alt" content="OpenViST logo"><meta name="twitter:image" content="'.esc_url($image).'">';
+        },3);
         add_action('admin_menu',static function(){add_management_page('OpenViST Link Auditor','Link Auditor','manage_options','ovla-pilot',[__CLASS__,'admin_page']);});
         add_action('admin_post_ovla_toggle',static function(){if(!self::worker_access())wp_die('Not allowed.');check_admin_referer('ovla_toggle');$on=isset($_POST['enabled'])&&$_POST['enabled']==='1';if($on&&(int)get_option('ovla_worker_seen',0)<time()-600)wp_die('Run the 0.4.0 VPS worker within the last ten minutes first.');update_option('ovla_public_enabled',$on?'1':'0',false);wp_safe_redirect(admin_url('tools.php?page=ovla-pilot'));exit;});
         add_action('wp_enqueue_scripts',static function(){
