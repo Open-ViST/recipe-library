@@ -7,7 +7,7 @@
     if (typeof text !== 'string' || new TextEncoder().encode(text).length > MAX_BYTES) fail('Each input must be at most 2 MiB.');
     return text;
   }
-  function json(text) {
+  function json(text, numericToken) {
     bounded(text);
     let i = 0, nodes = 0;
     const tokens = [];
@@ -65,7 +65,7 @@
       if (!found) error('Expected a JSON value');
       const raw = found[0]; token(raw); i += raw.length;
       // Output formatting uses original tokens, preserving large numbers exactly.
-      return raw === 'null' ? null : raw === 'true' ? true : raw === 'false' ? false : Number(raw);
+      return raw === 'null' ? null : raw === 'true' ? true : raw === 'false' ? false : (numericToken ? numericToken(raw) : Number(raw));
     }
     const data = value(0); space();
     if (i !== text.length) error('Unexpected content after the JSON value');

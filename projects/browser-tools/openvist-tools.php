@@ -2,7 +2,7 @@
 /**
  * Plugin Name: OpenViST Tools
  * Description: Free local JSON and CSV tools. Input processing runs in browser workers.
- * Version: 0.1.1
+ * Version: 0.2.0
  * Requires at least: 6.5
  * Requires PHP: 8.0
  * Author: OpenViST
@@ -10,12 +10,15 @@
  */
 defined('ABSPATH') || exit;
 final class OpenViST_Tools {
-    const VERSION = '0.1.1';
+    const VERSION = '0.2.0';
     public static function catalogue() {
         return [
             'json-validator'=>['title'=>'JSON Validator & Formatter','intro'=>'Validate, format or minify JSON while preserving the original numeric tokens.','detail'=>'Duplicate object keys are rejected. Maximum nesting: 100 levels; maximum values: 100,000. Formatting preserves number and string spellings.'],
             'csv-comparator'=>['title'=>'CSV Comparator','intro'=>'Compare two CSV files by an identifier column and find added, removed and modified rows.','detail'=>'Comma-separated CSV with a header row. Headers must be nonempty and unique; each row must have the same column count. Identifiers must be nonempty and unique in each file.'],
             'duplicate-finder'=>['title'=>'Duplicate & Conflict Finder','intro'=>'Find repeated identifiers and identifiers associated with different text values in CSV or JSON.','detail'=>'Select two different, literal field names. Both fields must contain nonempty strings. JSON input must be an array of objects. Positions are one-based data record positions.'],
+            'text-diff'=>['title'=>'Text Diff','intro'=>'Compare two texts line by line and identify additions, removals and unchanged lines.','detail'=>'Maximum 2,000 lines per input. Line endings are compared as LF. Case, spaces and Unicode spelling are preserved. Final newline presence is reported separately. The result is a readable comparison, not a patch file.'],
+            'csv-json-converter'=>['title'=>'CSV ↔ JSON Converter','intro'=>'Convert CSV records to JSON or flat JSON objects to CSV, with optional column selection.','detail'=>'CSV values remain strings. For JSON to CSV, missing fields and null become empty cells. Selected values must be scalar; nested arrays and objects are rejected. Formula-like string cells are prefixed with an apostrophe by default.'],
+            'sitemap-inspector'=>['title'=>'Sitemap Inspector','intro'=>'Inspect a sitemap XML file, extract URLs and find duplicates and common structural issues locally.','detail'=>'Accepts XML urlset and sitemapindex files up to 2 MiB and 20,000 entries. DTD declarations are rejected. These are local structural checks, not complete XSD validation, live link checking or an indexing guarantee.'],
         ];
     }
     public static function route() {
@@ -24,12 +27,13 @@ final class OpenViST_Tools {
     }
     public static function rules() {
         add_rewrite_rule('^tools/?$', 'index.php?openvist_tool=index', 'top');
-        add_rewrite_rule('^tools/(json-validator|csv-comparator|duplicate-finder)/?$', 'index.php?openvist_tool=$matches[1]', 'top');
+        add_rewrite_rule('^tools/('.implode('|',array_keys(self::catalogue())).')/?$', 'index.php?openvist_tool=$matches[1]', 'top');
     }
     public static function url($slug = '') { return home_url('/tools/'.($slug && $slug !== 'index' ? $slug.'/' : '')); }
     public static function title() { $route=self::route();return $route && $route!=='index' ? self::catalogue()[$route]['title'] : 'Free browser tools'; }
     public static function boot() {
         add_action('init',[__CLASS__,'rules']);
+        add_action('init',static function(){if(get_option('ovt_route_version')!==self::VERSION){flush_rewrite_rules(false);update_option('ovt_route_version',self::VERSION,false);}},20);
         add_filter('query_vars',static function($vars){$vars[]='openvist_tool';return $vars;});
         add_action('pre_get_posts',static function($query){
             if(!$query->is_main_query())return;
@@ -47,7 +51,9 @@ final class OpenViST_Tools {
         add_action('wp_enqueue_scripts',static function(){
             if(!self::route())return;
             wp_enqueue_style('openvist-tools',plugins_url('assets/tools.css',__FILE__),[],self::VERSION);
-            wp_enqueue_script('openvist-tools',plugins_url('assets/tools-ui.js',__FILE__),[],self::VERSION,true);
+            $deps=[];
+            if(self::route()==='sitemap-inspector'){wp_enqueue_script('openvist-tools-xml',plugins_url('assets/sitemap-dom.js',__FILE__),[],self::VERSION,true);$deps[]='openvist-tools-xml';}
+            wp_enqueue_script('openvist-tools',plugins_url('assets/tools-ui.js',__FILE__),$deps,self::VERSION,true);
             wp_add_inline_script('openvist-tools','window.ovtConfig='.wp_json_encode(['worker'=>plugins_url('assets/tools-worker.js',__FILE__).'?ver='.self::VERSION]).';','before');
         },1200);
         add_action('wp_head',[__CLASS__,'metadata'],2);
@@ -72,7 +78,7 @@ final class OpenViST_Tools {
     public static function metadata() {
         $route=self::route();if(!$route)return;
         $title=self::title().' | OpenViST';
-        $description=$route==='index'?'Free browser tools for JSON validation, CSV comparison and duplicate detection. Process inputs locally without an account.':self::catalogue()[$route]['intro'];
+        $description=$route==='index'?'Free local tools for JSON, CSV, text comparison and sitemap inspection. Process inputs in your browser without an account.':self::catalogue()[$route]['intro'];
         echo '<link rel="canonical" href="'.esc_url(self::url($route)).'">' . "\n";
         echo '<meta name="description" content="'.esc_attr($description).'">' . "\n";
         foreach(['og:title'=>$title,'og:description'=>$description,'og:url'=>self::url($route),'og:type'=>'website','og:site_name'=>'OpenViST'] as $key=>$value)echo '<meta property="'.esc_attr($key).'" content="'.esc_attr($value).'">' . "\n";
@@ -80,5 +86,5 @@ final class OpenViST_Tools {
     }
 }
 OpenViST_Tools::boot();
-register_activation_hook(__FILE__,static function(){OpenViST_Tools::rules();flush_rewrite_rules(false);});
+register_activation_hook(__FILE__,static function(){OpenViST_Tools::rules();flush_rewrite_rules(false);update_option('ovt_route_version',OpenViST_Tools::VERSION,false);});
 register_deactivation_hook(__FILE__,static function(){flush_rewrite_rules(false);});

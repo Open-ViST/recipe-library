@@ -9,7 +9,7 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -22,6 +22,20 @@ jobs:
       - name: JavaScript syntax and processing checks
         run: |
           node --check projects/browser-tools/assets/tools-core.js
+          node --check projects/browser-tools/assets/tools-extended.js
+          node --check projects/browser-tools/assets/sitemap-dom.js
           node --check projects/browser-tools/assets/tools-ui.js
           node --check projects/browser-tools/assets/tools-worker.js
-          node --test projects/browser-tools/tests/core.test.js
+          node --test projects/browser-tools/tests/core.test.js projects/browser-tools/tests/extended.test.js
+      - name: Install browser test driver
+        run: npm install --no-save --ignore-scripts --package-lock=false playwright@1.62.1
+      - name: Test local browser interfaces
+        shell: bash
+        run: |
+          set -euo pipefail
+          if command -v google-chrome >/dev/null; then
+            export CHROME_PATH="$(command -v google-chrome)"
+          else
+            npx playwright install --with-deps chromium
+          fi
+          node projects/browser-tools/tests/browser.test.js

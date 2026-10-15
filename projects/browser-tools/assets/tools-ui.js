@@ -21,7 +21,7 @@
     download.removeAttribute('href');
   }
   function ready(event) { fileTexts.delete(event.target.id); fileReads.delete(event.target.id); reset(); message('Ready. Run the tool to process your input.'); }
-  form.querySelectorAll('textarea:not([readonly]),input[type=text],select').forEach(el => el.addEventListener('input', ready));
+  form.querySelectorAll('textarea:not([readonly]),input[type=text],input[type=checkbox],select').forEach(el => el.addEventListener('input', ready));
   form.querySelectorAll('[data-ovt-file]').forEach(file => file.addEventListener('change', async function () {
     reset(); const selected = file.files[0], target = file.dataset.ovtFile, ticket = {};
     fileReads.delete(target); fileTexts.delete(target);
@@ -44,6 +44,13 @@
       input.value = 'id,name,status\n1,Alpha,active\n2,Beta,pending\n3,Gamma,active\n';
       second.value = 'id,name,status\n1,Alpha,active\n2,Beta,active\n4,Delta,new\n';
       form.querySelector('#ovt-key').value = 'id';
+    } else if (tool === 'text-diff') {
+      input.value = 'project=OpenViST\nstatus=draft\nkeep=this line\n'; second.value = 'project=OpenViST\nstatus=published\nkeep=this line\nnew=feature\n';
+    } else if (tool === 'csv-json-converter') {
+      form.querySelector('#ovt-direction').value = 'csv-json'; form.querySelector('#ovt-columns').value = ''; form.querySelector('#ovt-safe').checked = true;
+      input.value = 'id,name,active\n001,Alpha,true\n002,"Beta, Inc.",false\n';
+    } else if (tool === 'sitemap-inspector') {
+      input.value = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>https://example.com/</loc><lastmod>2026-10-15</lastmod></url>\n  <url><loc>https://example.com/about/</loc><lastmod>2026-02-31</lastmod></url>\n  <url><loc>https://example.com/</loc></url>\n</urlset>';
     } else {
       form.querySelector('#ovt-kind').value = 'csv'; form.querySelector('#ovt-key').value = 'id'; form.querySelector('#ovt-field').value = 'value';
       input.value = 'id,value\nalpha,open\nalpha,closed\nbeta,ready\nbeta,ready\n';
@@ -61,9 +68,15 @@
     if (typeof Worker !== 'function' || !window.ovtConfig) { message('Your browser cannot start local processing. No data was sent to the server.', true); return; }
     const task = {tool, input: fileTexts.get('ovt-input') ?? input.value, second: second ? (fileTexts.get('ovt-second') ?? second.value) : '',
       key: form.querySelector('#ovt-key')?.value, field: form.querySelector('#ovt-field')?.value,
-      kind: form.querySelector('#ovt-kind')?.value, compact: form.querySelector('#ovt-mode')?.value === 'compact'};
+      kind: form.querySelector('#ovt-kind')?.value, compact: form.querySelector('#ovt-mode')?.value === 'compact',
+      direction: form.querySelector('#ovt-direction')?.value, columns: form.querySelector('#ovt-columns')?.value,
+      spreadsheetSafe: form.querySelector('#ovt-safe')?.checked !== false};
     const id = generation;
     try {
+      if (tool === 'sitemap-inspector') {
+        if (!window.OpenViSTSitemap) throw new Error('The local XML parser could not load.');
+        task.sitemap = window.OpenViSTSitemap.parse(task.input);
+      }
       worker = new Worker(window.ovtConfig.worker);
       run.disabled = true; form.setAttribute('aria-busy', 'true'); message('Processing locally…');
       timer = setTimeout(function () { if (generation !== id) return; stop(); message('Processing stopped after 20 seconds. Try a smaller input.', true); }, 20000);
@@ -72,13 +85,15 @@
         stop(); const data = event.data;
         if (!data.ok) { message(data.error || 'Unable to process this input.', true); return; }
         output.value = data.result.text; panel.hidden = false;
-        objectURL = URL.createObjectURL(new Blob([data.result.text], {type:'application/json;charset=utf-8'}));
-        download.href = objectURL; download.download = 'openvist-' + tool + '.json';
+        const extension = data.result.extension || 'json';
+        objectURL = URL.createObjectURL(new Blob([data.result.text], {type:data.result.mime || 'application/json;charset=utf-8'}));
+        download.href = objectURL; download.download = 'openvist-' + tool + '.' + extension;
+        download.textContent = 'Download ' + extension.toUpperCase();
         message(data.result.summary); output.focus();
       };
       worker.onerror = function () { if (generation !== id) return; stop(); message('Local worker could not run. No data was sent to the server.', true); };
       worker.postMessage(task);
-    } catch (_) { stop(); message('Local processing could not start. No data was sent to the server.', true); }
+    } catch (error) { stop(); message(error.message || 'Local processing could not start. No data was sent to the server.', true); }
   });
   form.querySelector('[data-ovt-copy]').addEventListener('click', async function () {
     try { await navigator.clipboard.writeText(output.value); message('Result copied.'); }
