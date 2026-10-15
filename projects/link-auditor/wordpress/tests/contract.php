@@ -9,7 +9,7 @@ function add_filter($hook,$callback,$priority=10,$args=1){$GLOBALS['hooks'][$hoo
 function register_activation_hook($file,$callback){}
 function register_deactivation_hook($file,$callback){}
 function get_query_var($key){return $GLOBALS['pilot'];}
-function current_user_can($cap){return $cap==='manage_options'&&$GLOBALS['admin'];}
+function current_user_can($cap){return in_array($cap,['read','manage_options'],true)&&$GLOBALS['admin'];}
 function is_user_logged_in(){return $GLOBALS['admin'];}
 function wp_json_encode($value){return json_encode($value);}
 function register_rest_route($ns,$route,$args){$GLOBALS['routes'][]=$args;}
