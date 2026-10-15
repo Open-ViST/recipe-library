@@ -1,0 +1,32 @@
+<?php defined('ABSPATH') || exit; get_header(); $route=OpenViST_Tools::route(); $tools=OpenViST_Tools::catalogue(); ?>
+<main id="main-content" class="ovt-shell">
+    <nav class="ovt-breadcrumb" aria-label="Breadcrumb"><a href="<?php echo esc_url(home_url('/')); ?>">Home</a><span aria-hidden="true">/</span><?php if($route==='index'): ?><span>Tools</span><?php else: ?><a href="<?php echo esc_url(OpenViST_Tools::url()); ?>">Tools</a><span aria-hidden="true">/</span><span><?php echo esc_html(OpenViST_Tools::title()); ?></span><?php endif; ?></nav>
+    <header class="ovt-hero"><p class="ovt-kicker">OPENVIST TOOLS · FREE TO USE</p><h1><?php echo esc_html($route==='index'?'Small tools. Useful answers.':OpenViST_Tools::title()); ?></h1><p><?php echo esc_html($route==='index'?'Validate JSON, compare CSV files and find conflicting data. Clear inputs, useful results, no account required.':$tools[$route]['intro']); ?></p><span class="ovt-local">Runs locally in your browser</span></header>
+    <?php if($route==='index'): ?>
+    <section class="ovt-grid" aria-label="Available tools">
+        <?php foreach($tools as $slug=>$tool): ?><a class="ovt-card" href="<?php echo esc_url(OpenViST_Tools::url($slug)); ?>"><span class="ovt-card__symbol" aria-hidden="true"><?php echo $slug==='json-validator'?'{}':($slug==='csv-comparator'?'↔':'≡'); ?></span><h2><?php echo esc_html($tool['title']); ?></h2><p><?php echo esc_html($tool['intro']); ?></p><strong>Open tool <span aria-hidden="true">→</span></strong></a><?php endforeach; ?>
+    </section>
+    <section class="ovt-notes"><h2>Your inputs stay with you</h2><p>These tools process pasted text and selected files in a browser worker. Their processing code does not upload your inputs, use an AI API or save them to browser storage. Site analytics, when enabled by your consent, follow the site's privacy policy.</p><p>Start with an example before using your own data. These tools do not replace validation for your own system or workflow.</p><a href="<?php echo esc_url(home_url('/recipes/')); ?>">Explore reusable code recipes →</a> · <a href="https://github.com/Open-ViST/recipe-library/tree/main/projects/browser-tools">Source code &amp; tests →</a></section>
+    <?php else: ?>
+    <section role="form" aria-label="Local data tool" class="ovt-workbench" data-ovt-tool="<?php echo esc_attr($route); ?>" novalidate>
+        <div class="ovt-toolbar"><button type="button" data-ovt-sample>Load example</button><button type="button" data-ovt-clear>Clear all</button></div>
+        <p class="ovt-help">Maximum 2 MiB per input. CSV: 20,000 data rows and 100 columns. Text comparisons preserve case, whitespace and Unicode spelling.</p>
+        <div class="ovt-inputs <?php if($route==='csv-comparator')echo 'ovt-inputs--pair'; ?>">
+            <div><label for="ovt-input"><?php echo $route==='csv-comparator'?'Before CSV':'Input'; ?></label><input id="ovt-file" type="file" accept="<?php echo $route==='csv-comparator'?'.csv,text/csv':($route==='json-validator'?'.json,application/json':'.csv,.json,text/csv,application/json'); ?>" aria-label="Choose input file" data-ovt-file="ovt-input"><textarea id="ovt-input" name="input" rows="12" maxlength="2097152" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="ovt-format-help"></textarea></div>
+            <?php if($route==='csv-comparator'): ?><div><label for="ovt-second">After CSV</label><input type="file" accept=".csv,text/csv" aria-label="Choose after CSV file" data-ovt-file="ovt-second"><textarea id="ovt-second" name="second" rows="12" maxlength="2097152" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea></div><?php endif; ?>
+        </div>
+        <div class="ovt-options">
+            <?php if($route==='json-validator'): ?><label for="ovt-mode">Output format<select id="ovt-mode" name="mode"><option value="pretty">Formatted (2 spaces)</option><option value="compact">Minified</option></select></label>
+            <?php else: ?><label for="ovt-key">Identifier field / column<input id="ovt-key" name="key" type="text" value="id" maxlength="256" autocomplete="off"></label><?php endif; ?>
+            <?php if($route==='duplicate-finder'): ?><label for="ovt-kind">Input format<select id="ovt-kind" name="kind"><option value="csv">CSV</option><option value="json">JSON array</option></select></label><label for="ovt-field">Value field / column<input id="ovt-field" name="field" type="text" value="value" maxlength="256" autocomplete="off"></label><?php endif; ?>
+        </div>
+        <p id="ovt-format-help" class="ovt-help"><?php echo esc_html($tools[$route]['detail']); ?></p>
+        <button class="ovt-primary" type="button" data-ovt-run disabled><?php echo $route==='json-validator'?'Validate & format':($route==='csv-comparator'?'Compare files':'Find duplicates & conflicts'); ?></button>
+        <p class="ovt-status" data-ovt-status role="status" aria-live="polite">Load an example or provide your input to begin.</p>
+        <section class="ovt-result" data-ovt-result hidden><h2>Result</h2><label class="ovt-sr-only" for="ovt-output">Result text</label><textarea id="ovt-output" rows="14" readonly spellcheck="false"></textarea><div class="ovt-toolbar"><button type="button" data-ovt-copy>Copy result</button><a class="ovt-download" data-ovt-download download>Download JSON</a></div><p class="ovt-help">Downloads contain your processed data. Review them before sharing.</p></section>
+        <noscript><p>JavaScript is required for local processing. Your inputs are not submitted to WordPress.</p></noscript>
+    </section>
+    <section class="ovt-notes"><h2>What this tool does</h2><p><?php echo esc_html($tools[$route]['detail']); ?></p><p>Field names are literal: dots and slashes do not select nested paths. CSV fields remain strings. Blank CSV records are validated as data rows. A trailing line ending does not create an extra record.</p><p>Processing stops after 20 seconds or when an output would exceed 5 MiB. Inputs and results are cleared when you reload the page. Nothing is executed from the supplied files.</p><p><a href="https://github.com/Open-ViST/recipe-library/tree/main/projects/browser-tools">View source code, documentation and tests on GitHub →</a> <a href="<?php echo esc_url(home_url('/recipes/')); ?>">Browse published code recipes →</a></p></section>
+    <?php endif; ?>
+</main>
+<?php get_footer(); ?>

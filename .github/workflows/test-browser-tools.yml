@@ -1,0 +1,27 @@
+name: Test browser tools
+on:
+  push:
+    branches: [main]
+    paths: ['projects/browser-tools/**', '.github/workflows/test-browser-tools.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: PHP syntax and integration contract checks
+        run: |
+          php -l projects/browser-tools/openvist-tools.php
+          php -l projects/browser-tools/template.php
+          php projects/browser-tools/tests/integration.test.php
+      - name: JavaScript syntax and processing checks
+        run: |
+          node --check projects/browser-tools/assets/tools-core.js
+          node --check projects/browser-tools/assets/tools-ui.js
+          node --check projects/browser-tools/assets/tools-worker.js
+          node --test projects/browser-tools/tests/core.test.js
