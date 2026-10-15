@@ -1,0 +1,53 @@
+{
+  "slug": "compute-signed-adjacent-deltas-rust",
+  "kind": "static",
+  "title": "Compute signed deltas between adjacent integers with Rust",
+  "goal": "Measure consecutive changes with subtraction in a signed type so decreases remain negative.",
+  "language": "rust",
+  "version": "0.1.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-14",
+  "intro": "Measure consecutive changes with subtraction in a signed type so decreases remain negative. Work only with supplied input; this does not contact external services or modify input.",
+  "requirements": [
+    "Save as recipe.rs and compile with Rust 1.99.0 using: rustc --edition=2021 recipe.rs -o recipe",
+    "Run recipe without any arguments, including help flags, and supply input through stdin.",
+    "Uses only the standard library, with an explicit std::io import. No Cargo, crates, filesystem access, networking, subprocesses, unsafe code or dynamic loading.",
+    "Reads at most 65537 bytes and rejects input exceeding 65536 bytes. Requires strict UTF-8, rejects a leading UTF-8 BOM, and rejects every CR.",
+    "Splits only on LF and discards exactly empty segments. Before numeric classification, rejects more than 100 retained lines or any retained line exceeding 256 UTF-8 bytes. Does not trim, normalize, group or deduplicate.",
+    "Accepts only canonical ASCII decimal integers from 0 through 1000000: no signs, spaces or leading zeroes except the spelling 0.",
+    "Computes each adjacent difference as an i64 subtraction, preserving negative decreases. Empty input and a single value produce {\"deltas\":[]}.",
+    "Success exits 0 and writes exactly one JSON object followed by a newline, with no stderr. Invalid arguments, invalid input and stdin-read failures exit 2 with no stdout and exactly error: invalid input followed by a newline on stderr, subject to the output-write limitations below."
+  ],
+  "limits": [
+    "Stdin may block while waiting for data or EOF. The byte bound is not a timeout.",
+    "Memory stores at most 65537 input bytes, 100 retained-line references, 100 i64 values and a small output string. There are at most 99 deltas, each in -1000000..1000000; successful output is at most 904 bytes. Allocation capacities and runtime overhead are additional.",
+    "Successful output reveals the number of adjacent pairs and their signed changes, which may be sensitive. Error diagnostics do not disclose input values.",
+    "Memory-allocation failures and stdout/stderr write or flush failures are outside the input-error guarantee. Output failures can leave partial output; detected stdout failures exit 2 without an additional diagnostic."
+  ],
+  "steps": [
+    "Save the example as recipe.rs.",
+    "Compile with Rust 1.99.0 using rustc --edition=2021 recipe.rs -o recipe.",
+    "Prepare UTF-8 input.txt following the documented operation-specific conventions.",
+    "Run ./recipe < input.txt.",
+    "Inspect the JSON result. Exit 2 with exactly error: invalid input followed by a newline on stderr and no stdout identifies rejected input or stdin-read failure. Output-write failures may also exit nonzero, without that diagnostic and potentially after partial stdout; these are outside the input-error guarantee."
+  ],
+  "checks": [
+    "The example must produce the documented JSON result.",
+    "Empty stdin must produce the documented empty result.",
+    "Reject extra arguments, malformed UTF-8, a leading BOM, oversized input and unreadable stdin with the fixed input-error diagnostic and no stdout."
+  ],
+  "usage": "rustc --edition=2021 recipe.rs -o recipe\n./recipe < input.txt",
+  "example_input": "5\n2\n2\n9",
+  "expected_output": "{\"deltas\":[-3,0,7]}",
+  "tested_scope": "Six independent CLI fixtures and 19 supplementary cases are executed in pinned, offline Rust 1.99.0 containers. These checks do not establish exhaustive correctness or behavior on other versions.",
+  "sources": [
+    "https://doc.rust-lang.org/std/io/trait.Read.html",
+    "https://doc.rust-lang.org/std/primitive.str.html",
+    "https://doc.rust-lang.org/std/primitive.u32.html"
+  ],
+  "projects": [],
+  "url": "https://openvist.com/recipes/compute-signed-adjacent-deltas-rust/",
+  "code_file": "recipe.rs",
+  "code_sha256": "6540b7f56938734374a60550425420553480edee0b8cf09ccb9c39e017f3005a",
+  "published_record_sha256": "e2ade1b1fc16fd3f27bc83a6aec32a99337609d2076723af710db0eb692bf31e"
+}

@@ -62,6 +62,11 @@ Only publicly published recipes are included. Each version retains its exact cod
 | rust | [Compact bounded integers into inclusive consecutive ranges with Rust](recipes/rust/compact-inclusive-integer-ranges-rust/v0.1.0/README.md) | 0.1.0 |
 | rust | [Count shared leading octets in IPv4 pairs with Rust](recipes/rust/compare-ipv4-prefix-octets-rust/v0.1.0/README.md) | 0.1.0 |
 | rust | [Compute bounded integer prefix sums with Rust](recipes/rust/compute-integer-prefix-sums-rust/v0.1.0/README.md) | 0.1.0 |
+| rust | [Compute signed deltas between adjacent integers with Rust](recipes/rust/compute-signed-adjacent-deltas-rust/v0.1.0/README.md) | 0.1.0 |
+| rust | [Count consecutive runs of equal text lines with Rust](recipes/rust/count-adjacent-text-runs-rust/v0.1.0/README.md) | 0.1.0 |
+| rust | [Count ASCII letter digit whitespace and other bytes with Rust](recipes/rust/count-ascii-byte-classes-rust/v0.1.0/README.md) | 0.1.0 |
+| rust | [Distinguish LF CRLF and bare CR endings with Rust](recipes/rust/count-line-ending-forms-rust/v0.1.0/README.md) | 0.1.0 |
+| rust | [Count literal equals signs per text line with Rust](recipes/rust/count-literal-equals-signs-rust/v0.1.0/README.md) | 0.1.0 |
 | rust | [Count Lines in a Local UTF-8 File or Standard Input](recipes/rust/rust-stream-line-counts/v0.1.0/README.md) | 0.1.0 |
 | rust | [Audit Tabs in Saved Text](recipes/rust/saved-text-tab-audit/v0.1.0/README.md) | 0.1.0 |
 | rust | [Summarize Saved Text by Final-Character Group](recipes/rust/summarize-saved-text-by-final-character/v0.1.0/README.md) | 0.1.0 |

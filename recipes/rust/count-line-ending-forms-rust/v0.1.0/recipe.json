@@ -1,0 +1,53 @@
+{
+  "slug": "count-line-ending-forms-rust",
+  "kind": "static",
+  "title": "Distinguish LF CRLF and bare CR endings with Rust",
+  "goal": "Count newline representations in supplied text while treating CRLF as one paired ending.",
+  "language": "rust",
+  "version": "0.1.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-14",
+  "intro": "Count newline representations in supplied text while treating CRLF as one paired ending. Work only with supplied input; this does not contact external services or modify input.",
+  "requirements": [
+    "Save as recipe.rs and compile with Rust 1.99.0 using: rustc --edition=2021 recipe.rs -o recipe",
+    "Run recipe without arguments and supply the complete text on stdin. All arguments, including help flags, are rejected.",
+    "Reads at most 65537 bytes and rejects input exceeding 65536 bytes. Requires strict UTF-8 and rejects a leading UTF-8 BOM. Validation finishes before successful stdout begins.",
+    "Scans left to right, consuming each CRLF pair as one ending. Remaining LF and bare CR are counted separately. Ordinary characters and other Unicode line separators are not counted; an unterminated final segment adds no ending.",
+    "Success exits 0 and writes exactly {\"lf\":n,\"crlf\":n,\"cr\":n} followed by a newline, with no stderr.",
+    "Invalid arguments, invalid input, or non-interrupted stdin-read failures exit 2, emit no stdout, and write exactly error: invalid input followed by a newline to stderr, subject to the output-write limitation below. Diagnostics never include input values."
+  ],
+  "limits": [
+    "Uses a fixed 65537-byte input buffer plus small constant bookkeeping and standard-library I/O overhead. Runtime is linear in the input size; there is no line-count limit.",
+    "Stdin may block while waiting for data or EOF. Exactly 65536 bytes still require EOF to establish that the input is within the limit.",
+    "Empty input is valid and produces zero counts. A UTF-8 BOM occurring anywhere other than the beginning is ordinary text.",
+    "Successful output reveals newline counts, which may be sensitive metadata.",
+    "Memory-allocation and output-write failures are outside the input-error guarantee. A stdout write or flush failure exits 2 and may leave partial stdout; a failed stderr write may prevent the required diagnostic.",
+    "This counts literal newline forms; it does not parse records or normalize a document."
+  ],
+  "steps": [
+    "Save the example as recipe.rs.",
+    "Compile with Rust 1.99.0 using rustc --edition=2021 recipe.rs -o recipe.",
+    "Prepare UTF-8 input.txt following the documented operation-specific conventions.",
+    "Run ./recipe < input.txt.",
+    "Inspect the JSON result. Exit 2 with exactly error: invalid input followed by a newline on stderr and no stdout identifies rejected input or stdin-read failure. Output-write failures may also exit nonzero, without that diagnostic and potentially after partial stdout; these are outside the input-error guarantee."
+  ],
+  "checks": [
+    "The example must produce the documented JSON result.",
+    "Empty stdin must produce the documented empty result.",
+    "Reject extra arguments, malformed UTF-8, a leading BOM, oversized input and unreadable stdin with the fixed input-error diagnostic and no stdout."
+  ],
+  "usage": "rustc --edition=2021 recipe.rs -o recipe\n./recipe < input.txt",
+  "example_input": "a\r\nb\nc\r",
+  "expected_output": "{\"lf\":1,\"crlf\":1,\"cr\":1}",
+  "tested_scope": "Six independent CLI fixtures and 11 supplementary cases are executed in pinned, offline Rust 1.99.0 containers. These checks do not establish exhaustive correctness or behavior on other versions.",
+  "sources": [
+    "https://doc.rust-lang.org/std/io/trait.Read.html",
+    "https://doc.rust-lang.org/std/primitive.str.html",
+    "https://doc.rust-lang.org/std/primitive.u32.html"
+  ],
+  "projects": [],
+  "url": "https://openvist.com/recipes/count-line-ending-forms-rust/",
+  "code_file": "recipe.rs",
+  "code_sha256": "14006c82483374449eb8ed73dfb8528bb5a122bb703b32d86c7c9308bf355a14",
+  "published_record_sha256": "9c75ff3af1dda0d98eaada7ffde09d032960301b5714b371507ecd6d7eddeb63"
+}

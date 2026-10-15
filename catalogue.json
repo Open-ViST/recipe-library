@@ -650,6 +650,66 @@
       "code_sha256": "a616c19f3bba4677da76979a04cbb04d3590240970379b5d8efeb7294bd221ad"
     },
     {
+      "slug": "compute-signed-adjacent-deltas-rust",
+      "title": "Compute signed deltas between adjacent integers with Rust",
+      "language": "rust",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/compute-signed-adjacent-deltas-rust/",
+      "code": "recipes/rust/compute-signed-adjacent-deltas-rust/v0.1.0/recipe.rs",
+      "documentation": "recipes/rust/compute-signed-adjacent-deltas-rust/v0.1.0/README.md",
+      "metadata": "recipes/rust/compute-signed-adjacent-deltas-rust/v0.1.0/recipe.json",
+      "code_sha256": "6540b7f56938734374a60550425420553480edee0b8cf09ccb9c39e017f3005a"
+    },
+    {
+      "slug": "count-adjacent-text-runs-rust",
+      "title": "Count consecutive runs of equal text lines with Rust",
+      "language": "rust",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/count-adjacent-text-runs-rust/",
+      "code": "recipes/rust/count-adjacent-text-runs-rust/v0.1.0/recipe.rs",
+      "documentation": "recipes/rust/count-adjacent-text-runs-rust/v0.1.0/README.md",
+      "metadata": "recipes/rust/count-adjacent-text-runs-rust/v0.1.0/recipe.json",
+      "code_sha256": "2b044b9b3f9d3b63310484560687ace8ba6a2b2f1706704caebdb1f838af0306"
+    },
+    {
+      "slug": "count-ascii-byte-classes-rust",
+      "title": "Count ASCII letter digit whitespace and other bytes with Rust",
+      "language": "rust",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/count-ascii-byte-classes-rust/",
+      "code": "recipes/rust/count-ascii-byte-classes-rust/v0.1.0/recipe.rs",
+      "documentation": "recipes/rust/count-ascii-byte-classes-rust/v0.1.0/README.md",
+      "metadata": "recipes/rust/count-ascii-byte-classes-rust/v0.1.0/recipe.json",
+      "code_sha256": "427a499cb74de1c8041d3ff939e60fea62f987596d76fa3904b13600c259f6d4"
+    },
+    {
+      "slug": "count-line-ending-forms-rust",
+      "title": "Distinguish LF CRLF and bare CR endings with Rust",
+      "language": "rust",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/count-line-ending-forms-rust/",
+      "code": "recipes/rust/count-line-ending-forms-rust/v0.1.0/recipe.rs",
+      "documentation": "recipes/rust/count-line-ending-forms-rust/v0.1.0/README.md",
+      "metadata": "recipes/rust/count-line-ending-forms-rust/v0.1.0/recipe.json",
+      "code_sha256": "14006c82483374449eb8ed73dfb8528bb5a122bb703b32d86c7c9308bf355a14"
+    },
+    {
+      "slug": "count-literal-equals-signs-rust",
+      "title": "Count literal equals signs per text line with Rust",
+      "language": "rust",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/count-literal-equals-signs-rust/",
+      "code": "recipes/rust/count-literal-equals-signs-rust/v0.1.0/recipe.rs",
+      "documentation": "recipes/rust/count-literal-equals-signs-rust/v0.1.0/README.md",
+      "metadata": "recipes/rust/count-literal-equals-signs-rust/v0.1.0/recipe.json",
+      "code_sha256": "c08cd518c205dd32d5cd74321ab88121fe9cd7fc2bda5f48753e5e67a255c13f"
+    },
+    {
       "slug": "rust-stream-line-counts",
       "title": "Count Lines in a Local UTF-8 File or Standard Input",
       "language": "rust",
