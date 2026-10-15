@@ -16,7 +16,7 @@ from urllib.parse import urljoin, urlsplit, urlunsplit
 from urllib.robotparser import RobotFileParser
 import xml.etree.ElementTree as ET
 
-VERSION = '0.4.0'
+VERSION = '0.4.1'
 AGENT = 'OpenViST-Link-Auditor/0.4 (+https://openvist.com/tools/link-auditor/)'
 
 
@@ -259,6 +259,14 @@ def bounded_int(value):
     return number
 
 
+def finite_number(value, minimum, maximum):
+    import math
+    number = float(value)
+    if not math.isfinite(number) or not minimum <= number <= maximum:
+        raise argparse.ArgumentTypeError('Expected '+str(minimum)+'..'+str(maximum))
+    return number
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('url')
@@ -266,13 +274,17 @@ def main(argv=None):
     parser.add_argument('--max-pages', type=bounded_int, default=50)
     parser.add_argument('--max-urls', type=bounded_int, default=500)
     parser.add_argument('--external', action='store_true', help='Also check discovered external links')
+    parser.add_argument('--request-timeout', type=lambda v: finite_number(v,1,60), default=10, help='Socket timeout in seconds (1..60)')
+    parser.add_argument('--delay', type=lambda v: finite_number(v,0,60), default=0.25, help='Seconds between request starts (0..60)')
+    parser.add_argument('--byte-limit', type=lambda v: int(finite_number(v,1024,10485760)), default=1000000, help='Body bytes retained per response (1024..10485760)')
     parser.add_argument('--output', type=Path, default=Path('link-audit'))
     args = parser.parse_args(argv)
     json_path = Path(str(args.output)+'.json');html_path = Path(str(args.output)+'.html')
     if json_path.exists() or html_path.exists():
         parser.exit(2,'Output exists; choose a new --output prefix.\n')
     try:
-        report = Auditor(args.url,args.max_pages,args.max_urls,args.external).run(args.sitemap)
+        report = Auditor(args.url,args.max_pages,args.max_urls,args.external,network=Network(timeout=args.request_timeout,delay=args.delay,byte_limit=args.byte_limit)).run(args.sitemap)
+        report['scope'].update(request_timeout=args.request_timeout,delay=args.delay,byte_limit=args.byte_limit)
     except (ValueError, OSError, ET.ParseError) as error:
         parser.exit(2, 'Audit could not start: '+type(error).__name__+'\n')
     json_path = Path(str(args.output)+'.json');html_path = Path(str(args.output)+'.html')

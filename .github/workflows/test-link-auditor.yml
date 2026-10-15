@@ -30,6 +30,10 @@ jobs:
           node --check projects/link-auditor/wordpress/assets/pilot.js
           node --check projects/link-auditor/wordpress/assets/entry.js
           node projects/link-auditor/wordpress/tests/ui.test.js
+      - name: Build public standalone download
+        run: |
+          python3 projects/link-auditor/build_self_hosted.py --output projects/link-auditor/wordpress/downloads/openvist-link-auditor-self-hosted-0.4.1.zip
+          cp projects/link-auditor/SELF_HOSTING.md projects/link-auditor/wordpress/downloads/SELF_HOSTING.md
       - name: PHP syntax and contract checks
         run: |
           find projects/link-auditor/wordpress -name '*.php' -print0 | xargs -0 -n1 php -l

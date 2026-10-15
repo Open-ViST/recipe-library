@@ -1,11 +1,15 @@
 # OpenViST Link Auditor
 
 Find missing HTTP links, inspect redirect chains and distinguish access restrictions
-from broken pages. Python 3.11+, standard library only. **Version 0.4.0, public beta.**
+from broken pages. Python 3.11+, standard library only. **Version 0.4.1, public beta.**
 
 [Open the website tool](https://openvist.com/tools/link-auditor/) ·
 [OpenViST Tools](https://openvist.com/tools/) ·
 [Browser-only utilities](../browser-tools/)
+
+## Download and configure your own VPS
+
+The website offers a standalone ZIP and a downloadable [installation and limits guide](SELF_HOSTING.md). No account or API key is needed for this local CLI. Use `run_audit.py --deadline 600 -- https://example.com/ --max-pages 200 --max-urls 1000 --delay 0.5 --output my-audit` to choose your workload. The hosted service quotas do not apply to your own execution. Build the exact standalone ZIP with `python3 build_self_hosted.py --output self-hosted.zip`. The ZIP contains only the MIT CLI, report viewer, deadline launcher, guide and licence.
 
 ## Two ways to use it
 
