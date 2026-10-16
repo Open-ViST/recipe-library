@@ -6,7 +6,7 @@ const http = require('node:http');
 const {execFileSync} = require('node:child_process');
 const {chromium} = require('playwright');
 const root = path.resolve(__dirname, '..');
-const tools = ['json-validator','csv-comparator','duplicate-finder','text-diff','csv-json-converter','sitemap-inspector'];
+const tools = ['base64','url-encoder','sha256-checksum','json-validator','csv-comparator','duplicate-finder','text-diff','csv-json-converter','sitemap-inspector'];
 const server = http.createServer((req,res) => {
   const url = new URL(req.url,'http://localhost');
   if (url.pathname.startsWith('/assets/')) {
@@ -47,7 +47,7 @@ const server = http.createServer((req,res) => {
         if(slug==='sitemap-inspector'){const report=JSON.parse(output);assert.equal(report.duplicate_urls.length,1);assert.ok(report.issues.some(x=>x.code==='invalid_lastmod'));}
         const downloadPromise=page.waitForEvent('download');await page.locator('[data-ovt-download]').click();const download=await downloadPromise;
         assert.equal(fs.readFileSync(await download.path(),'utf8'),output);
-        assert.ok(download.suggestedFilename().endsWith(slug==='text-diff'?'.txt':'.json'));
+        assert.ok(download.suggestedFilename().endsWith(['text-diff','base64','url-encoder','sha256-checksum'].includes(slug)?'.txt':'.json'));
         await page.locator('[data-ovt-copy]').click();assert.equal(await page.evaluate(()=>navigator.clipboard.readText()),output);
         assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Horizontal overflow at '+slug+' '+width);
         await page.locator('.ovt-link-button').first().hover();
@@ -56,6 +56,23 @@ const server = http.createServer((req,res) => {
         console.log('PASS browser example, download, copy, clear and layout:',slug,width);
       }
     }
+    for(const slug of ['base64','sha256-checksum']){
+      await page.goto(base+'/'+slug);
+      const bytes=Buffer.from([0,255,239,187,191,13,10]);
+      await page.locator('#ovt-file').setInputFiles({name:'sample.bin',mimeType:'application/octet-stream',buffer:bytes});
+      await page.waitForFunction(()=>!document.querySelector('[data-ovt-run]').disabled);
+      await page.locator('[data-ovt-run]').click();await page.locator('[data-ovt-result]').waitFor({state:'visible'});
+      const result=await page.locator('#ovt-output').inputValue();
+      assert.equal(result,slug==='base64'?bytes.toString('base64'):require('node:crypto').createHash('sha256').update(bytes).digest('hex'));
+      if(slug==='base64'){
+        await page.locator('#ovt-operation').selectOption('decode');
+        await page.locator('#ovt-decoded').selectOption('binary');await page.locator('#ovt-input').fill(result);
+        await page.locator('[data-ovt-run]').click();await page.locator('[data-ovt-result]').waitFor({state:'visible'});
+        const done=page.waitForEvent('download');await page.locator('[data-ovt-download]').click();assert.deepEqual(fs.readFileSync(await (await done).path()),bytes);
+      }
+    }
+    await page.goto(base+'/url-encoder');await page.locator('#ovt-operation').selectOption('parameters');await page.locator('#ovt-input').fill('?a=1&a=2&x=a+b');await page.locator('[data-ovt-run]').click();await page.locator('[data-ovt-result]').waitFor({state:'visible'});
+    assert.deepEqual(JSON.parse(await page.locator('#ovt-output').inputValue()),[{name:'a',value:'1'},{name:'a',value:'2'},{name:'x',value:'a b'}]);
     await page.goto(base+'/csv-json-converter');
     await page.locator('#ovt-direction').selectOption('json-csv');
     await page.locator('#ovt-input').fill('[{"id":9007199254740993123,"value":"=1+1"}]');

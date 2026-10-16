@@ -1,7 +1,10 @@
-# OpenViST Tools 0.2.0
+# OpenViST Tools 0.3.0
 
-A WordPress plugin providing six free, browser-local data tools:
+A WordPress plugin providing nine free, browser-local data tools:
 
+- `/tools/base64/`: strict Base64 and unpadded Base64url encoding/decoding; UTF-8 or binary output.
+- `/tools/url-encoder/`: URL component encoding/decoding and ordered query inspection.
+- `/tools/sha256-checksum/`: SHA-256 for UTF-8 text or exact file bytes, with optional comparison.
 - `/tools/json-validator/`: JSON validation, formatting and minification.
 - `/tools/csv-comparator/`: CSV comparison by a unique string identifier.
 - `/tools/duplicate-finder/`: repeated identifiers and conflicting string values.
@@ -40,14 +43,13 @@ Conflict detection considers selected string fields only; other JSON field
 types are ignored. Field names are literal, not nested paths. Report positions
 are one-based data record positions, excluding the CSV header.
 
-Inputs are text data only. No spreadsheet formulas are evaluated, and downloads
-are JSON rather than spreadsheet-active CSV. Results can contain sensitive
+Inputs are text data only. No spreadsheet formulas are evaluated, and CSV downloads protect formula-like strings by default. Results can contain sensitive
 values: review them before sharing. Browser extensions and site compromises
 are outside the plugin's local-processing guarantee.
 
 ## WordPress integration
 
-WordPress 6.5+, PHP 8.0+. Activation registers seven virtual routes and refreshes
+WordPress 6.5+, PHP 8.0+. Activation registers ten virtual routes and refreshes
 rewrite rules. The plugin creates no posts, user-data options, cron events or database
 tables. A tiny route-version option refreshes rewrite rules once when the plugin is updated. The plugin does not alter recipe or listing publication schedules. Tools URLs
 are added to the native WordPress sitemap provider. Page titles, descriptions
@@ -112,8 +114,28 @@ No remote sitemap indexes, listed URLs, images or external entities are fetched.
 Gzip files are not accepted.
 
 The browser integration suite renders the PHP templates against a minimal
-WordPress contract harness and tests all six tools at desktop/mobile widths.
+WordPress contract harness and tests all nine tools at desktop/mobile widths.
 It checks native XML parsing, worker messages, examples, file input, downloads,
 clipboard copy, clearing, overflow and related-button hover states. Tests use
 local fixture pages and no private data; they do not replace live checks with
 WordPress, the theme and SiteGround optimization enabled.
+
+## Encoding and checksum details
+
+All three utilities run in the same bounded browser worker. SHA-256 uses Web Crypto
+and requires HTTPS (localhost also works for development). No URL entered in the
+URL tool is fetched. Query inspection supports at most 20,000 parameters and
+preserves repeated names and order; `+` is a space in queries, but remains a plus
+in component decoding. Malformed escapes and UTF-8 are errors.
+
+Base64 defaults to strict standard padded input; the optional Base64url alphabet
+is unpadded. Whitespace and nonzero unused padding bits are rejected. Select
+binary output when decoded bytes are not UTF-8; the download is an inert `.bin`
+file, never an embedded preview. Base64 is not encryption.
+
+The 2 MiB bound applies to each selected file or pasted input. An encoded output
+can be larger than its original file and exceed the decoder's input bound.
+Select files for byte-exact hashing: pasted text uses UTF-8 and textarea editing
+can normalize line endings. Expected hashes accept 64 hex digits, case insensitive.
+A matching checksum is not proof of a trustworthy source. Utility downloads use
+TXT, JSON (query inspection), or BIN (binary Base64 decoding), without any upload.

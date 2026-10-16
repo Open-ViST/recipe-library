@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: OpenViST Tools
- * Description: Free local JSON and CSV tools. Processing runs locally in the browser.
- * Version: 0.2.0
+ * Description: Free local data, encoding and checksum tools. Processing runs locally in the browser.
+ * Version: 0.3.0
  * Requires at least: 6.5
  * Requires PHP: 8.0
  * Author: OpenViST
@@ -10,9 +10,12 @@
  */
 defined('ABSPATH') || exit;
 final class OpenViST_Tools {
-    const VERSION = '0.2.0';
+    const VERSION = '0.3.0';
     public static function catalogue() {
         return [
+            'base64'=>['title'=>'Base64 Encoder & Decoder','intro'=>'Encode text or a file as Base64, or decode Base64 as UTF-8 text or a binary download.','detail'=>'Standard Base64 requires padding; Base64url uses the unpadded URL-safe alphabet. Whitespace and noncanonical padding bits are rejected. Text is encoded as UTF-8. Files are read as their exact bytes. Base64 is not encryption.'],
+            'url-encoder'=>['title'=>'URL Encoder & Decoder','intro'=>'Encode or decode a URL component and inspect query parameters, including repeated names.','detail'=>'Component encoding uses percent escapes and %20 for spaces. Component decoding preserves literal + signs; query inspection treats + as a space. Query inspection accepts at most 20,000 parameters. Results preserve parameter order and repeated names. No URL is requested. Malformed percent escapes and invalid UTF-8 are rejected.'],
+            'sha256-checksum'=>['title'=>'SHA-256 Checksum Calculator','intro'=>'Calculate a SHA-256 checksum from text or a file and compare it with an expected value locally.','detail'=>'Files are hashed byte for byte, including line endings and any BOM. Pasted text is encoded as UTF-8; browser editing may normalize line endings. Optional comparisons require 64 hexadecimal characters. A matching hash only establishes equality to the supplied checksum, not source authenticity. Requires HTTPS and Web Crypto.'],
             'json-validator'=>['title'=>'JSON Validator & Formatter','intro'=>'Validate, format or minify JSON while preserving the original numeric tokens.','detail'=>'Duplicate object keys are rejected. Maximum nesting: 100 levels; maximum values: 100,000. Formatting preserves number and string spellings.'],
             'csv-comparator'=>['title'=>'CSV Comparator','intro'=>'Compare two CSV files by an identifier column and find added, removed and modified rows.','detail'=>'Comma-separated CSV with a header row. Headers must be nonempty and unique; each row must have the same column count. Identifiers must be nonempty and unique in each file.'],
             'duplicate-finder'=>['title'=>'Duplicate & Conflict Finder','intro'=>'Find repeated identifiers and identifiers associated with different text values in CSV or JSON.','detail'=>'Select two different, literal field names. Both fields must contain nonempty strings. JSON input must be an array of objects. Positions are one-based data record positions.'],
@@ -70,7 +73,7 @@ final class OpenViST_Tools {
                 public function get_max_num_pages($object_subtype=''){return (string)get_option('blog_public')==='1'?1:0;}
             };
             // The site's conservative sitemap plugin filters unknown providers.
-            // Restore only these four explicitly maintained public Tools URLs.
+            // Restore these explicitly maintained public Tools URLs.
             add_filter('wp_sitemaps_add_provider',static function($candidate,$name)use($provider){return $name==='openvist-tools'?$provider:$candidate;},120,2);
             $server->registry->add_provider('openvist-tools',$provider);
         });
@@ -78,7 +81,7 @@ final class OpenViST_Tools {
     public static function metadata() {
         $route=self::route();if(!$route)return;
         $title=self::title().' | OpenViST';
-        $description=$route==='index'?'Free local tools for JSON, CSV, text comparison and sitemap inspection. Process inputs in your browser without an account.':self::catalogue()[$route]['intro'];
+        $description=$route==='index'?'Free local tools for JSON, CSV, text, Base64, URL encoding, SHA-256 and sitemap inspection. Process inputs in your browser without an account.':self::catalogue()[$route]['intro'];
         echo '<link rel="canonical" href="'.esc_url(self::url($route)).'">' . "\n";
         echo '<meta name="description" content="'.esc_attr($description).'">' . "\n";
         foreach(['og:title'=>$title,'og:description'=>$description,'og:url'=>self::url($route),'og:type'=>'website','og:site_name'=>'OpenViST'] as $key=>$value)echo '<meta property="'.esc_attr($key).'" content="'.esc_attr($value).'">' . "\n";
