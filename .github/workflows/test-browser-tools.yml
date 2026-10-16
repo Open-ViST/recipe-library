@@ -1,7 +1,7 @@
 name: Test browser tools
 on:
   push:
-    branches: [main, tools-encoding-030]
+    branches: [main, tools-encoding-030, tools-json-compare-031]
     paths: ['projects/browser-tools/**', '.github/workflows/test-browser-tools.yml']
   workflow_dispatch:
 permissions:
@@ -26,7 +26,7 @@ jobs:
           node --check projects/browser-tools/assets/sitemap-dom.js
           node --check projects/browser-tools/assets/tools-ui.js
           node --check projects/browser-tools/assets/tools-worker.js
-          node --test projects/browser-tools/tests/core.test.js projects/browser-tools/tests/extended.test.js projects/browser-tools/tests/utilities.test.js
+          node --test projects/browser-tools/tests/core.test.js projects/browser-tools/tests/extended.test.js projects/browser-tools/tests/utilities.test.js projects/browser-tools/tests/json-compare.test.js
       - name: Install browser test driver
         run: npm install --no-save --ignore-scripts --package-lock=false playwright@1.62.1
       - name: Test local browser interfaces

@@ -6,7 +6,7 @@ const http = require('node:http');
 const {execFileSync} = require('node:child_process');
 const {chromium} = require('playwright');
 const root = path.resolve(__dirname, '..');
-const tools = ['base64','url-encoder','sha256-checksum','json-validator','csv-comparator','duplicate-finder','text-diff','csv-json-converter','sitemap-inspector'];
+const tools = ['json-compare','base64','url-encoder','sha256-checksum','json-validator','csv-comparator','duplicate-finder','text-diff','csv-json-converter','sitemap-inspector'];
 const server = http.createServer((req,res) => {
   const url = new URL(req.url,'http://localhost');
   if (url.pathname.startsWith('/assets/')) {
@@ -39,6 +39,7 @@ const server = http.createServer((req,res) => {
         await page.locator('[data-ovt-result]').waitFor({state:'visible',timeout:10000});
         assert.equal(await page.locator('[data-ovt-status]').getAttribute('class'),'ovt-status');
         const output=await page.locator('#ovt-output').inputValue();assert.ok(output.length);
+        if(slug==='json-compare')assert.deepEqual(JSON.parse(output).counts,{added:1,removed:1,modified:2});
         if(slug==='json-validator')assert.match(output,/9007199254740993/);
         if(slug==='csv-comparator')assert.equal(JSON.parse(output).modified.length,1);
         if(slug==='duplicate-finder')assert.equal(JSON.parse(output).conflicts.length,1);
@@ -56,6 +57,11 @@ const server = http.createServer((req,res) => {
         console.log('PASS browser example, download, copy, clear and layout:',slug,width);
       }
     }
+    await page.goto(base+'/json-compare');
+    await page.locator('#ovt-input').fill('{"a":1,"b":2}');await page.locator('#ovt-second').fill('{"b":2,"a":1}');
+    await page.locator('[data-ovt-run]').click();await page.locator('[data-ovt-result]').waitFor({state:'visible'});
+    assert.equal(JSON.parse(await page.locator('#ovt-output').inputValue()).equal,true);
+    await page.locator('#ovt-second').fill('{"a":1,"a":2}');await page.locator('[data-ovt-run]').click();await page.locator('.ovt-status.is-error').waitFor();assert.equal(await page.locator('[data-ovt-result]').isVisible(),false);
     for(const slug of ['base64','sha256-checksum']){
       await page.goto(base+'/'+slug);
       const bytes=Buffer.from([0,255,239,187,191,13,10]);

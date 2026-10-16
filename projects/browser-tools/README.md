@@ -1,7 +1,8 @@
-# OpenViST Tools 0.3.0
+# OpenViST Tools 0.3.1
 
-A WordPress plugin providing nine free, browser-local data tools:
+A WordPress plugin providing ten free, browser-local data tools:
 
+- `/tools/json-compare/`: structural JSON comparison with exact numeric tokens and JSON Pointer paths.
 - `/tools/base64/`: strict Base64 and unpadded Base64url encoding/decoding; UTF-8 or binary output.
 - `/tools/url-encoder/`: URL component encoding/decoding and ordered query inspection.
 - `/tools/sha256-checksum/`: SHA-256 for UTF-8 text or exact file bytes, with optional comparison.
@@ -49,7 +50,7 @@ are outside the plugin's local-processing guarantee.
 
 ## WordPress integration
 
-WordPress 6.5+, PHP 8.0+. Activation registers ten virtual routes and refreshes
+WordPress 6.5+, PHP 8.0+. Activation registers eleven virtual routes and refreshes
 rewrite rules. The plugin creates no posts, user-data options, cron events or database
 tables. A tiny route-version option refreshes rewrite rules once when the plugin is updated. The plugin does not alter recipe or listing publication schedules. Tools URLs
 are added to the native WordPress sitemap provider. Page titles, descriptions
@@ -114,7 +115,7 @@ No remote sitemap indexes, listed URLs, images or external entities are fetched.
 Gzip files are not accepted.
 
 The browser integration suite renders the PHP templates against a minimal
-WordPress contract harness and tests all nine tools at desktop/mobile widths.
+WordPress contract harness and tests all ten tools at desktop/mobile widths.
 It checks native XML parsing, worker messages, examples, file input, downloads,
 clipboard copy, clearing, overflow and related-button hover states. Tests use
 local fixture pages and no private data; they do not replace live checks with
@@ -139,3 +140,18 @@ Select files for byte-exact hashing: pasted text uses UTF-8 and textarea editing
 can normalize line endings. Expected hashes accept 64 hex digits, case insensitive.
 A matching checksum is not proof of a trustworthy source. Utility downloads use
 TXT, JSON (query inspection), or BIN (binary Base64 decoding), without any upload.
+
+## JSON Compare
+
+Object property order is ignored, while arrays are compared by zero-based index.
+Numbers are compared by exact JSON token spelling: `1`, `1.0` and `1e0` differ.
+This avoids IEEE floating-point rounding, including for arbitrarily large integers
+and exponents. Strings are compared after JSON decoding (escape spelling does not
+matter); Unicode normalization is not performed. Missing keys differ from null.
+Duplicate keys are rejected rather than silently overwritten. Limits are 2 MiB,
+100 nesting levels and 100,000 values per input; at most 10,000 reported changes
+and 5 MiB output. Added/removed containers are reported once as whole subtrees.
+A type change is one modification. Paths follow JSON Pointer (`~0`, `~1`), and
+an empty path identifies the root. `before_json` and `after_json` are JSON source
+strings, preserving original numeric tokens. The report is not executable and
+is not a JSON Patch. No URLs, input data or comparison results are uploaded.

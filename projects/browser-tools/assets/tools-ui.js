@@ -49,6 +49,9 @@
       input.value = tool === 'url-encoder' ? 'Hello world & OpenViST ✓' : 'OpenViST ✓';
       if(form.querySelector('#ovt-operation'))form.querySelector('#ovt-operation').value='encode';
       if(form.querySelector('#ovt-expected'))form.querySelector('#ovt-expected').value='';
+    } else if (tool === 'json-compare') {
+      input.value = '{"project":"OpenViST","status":"draft","retired":true,"stats":{"count":9007199254740993}}';
+      second.value = '{"stats":{"count":9007199254740994},"status":"published","project":"OpenViST","active":true}';
     } else if (tool === 'json-validator') input.value = '{"project":"OpenViST","versions":[1,2,3],"large_integer":9007199254740993}';
     else if (tool === 'csv-comparator') {
       input.value = 'id,name,status\n1,Alpha,active\n2,Beta,pending\n3,Gamma,active\n';

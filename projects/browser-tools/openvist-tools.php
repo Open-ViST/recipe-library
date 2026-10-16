@@ -2,7 +2,7 @@
 /**
  * Plugin Name: OpenViST Tools
  * Description: Free local data, encoding and checksum tools. Processing runs locally in the browser.
- * Version: 0.3.0
+ * Version: 0.3.1
  * Requires at least: 6.5
  * Requires PHP: 8.0
  * Author: OpenViST
@@ -10,9 +10,10 @@
  */
 defined('ABSPATH') || exit;
 final class OpenViST_Tools {
-    const VERSION = '0.3.0';
+    const VERSION = '0.3.1';
     public static function catalogue() {
         return [
+            'json-compare'=>['title'=>'JSON Compare','intro'=>'Compare two JSON documents by structure and find added, removed or modified values.','detail'=>'Object key order is ignored. Arrays are compared by zero-based index. Number spellings are exact: 1 and 1.0 differ, with no rounding of large numbers. Strings are compared after JSON unescaping. Duplicate keys are rejected. Maximum 100 nesting levels, 100,000 values per input and 10,000 changes. Paths use JSON Pointer; an empty path means the root. Added or removed containers are reported once. Result snippets are JSON source strings, not rounded parsed values. The report is not a JSON Patch.'],
             'base64'=>['title'=>'Base64 Encoder & Decoder','intro'=>'Encode text or a file as Base64, or decode Base64 as UTF-8 text or a binary download.','detail'=>'Standard Base64 requires padding; Base64url uses the unpadded URL-safe alphabet. Whitespace and noncanonical padding bits are rejected. Text is encoded as UTF-8. Files are read as their exact bytes. Base64 is not encryption.'],
             'url-encoder'=>['title'=>'URL Encoder & Decoder','intro'=>'Encode or decode a URL component and inspect query parameters, including repeated names.','detail'=>'Component encoding uses percent escapes and %20 for spaces. Component decoding preserves literal + signs; query inspection treats + as a space. Query inspection accepts at most 20,000 parameters. Results preserve parameter order and repeated names. No URL is requested. Malformed percent escapes and invalid UTF-8 are rejected.'],
             'sha256-checksum'=>['title'=>'SHA-256 Checksum Calculator','intro'=>'Calculate a SHA-256 checksum from text or a file and compare it with an expected value locally.','detail'=>'Files are hashed byte for byte, including line endings and any BOM. Pasted text is encoded as UTF-8; browser editing may normalize line endings. Optional comparisons require 64 hexadecimal characters. A matching hash only establishes equality to the supplied checksum, not source authenticity. Requires HTTPS and Web Crypto.'],

@@ -36,7 +36,7 @@ $GLOBALS['hooks']['pre_get_posts'][0]($query);
 check('Virtual route does not impersonate homepage',!$query->is_home&&!$query->is_singular&&$query->settings['post__in']===[0]);
 $server=new stdClass();$server->registry=new class {public $provider;function add_provider($name,$provider){$candidate=false;foreach($GLOBALS['hooks']['wp_sitemaps_add_provider'] as $filter)$candidate=$filter($candidate,$name);$this->provider=$candidate;}};
 $GLOBALS['hooks']['wp_sitemaps_init'][0]($server);
-check('Tools sitemap survives conservative provider filter',count($server->registry->provider->get_url_list(1))===10);
+check('Tools sitemap survives conservative provider filter',count($server->registry->provider->get_url_list(1))===11);
 $GLOBALS['blog_public']='0';
 check('Private-site setting respected',$server->registry->provider->get_url_list(1)===[]&&$server->registry->provider->get_max_num_pages()===0);
 echo "All integration contract checks passed.\n";
