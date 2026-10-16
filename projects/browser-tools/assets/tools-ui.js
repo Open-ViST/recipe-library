@@ -5,6 +5,7 @@
   const tool = form.dataset.ovtTool, input = form.querySelector('#ovt-input');
   const second = form.querySelector('#ovt-second'), output = form.querySelector('#ovt-output');
   const status = form.querySelector('[data-ovt-status]'), panel = form.querySelector('[data-ovt-result]');
+  const cancel = form.querySelector('[data-ovt-stop]'), highlights=form.querySelector('[data-ovt-highlights]');
   const run = form.querySelector('[data-ovt-run]'), download = form.querySelector('[data-ovt-download]');
   let worker = null, timer = null, objectURL = null, generation = 0;
   const fileTexts = new Map(), fileReads = new Map(), fileBytes = new Map();
@@ -12,11 +13,11 @@
   function message(text, error) { status.textContent = text; status.classList.toggle('is-error', !!error); }
   function stop() {
     if (worker) worker.terminate(); worker = null;
-    clearTimeout(timer); timer = null;
+    clearTimeout(timer); timer = null; if(cancel)cancel.hidden=true;
     form.removeAttribute('aria-busy'); availability();
   }
   function reset() {
-    generation++; stop(); panel.hidden = true; output.value = '';
+    generation++; stop(); panel.hidden = true; output.value = ''; if(highlights)highlights.replaceChildren();
     if (objectURL) URL.revokeObjectURL(objectURL); objectURL = null;
     download.removeAttribute('href');
   }
@@ -49,6 +50,10 @@
       input.value = tool === 'url-encoder' ? 'Hello world & OpenViST ✓' : 'OpenViST ✓';
       if(form.querySelector('#ovt-operation'))form.querySelector('#ovt-operation').value='encode';
       if(form.querySelector('#ovt-expected'))form.querySelector('#ovt-expected').value='';
+    } else if (tool === 'regex-tester') {
+      input.value = 'OpenViST v0.5.0\nPython v3.14.0\nRust v1.90.0';
+      form.querySelector('#ovt-pattern').value='(?<name>[A-Za-z]+) v(?<version>[0-9]+\\.[0-9]+\\.[0-9]+)';
+      form.querySelector('#ovt-flags').value='g';
     } else if (tool === 'json-compare') {
       input.value = '{"project":"OpenViST","status":"draft","retired":true,"stats":{"count":9007199254740993}}';
       second.value = '{"stats":{"count":9007199254740994},"status":"published","project":"OpenViST","active":true}';
@@ -79,7 +84,7 @@
   run.addEventListener('click', function () {
     reset();
     if (typeof Worker !== 'function' || !window.ovtConfig) { message('Your browser cannot start local processing. No data was sent to the server.', true); return; }
-    const task = {tool, bytes:fileBytes.get('ovt-input'), operation:form.querySelector('#ovt-operation')?.value, alphabet:form.querySelector('#ovt-alphabet')?.value, decoded:form.querySelector('#ovt-decoded')?.value, expected:form.querySelector('#ovt-expected')?.value, input: fileTexts.get('ovt-input') ?? input.value, second: second ? (fileTexts.get('ovt-second') ?? second.value) : '',
+    const task = {tool, pattern:form.querySelector('#ovt-pattern')?.value, flags:form.querySelector('#ovt-flags')?.value, bytes:fileBytes.get('ovt-input'), operation:form.querySelector('#ovt-operation')?.value, alphabet:form.querySelector('#ovt-alphabet')?.value, decoded:form.querySelector('#ovt-decoded')?.value, expected:form.querySelector('#ovt-expected')?.value, input: fileTexts.get('ovt-input') ?? input.value, second: second ? (fileTexts.get('ovt-second') ?? second.value) : '',
       key: form.querySelector('#ovt-key')?.value, field: form.querySelector('#ovt-field')?.value,
       kind: form.querySelector('#ovt-kind')?.value, compact: form.querySelector('#ovt-mode')?.value === 'compact',
       direction: form.querySelector('#ovt-direction')?.value, columns: form.querySelector('#ovt-columns')?.value,
@@ -91,13 +96,23 @@
         task.sitemap = window.OpenViSTSitemap.parse(task.input);
       }
       worker = new Worker(window.ovtConfig.worker);
-      run.disabled = true; form.setAttribute('aria-busy', 'true'); message('Processing locally…');
-      timer = setTimeout(function () { if (generation !== id) return; stop(); message('Processing stopped after 20 seconds. Try a smaller input.', true); }, 20000);
+      run.disabled = true; if(cancel)cancel.hidden=false; form.setAttribute('aria-busy', 'true'); message('Processing locally…');
+      timer = setTimeout(function () { if (generation !== id) return; stop(); message(tool==='regex-tester'?'Search stopped after 3 seconds. Simplify the pattern or shorten the text.':'Processing stopped after 20 seconds. Try a smaller input.', true); }, tool==='regex-tester'?3000:20000);
       worker.onmessage = function (event) {
         if (generation !== id) return;
         stop(); const data = event.data;
         if (!data.ok) { message(data.error || 'Unable to process this input.', true); return; }
         output.value = data.result.text; panel.hidden = false;
+        if(highlights){
+          let cursor=0;const fragment=document.createDocumentFragment();
+          for(const match of data.result.matches||[]){
+            fragment.append(document.createTextNode(task.input.slice(cursor,match.index)));
+            const mark=document.createElement('mark');mark.textContent=match.text||'│';
+            mark.title='Match at UTF-16 index '+match.index+(match.text===''?' (zero length)':'');
+            fragment.append(mark);cursor=match.end;
+          }
+          fragment.append(document.createTextNode(task.input.slice(cursor)));highlights.replaceChildren(fragment);
+        }
         const extension = data.result.extension || 'json';
         objectURL = URL.createObjectURL(new Blob([data.result.bytes ?? data.result.text], {type:data.result.mime || 'application/json;charset=utf-8'}));
         download.href = objectURL; download.download = 'openvist-' + tool + '.' + extension;
@@ -112,6 +127,7 @@
     try { await navigator.clipboard.writeText(output.value); message('Result copied.'); }
     catch (_) { output.focus(); output.select(); message('Result selected. Use your browser’s copy command.'); }
   });
+  if(cancel)cancel.addEventListener('click',()=>{reset();message('Search stopped. No partial report was kept.');});
   window.addEventListener('pagehide', reset);
   run.disabled = typeof Worker !== 'function';
   if (run.disabled) message('This browser does not support the worker required for local processing.', true);

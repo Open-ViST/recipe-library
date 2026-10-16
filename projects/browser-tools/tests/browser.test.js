@@ -6,7 +6,7 @@ const http = require('node:http');
 const {execFileSync} = require('node:child_process');
 const {chromium} = require('playwright');
 const root = path.resolve(__dirname, '..');
-const tools = ['json-compare','base64','url-encoder','sha256-checksum','json-validator','csv-comparator','duplicate-finder','text-diff','csv-json-converter','sitemap-inspector'];
+const tools = ['regex-tester','json-compare','base64','url-encoder','sha256-checksum','json-validator','csv-comparator','duplicate-finder','text-diff','csv-json-converter','sitemap-inspector'];
 const server = http.createServer((req,res) => {
   const url = new URL(req.url,'http://localhost');
   if (url.pathname.startsWith('/assets/')) {
@@ -39,6 +39,7 @@ const server = http.createServer((req,res) => {
         await page.locator('[data-ovt-result]').waitFor({state:'visible',timeout:10000});
         assert.equal(await page.locator('[data-ovt-status]').getAttribute('class'),'ovt-status');
         const output=await page.locator('#ovt-output').inputValue();assert.ok(output.length);
+        if(slug==='regex-tester'){assert.equal(JSON.parse(output).matches.length,3);assert.equal(await page.locator('[data-ovt-highlights] mark').count(),3);}
         if(slug==='json-compare')assert.deepEqual(JSON.parse(output).counts,{added:1,removed:1,modified:2});
         if(slug==='json-validator')assert.match(output,/9007199254740993/);
         if(slug==='csv-comparator')assert.equal(JSON.parse(output).modified.length,1);
@@ -57,6 +58,14 @@ const server = http.createServer((req,res) => {
         console.log('PASS browser example, download, copy, clear and layout:',slug,width);
       }
     }
+    await page.goto(base+'/regex-tester');
+    await page.locator('#ovt-pattern').fill('.+');await page.locator('#ovt-input').fill('<img src=x onerror=alert(1)>');await page.locator('[data-ovt-run]').click();await page.locator('[data-ovt-result]').waitFor({state:'visible'});assert.equal(await page.locator('[data-ovt-highlights] img').count(),0);assert.equal(await page.locator('[data-ovt-highlights] mark').textContent(),'<img src=x onerror=alert(1)>');
+    await page.locator('#ovt-pattern').fill('(');await page.locator('[data-ovt-run]').click();await page.locator('.ovt-status.is-error').waitFor();
+    await page.locator('#ovt-pattern').fill('(a+)+$');await page.locator('#ovt-input').fill('a'.repeat(35)+'!');await page.locator('[data-ovt-run]').click();await page.locator('.ovt-status.is-error').waitFor({timeout:8000});assert.match(await page.locator('[data-ovt-status]').textContent(),/3 seconds/);assert.equal(await page.locator('[data-ovt-result]').isVisible(),false);
+    await page.locator('[data-ovt-run]').click();await page.locator('[data-ovt-stop]').click();assert.match(await page.locator('[data-ovt-status]').textContent(),/Search stopped/);
+    await page.locator('[data-ovt-sample]').click();await page.locator('[data-ovt-run]').click();await page.locator('[data-ovt-result]').waitFor({state:'visible'});
+    await page.goto(base+'/');assert.equal(await page.locator('.ovt-tool-group').count(),4);assert.equal(await page.locator('.ovt-card').count(),12);assert.equal(await page.locator('[data-ovt-websites] .ovt-card').count(),1);
+    console.log('PASS regex highlights, inert markup, invalid pattern, real worker timeout, cancellation and recovery, grouped catalogue.');
     await page.goto(base+'/code-to-image');
     assert.equal(await page.locator('form').count(),0);
     await page.locator('[data-image-sample]').click();

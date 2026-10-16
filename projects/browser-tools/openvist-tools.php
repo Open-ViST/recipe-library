@@ -2,7 +2,7 @@
 /**
  * Plugin Name: OpenViST Tools
  * Description: Free local data, encoding and checksum tools. Processing runs locally in the browser.
- * Version: 0.4.0
+ * Version: 0.5.0
  * Requires at least: 6.5
  * Requires PHP: 8.0
  * Author: OpenViST
@@ -10,9 +10,10 @@
  */
 defined('ABSPATH') || exit;
 final class OpenViST_Tools {
-    const VERSION = '0.4.0';
+    const VERSION = '0.5.0';
     public static function catalogue() {
         return [
+            'regex-tester'=>['title'=>'Regex Tester — JavaScript','intro'=>'Test a JavaScript regular expression locally, highlight matches and inspect numbered and named capture groups.','detail'=>'Uses your browser’s JavaScript RegExp engine, not Python, PHP or Rust. Enter a pattern without / delimiters. Flags: g, i, m, s, u, y. Without g, only the first match is returned. Positions are zero-based UTF-16 code units; end positions are exclusive. Null captures mean an unmatched group. Limits: 256 KiB text, 4 KiB pattern, 200 capture groups, 1,000 matches and 5 MiB output. The worker is terminated after 3 seconds; no partial report is returned.'],
             'code-to-image'=>['title'=>'Code to Image','intro'=>'Turn a short code example into a polished PNG for documentation, tutorials or social posts, locally in your browser.','detail'=>'Three styles, editable title, optional line numbers and signature, and 1× or 2× PNG export. All languages are accepted as plain text; no syntax highlighting or execution. Maximum 60 lines, 140 characters per expanded line and 20 KiB of UTF-8 input.'],
             'json-compare'=>['title'=>'JSON Compare','intro'=>'Compare two JSON documents by structure and find added, removed or modified values.','detail'=>'Object key order is ignored. Arrays are compared by zero-based index. Number spellings are exact: 1 and 1.0 differ, with no rounding of large numbers. Strings are compared after JSON unescaping. Duplicate keys are rejected. Maximum 100 nesting levels, 100,000 values per input and 10,000 changes. Paths use JSON Pointer; an empty path means the root. Added or removed containers are reported once. Result snippets are JSON source strings, not rounded parsed values. The report is not a JSON Patch.'],
             'base64'=>['title'=>'Base64 Encoder & Decoder','intro'=>'Encode text or a file as Base64, or decode Base64 as UTF-8 text or a binary download.','detail'=>'Standard Base64 requires padding; Base64url uses the unpadded URL-safe alphabet. Whitespace and noncanonical padding bits are rejected. Text is encoded as UTF-8. Files are read as their exact bytes. Base64 is not encryption.'],
@@ -24,6 +25,14 @@ final class OpenViST_Tools {
             'text-diff'=>['title'=>'Text Diff','intro'=>'Compare two texts line by line and identify additions, removals and unchanged lines.','detail'=>'Maximum 2,000 lines per input. Line endings are compared as LF. Case, spaces and Unicode spelling are preserved. Final newline presence is reported separately. The result is a readable comparison, not a patch file.'],
             'csv-json-converter'=>['title'=>'CSV ↔ JSON Converter','intro'=>'Convert CSV records to JSON or flat JSON objects to CSV, with optional column selection.','detail'=>'CSV values remain strings. For JSON to CSV, missing fields and null become empty cells. Selected values must be scalar; nested arrays and objects are rejected. Formula-like string cells are prefixed with an apostrophe by default.'],
             'sitemap-inspector'=>['title'=>'Sitemap Inspector','intro'=>'Inspect a sitemap XML file, extract URLs and find duplicates and common structural issues locally.','detail'=>'Accepts XML urlset and sitemapindex files up to 2 MiB and 20,000 entries. DTD declarations are rejected. These are local structural checks, not complete XSD validation, live link checking or an indexing guarantee.'],
+        ];
+    }
+    public static function groups() {
+        return [
+            'JSON & structured data'=>['json-validator','json-compare','csv-json-converter','csv-comparator','duplicate-finder'],
+            'Text & code'=>['text-diff','regex-tester','code-to-image'],
+            'Encoding & checksums'=>['base64','url-encoder','sha256-checksum'],
+            'Website checks'=>['sitemap-inspector'],
         ];
     }
     public static function route() {

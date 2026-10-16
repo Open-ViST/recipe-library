@@ -1,7 +1,8 @@
-# OpenViST Tools 0.4.0
+# OpenViST Tools 0.5.0
 
-A WordPress plugin providing eleven free, browser-local data tools:
+A WordPress plugin providing twelve free, browser-local data tools:
 
+- `/tools/regex-tester/`: JavaScript worker regex matching, highlighted spans and capture reports.
 - `/tools/code-to-image/`: local Canvas PNG export of short plain-text code examples.
 - `/tools/json-compare/`: structural JSON comparison with exact numeric tokens and JSON Pointer paths.
 - `/tools/base64/`: strict Base64 and unpadded Base64url encoding/decoding; UTF-8 or binary output.
@@ -15,7 +16,7 @@ A WordPress plugin providing eleven free, browser-local data tools:
 - `/tools/sitemap-inspector/`: local sitemap XML structural checks.
 
 The landing page is `/tools/`. Install and activate this plugin from its ZIP.
-OpenViST Home 0.4.02 adds the Tools navigation integration; older Home versions
+OpenViST Home 0.5.02 adds the Tools navigation integration; older Home versions
 still permit direct access to the tool URLs. No VPS service, REST processing
 endpoint, OpenAI call, paid dependency or user account is required.
 
@@ -51,14 +52,14 @@ are outside the plugin's local-processing guarantee.
 
 ## WordPress integration
 
-WordPress 6.5+, PHP 8.0+. Activation registers twelve virtual routes and refreshes
+WordPress 6.5+, PHP 8.0+. Activation registers thirteen virtual routes and refreshes
 rewrite rules. The plugin creates no posts, user-data options, cron events or database
 tables. A tiny route-version option refreshes rewrite rules once when the plugin is updated. The plugin does not alter recipe or listing publication schedules. Tools URLs
 are added to the native WordPress sitemap provider. Page titles, descriptions
 and canonical metadata are provided for these routes; the OpenViST Directory
 UI's generic metadata is suppressed only on Tools pages. Existing theme header
 and footer templates are retained. The navigation filter adds Tools after
-Recipes when OpenViST Home 0.4.02 is active.
+Recipes when OpenViST Home 0.5.02 is active.
 
 If `/tools/` returns 404 after activation, save **Settings → Permalinks** once
 without changing its values. Custom sitemap plugins may require separate
@@ -172,3 +173,25 @@ above 10 MiB are rejected. Preview invalidates on edits, old object URLs are
 revoked, and clearing/reloading removes results. Clipboard image support is
 optional; denied clipboard access directs users to Download PNG. Review secrets
 before sharing. Input stays local; analytics should never collect input fields.
+
+## Regex Tester and grouped catalogue
+
+The index groups tools into JSON & structured data, Text & code, Encoding &
+checksums, and Website checks. Link Auditor Bridge 0.2.5 places its server-audit
+entry in Website checks and removes obsolete tool counts (older bridge versions
+remain functional but insert their entry after the first group).
+
+Regex Tester uses JavaScript RegExp in a separate worker, terminated by the UI
+after 3 seconds or when Stop search is clicked. Editing input also terminates
+processing and invalidates old results. No partial report is shown on timeout.
+There is no automatic per-keystroke regex execution. Limits: 256 KiB UTF-8 text,
+4 KiB pattern, flags g/i/m/s/u/y without duplicates, 1,000 matches, 200 capture
+groups and 5 MiB output. Patterns are entered without slash delimiters. Empty
+matches explicitly advance by one code point with u, or one UTF-16 unit without
+u. Reports use zero-based UTF-16 indices and exclusive ends; unmatched groups
+are null. Without g only the first match is returned; y uses sticky semantics.
+Highlights are built from text nodes, never HTML. Zero-length matches display a
+vertical marker. Results depend on browser support and do not establish
+compatibility with Python, PHP, Rust or a different JavaScript engine/version.
+Browser tests exercise a pathological regex, timeout, manual cancellation,
+subsequent recovery, literal HTML handling and desktop/mobile examples.

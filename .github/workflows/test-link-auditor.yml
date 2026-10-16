@@ -1,7 +1,7 @@
 name: Test Link Auditor
 on:
   push:
-    branches: [main, link-auditor-public-beta]
+    branches: [main, link-auditor-public-beta, tools-regex-050]
     paths: ['projects/link-auditor/**', '.github/workflows/test-link-auditor.yml']
   workflow_dispatch:
 permissions:
