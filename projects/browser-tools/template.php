@@ -36,5 +36,6 @@
     </section>
     <section class="ovt-notes"><h2>What this tool does</h2><p><?php echo esc_html($tools[$route]['detail']); ?></p><p>Use the example to understand the accepted input. Field names, when applicable, are literal. Inputs are not executed, and Sitemap Inspector never requests the listed URLs.</p><p>Worker processing stops after <?php echo $route==='regex-tester'?'3':'20'; ?> seconds; results are limited to 5 MiB. Initial sitemap XML parsing runs locally before that worker timeout. Inputs and results are cleared when you reload the page. Nothing is executed from the supplied files.</p><div class="ovt-link-actions"><a class="ovt-link-button button" href="https://github.com/Open-ViST/recipe-library/tree/main/projects/browser-tools">Source code on GitHub <span aria-hidden="true">↗</span></a><a class="ovt-link-button button" href="<?php echo esc_url(home_url('/recipes/')); ?>">Browse recipes <span aria-hidden="true">→</span></a></div></section>
     <?php endif; ?>
+    <?php if($route!=='index')echo OpenViST_Tools::context($route); ?>
 </main>
 <?php get_footer(); ?>

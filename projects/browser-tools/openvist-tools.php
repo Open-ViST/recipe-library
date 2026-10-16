@@ -2,7 +2,7 @@
 /**
  * Plugin Name: OpenViST Tools
  * Description: Free local data, encoding and checksum tools. Processing runs locally in the browser.
- * Version: 0.5.0
+ * Version: 0.5.1
  * Requires at least: 6.5
  * Requires PHP: 8.0
  * Author: OpenViST
@@ -10,7 +10,7 @@
  */
 defined('ABSPATH') || exit;
 final class OpenViST_Tools {
-    const VERSION = '0.5.0';
+    const VERSION = '0.5.1';
     public static function catalogue() {
         return [
             'regex-tester'=>['title'=>'Regex Tester — JavaScript','intro'=>'Test a JavaScript regular expression locally, highlight matches and inspect numbered and named capture groups.','detail'=>'Uses your browser’s JavaScript RegExp engine, not Python, PHP or Rust. Enter a pattern without / delimiters. Flags: g, i, m, s, u, y. Without g, only the first match is returned. Positions are zero-based UTF-16 code units; end positions are exclusive. Null captures mean an unmatched group. Limits: 256 KiB text, 4 KiB pattern, 200 capture groups, 1,000 matches and 5 MiB output. The worker is terminated after 3 seconds; no partial report is returned.'],
@@ -44,7 +44,7 @@ final class OpenViST_Tools {
         add_rewrite_rule('^tools/('.implode('|',array_keys(self::catalogue())).')/?$', 'index.php?openvist_tool=$matches[1]', 'top');
     }
     public static function url($slug = '') { return home_url('/tools/'.($slug && $slug !== 'index' ? $slug.'/' : '')); }
-    public static function title() { $route=self::route();return $route && $route!=='index' ? self::catalogue()[$route]['title'] : 'Free browser tools'; }
+    public static function title() { $route=self::route();return $route && $route!=='index' ? self::catalogue()[$route]['title'] : 'Free Developer Tools'; }
     public static function boot() {
         add_action('init',[__CLASS__,'rules']);
         add_action('init',static function(){if(get_option('ovt_route_version')!==self::VERSION){flush_rewrite_rules(false);update_option('ovt_route_version',self::VERSION,false);}},20);
@@ -63,6 +63,7 @@ final class OpenViST_Tools {
         add_filter('template_include',static function($template){return self::route()?__DIR__.'/template.php':$template;},PHP_INT_MAX);
         add_filter('body_class',static function($classes){if(self::route())$classes=array_merge($classes,['ovt-page','openvist-public-ui']);return array_unique($classes);});
         add_action('wp_enqueue_scripts',static function(){
+            if(is_singular('ov_recipe'))wp_enqueue_style('openvist-tool-context',plugins_url('assets/context.css',__FILE__),[],self::VERSION);
             if(!self::route())return;
             wp_enqueue_style('openvist-tools',plugins_url('assets/tools.css',__FILE__),[],self::VERSION);
             if(self::route()==='code-to-image'){wp_enqueue_script('openvist-code-image',plugins_url('assets/code-image.js',__FILE__),[],self::VERSION,true);return;}
@@ -71,6 +72,7 @@ final class OpenViST_Tools {
             wp_enqueue_script('openvist-tools',plugins_url('assets/tools-ui.js',__FILE__),$deps,self::VERSION,true);
             wp_add_inline_script('openvist-tools','window.ovtConfig='.wp_json_encode(['worker'=>plugins_url('assets/tools-worker.js',__FILE__).'?ver='.self::VERSION]).';','before');
         },1200);
+        add_filter('openvist_recipe_related_tools',[__CLASS__,'recipe_tools'],10,2);
         add_action('wp_head',[__CLASS__,'metadata'],2);
         add_action('wp',static function(){if(self::route())remove_action('wp_head','rel_canonical');});
         add_filter('openvist_navigation_links',static function($links){
@@ -90,10 +92,33 @@ final class OpenViST_Tools {
             $server->registry->add_provider('openvist-tools',$provider);
         });
     }
+    public static function guides(){
+        static $data=null;if($data===null)$data=json_decode((string)file_get_contents(__DIR__.'/data/tool-guides.json'),true)?:[];return $data;
+    }
+    public static function public_recipe($slug){
+        if(!function_exists('get_page_by_path'))return null;
+        $post=get_page_by_path($slug,OBJECT,'ov_recipe');
+        return $post&&$post->post_status==='publish'&&$post->post_password===''?$post:null;
+    }
+    public static function context($route){
+        $guide=self::guides()[$route]??null;if(!$guide)return '';
+        $h='<section class="ovt-notes ovt-context"><h2>A practical example</h2><p>'.esc_html($guide['use']).'</p><h3>Example input</h3><pre>'.esc_html($guide['input']).'</pre><h3>What to expect</h3><p>'.esc_html($guide['expected']).'</p><p>Use the controls above to enter this example. Load example may use a different sample; check the selected operation and options.</p>';
+        $links='';foreach($guide['recipes'] as $slug){$post=self::public_recipe($slug);if($post)$links.='<li><a href="'.esc_url(get_permalink($post->ID)).'">'.esc_html(get_the_title($post->ID)).'</a></li>';}
+        if($links)$h.='<h3>Continue with a related recipe</h3><p>'.esc_html($guide['recipe_note']??'These scripts address related tasks. Review each recipe’s runtime, inputs, recorded tests and limits; its behavior may differ from this browser tool.').'</p><ul>'.$links.'</ul>';
+        return $h.'</section>';
+    }
+    public static function recipe_tools($html,$record){
+        if(!is_array($record)||!is_string($record['slug']??null))return $html;
+        $links='';$count=0;foreach(self::guides() as $slug=>$guide){if(!in_array($record['slug'],$guide['recipes'],true)||!isset(self::catalogue()[$slug]))continue;
+            $links.='<a class="ovt-link-button button" href="'.esc_url(self::url($slug)).'">'.esc_html(self::catalogue()[$slug]['title']).'</a>';if(++$count===4)break;
+        }
+        if(!$links)return $html;
+        return $html.'<section class="ovr-sources ovt-context"><h2>Related browser tools</h2><p>Inspect related data locally in your browser. These tools have their own input rules and limits; they do not execute this recipe.</p><div class="ovt-link-actions">'.$links.'</div></section>';
+    }
     public static function metadata() {
         $route=self::route();if(!$route)return;
         $title=self::title().' | OpenViST';
-        $description=$route==='index'?'Free local tools for JSON, CSV, text, Base64, URL encoding, SHA-256 and sitemap inspection. Process inputs in your browser without an account.':self::catalogue()[$route]['intro'];
+        $description=$route==='index'?'Free browser tools for JSON comparison, CSV, JavaScript regex, Base64, URL encoding, SHA-256, code images and sitemap inspection. Process inputs in your browser without an account.':self::catalogue()[$route]['intro'];
         echo '<link rel="canonical" href="'.esc_url(self::url($route)).'">' . "\n";
         echo '<meta name="description" content="'.esc_attr($description).'">' . "\n";
         foreach(['og:title'=>$title,'og:description'=>$description,'og:url'=>self::url($route),'og:type'=>'website','og:site_name'=>'OpenViST'] as $key=>$value)echo '<meta property="'.esc_attr($key).'" content="'.esc_attr($value).'">' . "\n";

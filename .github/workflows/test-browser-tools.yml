@@ -1,7 +1,7 @@
 name: Test browser tools
 on:
   push:
-    branches: [main, tools-encoding-030, tools-json-compare-031, tools-code-image-040, tools-regex-050]
+    branches: [main, tools-encoding-030, tools-json-compare-031, tools-code-image-040, tools-regex-050, tools-context-seo-051]
     paths: ['projects/browser-tools/**', '.github/workflows/test-browser-tools.yml']
   workflow_dispatch:
 permissions:

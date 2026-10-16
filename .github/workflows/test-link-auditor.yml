@@ -1,7 +1,7 @@
 name: Test Link Auditor
 on:
   push:
-    branches: [main, link-auditor-public-beta, tools-regex-050]
+    branches: [main, link-auditor-public-beta, tools-regex-050, tools-context-seo-051]
     paths: ['projects/link-auditor/**', '.github/workflows/test-link-auditor.yml']
   workflow_dispatch:
 permissions:
@@ -56,3 +56,4 @@ jobs:
           cp -a projects/link-auditor/wordpress /tmp/ovla-wordpress/wp-content/plugins/openvist-link-auditor-bridge
           php /tmp/wp-cli.phar plugin activate openvist-link-auditor-bridge --path=/tmp/ovla-wordpress
           php /tmp/wp-cli.phar eval-file "$PWD/projects/link-auditor/wordpress/tests/wp-integration.php" --path=/tmp/ovla-wordpress
+          php /tmp/wp-cli.phar eval-file "$PWD/projects/browser-tools/tests/site-integration.php" --path=/tmp/ovla-wordpress

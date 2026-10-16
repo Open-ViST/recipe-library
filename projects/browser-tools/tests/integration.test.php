@@ -12,6 +12,10 @@ function home_url($path='/'){return 'https://example.com'.$path;}
 function esc_url($value){return htmlspecialchars($value,ENT_QUOTES,'UTF-8');}
 function esc_html($value){return htmlspecialchars($value,ENT_QUOTES,'UTF-8');}
 function esc_attr($value){return htmlspecialchars($value,ENT_QUOTES,'UTF-8');}
+function get_page_by_path($slug,$output='OBJECT',$type='page'){return $GLOBALS['test_recipes'][$slug]??null;}
+function get_permalink($id){return 'https://example.com/recipes/recipe-'.$id.'/';}
+function get_the_title($id){return 'Published recipe '.$id;}
+if(!defined('OBJECT'))define('OBJECT','OBJECT');
 function get_header(){echo '<header>Shared header</header>';}
 function get_footer(){echo '<footer>Shared footer</footer>';}
 function status_header($status){$GLOBALS['status']=$status;}
@@ -29,6 +33,13 @@ foreach(array_merge(['index'],array_keys(OpenViST_Tools::catalogue())) as $route
     check('Tools canonical '.$route,str_contains($meta,OpenViST_Tools::url($route))&&substr_count($meta,'rel="canonical"')===1);
 }
 $grouped=array_merge(...array_values(OpenViST_Tools::groups()));check('Every tool belongs to exactly one catalogue group',count($grouped)===count(array_unique($grouped))&&count($grouped)===count(OpenViST_Tools::catalogue())&&array_diff(array_keys(OpenViST_Tools::catalogue()),$grouped)===[]);
+check('Each tool has a documented use case and example',array_keys(OpenViST_Tools::guides())!==[]&&count(OpenViST_Tools::guides())===count(OpenViST_Tools::catalogue()));
+$GLOBALS['test_recipes']=['compare-json-object-paths-python'=>(object)['ID'=>1,'post_status'=>'publish','post_password'=>''],'compare-permission-sets-javascript'=>(object)['ID'=>2,'post_status'=>'draft','post_password'=>'']];
+$context=OpenViST_Tools::context('json-compare');
+check('Only published recipes appear in related links',str_contains($context,'recipe-1/')&&!str_contains($context,'recipe-2/'));
+$GLOBALS['test_recipes']['compare-json-object-paths-python']->post_password='private';check('Password-protected recipes are excluded',!str_contains(OpenViST_Tools::context('json-compare'),'recipe-1/'));
+check('Recipe-to-tool mapping is specific',str_contains(OpenViST_Tools::recipe_tools('',['slug'=>'compare-json-object-paths-python']),'/tools/json-compare/'));
+check('Unmapped recipes do not receive unrelated tools',OpenViST_Tools::recipe_tools('original',['slug'=>'unmapped-example'])==='original');
 $GLOBALS['tool_route']='invalid';check('Unknown route ignored',OpenViST_Tools::route()==='');
 $menu=$GLOBALS['hooks']['openvist_navigation_links'][0](['Directory'=>'/site/','Recipes'=>'/recipes/','Journal'=>'/journal/']);
 check('Menu ordering',array_keys($menu)===['Directory','Recipes','Tools','Journal']);

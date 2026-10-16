@@ -1,4 +1,4 @@
-# OpenViST Tools 0.5.0
+# OpenViST Tools 0.5.1
 
 A WordPress plugin providing twelve free, browser-local data tools:
 
@@ -16,7 +16,7 @@ A WordPress plugin providing twelve free, browser-local data tools:
 - `/tools/sitemap-inspector/`: local sitemap XML structural checks.
 
 The landing page is `/tools/`. Install and activate this plugin from its ZIP.
-OpenViST Home 0.5.02 adds the Tools navigation integration; older Home versions
+OpenViST Home 0.5.12 adds the Tools navigation integration; older Home versions
 still permit direct access to the tool URLs. No VPS service, REST processing
 endpoint, OpenAI call, paid dependency or user account is required.
 
@@ -59,7 +59,7 @@ are added to the native WordPress sitemap provider. Page titles, descriptions
 and canonical metadata are provided for these routes; the OpenViST Directory
 UI's generic metadata is suppressed only on Tools pages. Existing theme header
 and footer templates are retained. The navigation filter adds Tools after
-Recipes when OpenViST Home 0.5.02 is active.
+Recipes when OpenViST Home 0.5.12 is active.
 
 If `/tools/` returns 404 after activation, save **Settings → Permalinks** once
 without changing its values. Custom sitemap plugins may require separate
@@ -195,3 +195,13 @@ vertical marker. Results depend on browser support and do not establish
 compatibility with Python, PHP, Rust or a different JavaScript engine/version.
 Browser tests exercise a pathological regex, timeout, manual cancellation,
 subsequent recovery, literal HTML handling and desktop/mobile examples.
+
+## Contextual examples and related recipes
+
+Each tool has a server-rendered use case, input example and expected outcome in
+`data/tool-guides.json`. Related links are curated by task, resolved against
+published, unpassworded `ov_recipe` posts, and omitted when unavailable. They do
+not use keyword-stuffed search URLs or automated claims of equivalent behavior.
+Recipe pages with Recipes 0.7.5 use the `openvist_recipe_related_tools` filter to
+show the reverse task links. Tools remains independent when Recipes is inactive.
+No visitor input is placed in these links or stored in WordPress.

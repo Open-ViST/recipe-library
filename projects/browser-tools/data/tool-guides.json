@@ -1,0 +1,115 @@
+{
+  "json-validator": {
+    "use": "Inspect an API response before adapting it in a script. Formatting makes nested values readable without rounding large numeric tokens.",
+    "input": "{\"project\":\"OpenViST\",\"versions\":[1,2,3],\"large_integer\":9007199254740993}",
+    "expected": "Valid JSON. The large_integer token remains 9007199254740993 after formatting. Duplicate object keys are errors.",
+    "recipes": [
+      "check-required-keys-in-local-json-config",
+      "validate-jsonl-object-records",
+      "summarize-json-field-types-python"
+    ]
+  },
+  "json-compare": {
+    "use": "Compare two saved API responses or configurations when spacing and object-key order should not count as changes.",
+    "input": "Before: {\"enabled\":false,\"count\":9007199254740993}\nAfter:  {\"count\":9007199254740994,\"enabled\":true}",
+    "expected": "Two modified paths: /enabled and /count. Numeric tokens are preserved; 1 and 1.0 are intentionally different.",
+    "recipes": [
+      "compare-json-object-paths-python",
+      "compare-permission-sets-javascript"
+    ]
+  },
+  "csv-json-converter": {
+    "use": "Move a small table into JSON while preserving identifiers with leading zeros.",
+    "input": "id,name\n001,Alpha\n002,\"Beta, Inc.\"",
+    "expected": "CSV → JSON keeps \"001\" and \"002\" as strings. JSON → CSV has its own scalar-value and spreadsheet-safety rules.",
+    "recipes": [
+      "convert-jsonl-to-csv",
+      "validate-csv-columns-detect-duplicate-rows-python"
+    ]
+  },
+  "csv-comparator": {
+    "use": "Check how an exported table changed between two snapshots using a unique identifier column.",
+    "input": "Before: id,name\\n1,Alpha\\n2,Beta\nAfter:  id,name\\n1,Alpha\\n2,Gamma",
+    "expected": "With id as the identifier, record 2 is modified and record 1 is unchanged. The example above uses literal \\n to show CSV line endings.",
+    "recipes": [
+      "compare-csv-records-by-key",
+      "validate-csv-columns-detect-duplicate-rows-python"
+    ]
+  },
+  "duplicate-finder": {
+    "use": "Find repeated record identifiers and distinguish identical repeats from conflicting string values.",
+    "input": "id,value\nalpha,open\nalpha,closed\nbeta,ready\nbeta,ready",
+    "expected": "alpha and beta are repeated identifiers. Only alpha has conflicting values. Choose id and value as the fields.",
+    "recipes": [
+      "audit-identifier-value-conflicts-python",
+      "check-json-record-ids",
+      "audit-config-assignment-keys-javascript"
+    ]
+  },
+  "text-diff": {
+    "use": "Compare small configuration snapshots or notes line by line before applying a change.",
+    "input": "Before: status=draft\nAfter:  status=published",
+    "expected": "One removed line and one added line. Case and spaces matter; the presence of a final newline is reported separately.",
+    "recipes": [
+      "compare-sitemap-snapshots",
+      "count-line-ending-forms-rust"
+    ]
+  },
+  "regex-tester": {
+    "use": "Extract version-like tokens from a small text and inspect capture groups using the browser’s JavaScript engine.",
+    "input": "Pattern: v([0-9]+)\\.([0-9]+)\\.([0-9]+)\nFlags: g\nText: OpenViST v0.5.0",
+    "expected": "One match: v0.5.0; captures 0, 5 and 0. This pattern matches a spelling, not full semantic-version validity.",
+    "recipes": [
+      "sort-numeric-version-cores-javascript",
+      "audit-config-assignment-keys-javascript"
+    ]
+  },
+  "code-to-image": {
+    "use": "Prepare a short, readable code illustration for documentation or a social post without running the snippet.",
+    "input": "fn main() {\n    println!(\"Build something useful.\");\n}",
+    "expected": "A PNG containing the code as plain text. Style, title, line numbers and 1×/2× resolution can be changed. Syntax is not checked.",
+    "recipes": [
+      "group-repeated-token-positions-rust",
+      "count-ascii-byte-classes-rust"
+    ]
+  },
+  "base64": {
+    "use": "Encode a short UTF-8 value for a documented data format, or decode a Base64 value for inspection.",
+    "input": "Hello",
+    "expected": "Standard Base64 encoding produces SGVsbG8=. Decoding it as UTF-8 returns Hello. Base64 does not encrypt the text.",
+    "recipe_note": "These related scripts inspect UTF-8 input; they do not implement the Base64 tool.",
+    "recipes": [
+      "audit-utf8-bom",
+      "locate-replacement-scalars-rust"
+    ]
+  },
+  "url-encoder": {
+    "use": "Encode one query-parameter value or inspect repeated parameters in a saved URL without requesting that URL.",
+    "input": "Component: hello world+\nQuery: ?tag=rust&tag=python&q=a+b",
+    "expected": "Component encoding yields hello%20world%2B. Query inspection preserves both tag entries and decodes q as a b.",
+    "recipe_note": "These scripts group or compare saved URL paths; their contracts differ from component encoding.",
+    "recipes": [
+      "summarize-http-urls-by-hostname",
+      "find-route-prefix-overlaps-javascript"
+    ]
+  },
+  "sha256-checksum": {
+    "use": "Compare the bytes of a downloaded file against a checksum obtained from a trusted source.",
+    "input": "abc",
+    "expected": "SHA-256 of exactly these three UTF-8 bytes, without a newline: ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+    "recipe_note": "The manifest recipe hashes files; the spelling classifier validates hexadecimal text and does not calculate hashes.",
+    "recipes": [
+      "create-sha256-file-manifest",
+      "classify-sha256-spellings-rust"
+    ]
+  },
+  "sitemap-inspector": {
+    "use": "Inspect a saved sitemap for repeated URLs and structural issues before doing a separate live-link audit.",
+    "input": "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"><url><loc>https://example.com/</loc></url></urlset>",
+    "expected": "One URL entry and no duplicates. This tool does not fetch the URL or establish whether Google will index it.",
+    "recipes": [
+      "compare-sitemap-snapshots",
+      "validate-xml-agent-workflow-structure"
+    ]
+  }
+}
