@@ -69,6 +69,14 @@ Only publicly published recipes are included. Each version retains its exact cod
 | rust | [Count literal equals signs per text line with Rust](recipes/rust/count-literal-equals-signs-rust/v0.1.0/README.md) | 0.1.0 |
 | rust | [Count set bits in canonical unsigned 32-bit values with Rust](recipes/rust/count-u32-one-bits-rust/v0.1.0/README.md) | 0.1.0 |
 | rust | [Decode lowercase hexadecimal octet lines with Rust](recipes/rust/decode-hex-octets-rust/v0.1.0/README.md) | 0.1.0 |
+| rust | [Group repeated exact text tokens by position with Rust](recipes/rust/group-repeated-token-positions-rust/v0.1.0/README.md) | 0.1.0 |
+| rust | [Locate lines containing ASCII control characters with Rust](recipes/rust/locate-ascii-control-lines-rust/v0.1.0/README.md) | 0.1.0 |
+| rust | [Locate breaks in strictly increasing integer sequences with Rust](recipes/rust/locate-nonincreasing-steps-rust/v0.1.0/README.md) | 0.1.0 |
+| rust | [Locate Unicode replacement characters in text lines with Rust](recipes/rust/locate-replacement-scalars-rust/v0.1.0/README.md) | 0.1.0 |
+| rust | [Locate leading tab indentation in text lines with Rust](recipes/rust/locate-tab-indentation-rust/v0.1.0/README.md) | 0.1.0 |
+| rust | [Locate trailing spaces and tabs in text lines with Rust](recipes/rust/locate-trailing-ascii-space-rust/v0.1.0/README.md) | 0.1.0 |
+| rust | [Measure UTF-8 byte and scalar widths of text lines with Rust](recipes/rust/measure-utf8-line-widths-rust/v0.1.0/README.md) | 0.1.0 |
+| rust | [Partition bounded integers by parity with Rust](recipes/rust/partition-integer-parity-rust/v0.1.0/README.md) | 0.1.0 |
 | rust | [Count Lines in a Local UTF-8 File or Standard Input](recipes/rust/rust-stream-line-counts/v0.1.0/README.md) | 0.1.0 |
 | rust | [Audit Tabs in Saved Text](recipes/rust/saved-text-tab-audit/v0.1.0/README.md) | 0.1.0 |
 | rust | [Summarize Saved Text by Final-Character Group](recipes/rust/summarize-saved-text-by-final-character/v0.1.0/README.md) | 0.1.0 |

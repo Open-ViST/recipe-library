@@ -1,0 +1,55 @@
+{
+  "slug": "locate-ascii-control-lines-rust",
+  "kind": "static",
+  "title": "Locate lines containing ASCII control characters with Rust",
+  "goal": "Identify retained-line positions containing bytes below 32 or DEL while leaving Unicode text otherwise uninterpreted.",
+  "language": "rust",
+  "version": "0.1.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-14",
+  "intro": "Identify retained-line positions containing bytes below 32 or DEL while leaving Unicode text otherwise uninterpreted. Work only with supplied input; this does not contact external services or modify input.",
+  "requirements": [
+    "Save as recipe.rs and compile with Rust 1.99.0 using: rustc --edition=2021 recipe.rs -o recipe",
+    "Run ./recipe without arguments, supplying input through stdin. Help flags and all other arguments are invalid.",
+    "Input must contain at most 65536 bytes, be strict UTF-8, have no leading UTF-8 BOM, and contain no CR bytes.",
+    "Only LF separates lines. Exactly empty segments are discarded; whitespace-only segments are retained. No trimming, normalization, grouping, or deduplication occurs.",
+    "At most 100 nonempty lines are allowed, each containing at most 256 UTF-8 bytes. All input and line limits are validated before classification.",
+    "Successful output is exactly one JSON object followed by a newline, with one-based retained-line positions in ascending order. A position is included if its line contains U+0000 through U+001F or U+007F. LF is a separator, and CR is invalid. Other Unicode characters are not classified as ASCII controls.",
+    "Empty input or input containing only LF separators produces {\"positions\":[]}.",
+    "Success exits 0 and writes no stderr. Invalid arguments, invalid input, and stdin-read failures exit 2 with no stdout and exactly error: invalid input followed by a newline on stderr, subject to the failure limitations below."
+  ],
+  "limits": [
+    "The program requests at most 65537 bytes from stdin. Observing byte 65537 immediately rejects oversized input without reading further.",
+    "Stdin can block while awaiting data or EOF. Even exactly 65536 bytes require another read to establish EOF or detect an extra byte.",
+    "Memory use includes a fixed 65537-byte input buffer, metadata for at most 100 borrowed line slices, a small output string, and standard-library I/O overhead. Input text is not copied per line.",
+    "Successful output can be sensitive: it reveals which retained lines contain ASCII controls. Handle stdout accordingly.",
+    "Memory-allocation failures and stdout/stderr write or flush failures are outside the input-error guarantee. Output-write failures attempt exit status 2 and may leave partial stdout; diagnostic-write failures may prevent the required stderr message.",
+    "The implementation uses only the standard library and permitted APIs. It performs no filesystem access, networking, subprocess execution, or dynamic loading."
+  ],
+  "steps": [
+    "Save the example as recipe.rs.",
+    "Compile with Rust 1.99.0 using rustc --edition=2021 recipe.rs -o recipe.",
+    "Prepare UTF-8 input.txt following the documented operation-specific conventions.",
+    "Run ./recipe < input.txt.",
+    "Inspect the JSON result. Exit 2 with exactly error: invalid input followed by a newline on stderr and no stdout identifies rejected input or stdin-read failure. Output-write failures may also exit nonzero, without that diagnostic and potentially after partial stdout; these are outside the input-error guarantee."
+  ],
+  "checks": [
+    "The example must produce the documented JSON result.",
+    "Empty stdin must produce the documented empty result.",
+    "Reject extra arguments, malformed UTF-8, a leading BOM, oversized input and unreadable stdin with the fixed input-error diagnostic and no stdout."
+  ],
+  "usage": "rustc --edition=2021 recipe.rs -o recipe\n./recipe < input.txt",
+  "example_input": "hello\na\tb\n\u0000\né\n",
+  "expected_output": "{\"positions\":[2,3]}",
+  "tested_scope": "Six independent CLI fixtures and 16 supplementary cases are executed in pinned, offline Rust 1.99.0 containers. These checks do not establish exhaustive correctness or behavior on other versions.",
+  "sources": [
+    "https://doc.rust-lang.org/std/io/trait.Read.html",
+    "https://doc.rust-lang.org/std/primitive.str.html",
+    "https://doc.rust-lang.org/std/primitive.u32.html"
+  ],
+  "projects": [],
+  "url": "https://openvist.com/recipes/locate-ascii-control-lines-rust/",
+  "code_file": "recipe.rs",
+  "code_sha256": "1bbf8c27849a6b33cfb9eba71f1897643a747717eb0b46aa9d75c69fc1bb487f",
+  "published_record_sha256": "2e04388023d0acbd0c66845e728d1dc40a1d1476f216bb6be1e1e43ec2d651d9"
+}

@@ -1,0 +1,55 @@
+{
+  "slug": "measure-utf8-line-widths-rust",
+  "kind": "static",
+  "title": "Measure UTF-8 byte and scalar widths of text lines with Rust",
+  "goal": "Report storage length and Unicode scalar count per nonempty line without confusing either measure with display width.",
+  "language": "rust",
+  "version": "0.1.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-14",
+  "intro": "Report storage length and Unicode scalar count per nonempty line without confusing either measure with display width. Work only with supplied input; this does not contact external services or modify input.",
+  "requirements": [
+    "Save as recipe.rs and compile with Rust 1.99.0 using: rustc --edition=2021 recipe.rs -o recipe",
+    "Run recipe with text supplied on stdin. No CLI arguments are accepted, including help flags.",
+    "Reads at most 65537 bytes from stdin and rejects input exceeding 65536 bytes. Requires strict UTF-8, rejects a leading UTF-8 BOM, and rejects every CR character.",
+    "Splits only on LF and discards exactly empty segments. Preserves all other text, order, whitespace, and duplicates without trimming or normalization.",
+    "Validates at most 100 nonempty lines and at most 256 UTF-8 bytes per retained line before computing scalar counts.",
+    "Successful execution exits 0, emits exactly one JSON object followed by a newline, and emits no stderr. Empty input or input containing only LF characters produces {\"widths\":[]}.",
+    "Invalid arguments, invalid input, and stdin-read failures exit 2 with no stdout and exactly error: invalid input followed by a newline on stderr, subject to the output-failure limitation below. Diagnostics never contain input values.",
+    "Uses only the standard library, explicit std::io imports, and permitted fully qualified APIs. No Cargo, external crates, filesystem access, networking, subprocesses, or dynamic loading are used."
+  ],
+  "limits": [
+    "The bytes field measures UTF-8 storage bytes excluding LF separators. The scalars field counts Rust .chars(): Unicode scalar values, not grapheme clusters or terminal display columns. Combining marks and components of multi-scalar emoji count separately.",
+    "Only a BOM at the beginning of the entire input is rejected as a BOM. U+FEFF elsewhere is retained and counted. Unicode line separators other than LF remain part of a line.",
+    "Stdin may block until EOF or until the 65537-byte read bound is reached. No timeout is imposed.",
+    "Memory holds up to 65537 input bytes, at most 100 borrowed line references, the serialized JSON, and small temporary numeric strings. Allocator, buffering, and runtime overhead are additional; this is not a strict total-memory cap.",
+    "Successful output reveals line order, the number of nonempty lines, and each line's byte and scalar lengths. These measurements can be sensitive even though text contents are not printed.",
+    "Memory-allocation failures and output-write failures are outside the input-error guarantee. A detected successful-output write or flush failure exits 1; stdout may already be partial. Failed stderr writes can prevent delivery of the prescribed error diagnostic."
+  ],
+  "steps": [
+    "Save the example as recipe.rs.",
+    "Compile with Rust 1.99.0 using rustc --edition=2021 recipe.rs -o recipe.",
+    "Prepare UTF-8 input.txt following the documented operation-specific conventions.",
+    "Run ./recipe < input.txt.",
+    "Inspect the JSON result. Exit 2 with exactly error: invalid input followed by a newline on stderr and no stdout identifies rejected input or stdin-read failure. Output-write failures may also exit nonzero, without that diagnostic and potentially after partial stdout; these are outside the input-error guarantee."
+  ],
+  "checks": [
+    "The example must produce the documented JSON result.",
+    "Empty stdin must produce the documented empty result.",
+    "Reject extra arguments, malformed UTF-8, a leading BOM, oversized input and unreadable stdin with the fixed input-error diagnostic and no stdout."
+  ],
+  "usage": "rustc --edition=2021 recipe.rs -o recipe\n./recipe < input.txt",
+  "example_input": "café\n💻\né\n",
+  "expected_output": "{\"widths\":[{\"bytes\":5,\"scalars\":4},{\"bytes\":4,\"scalars\":1},{\"bytes\":3,\"scalars\":2}]}",
+  "tested_scope": "Six independent CLI fixtures and 16 supplementary cases are executed in pinned, offline Rust 1.99.0 containers. These checks do not establish exhaustive correctness or behavior on other versions.",
+  "sources": [
+    "https://doc.rust-lang.org/std/io/trait.Read.html",
+    "https://doc.rust-lang.org/std/primitive.str.html",
+    "https://doc.rust-lang.org/std/primitive.u32.html"
+  ],
+  "projects": [],
+  "url": "https://openvist.com/recipes/measure-utf8-line-widths-rust/",
+  "code_file": "recipe.rs",
+  "code_sha256": "e5b737affa8bd689b8ae096065d99d85347293acec06686cf608a56f15b7b3b6",
+  "published_record_sha256": "86983844c0e6300b28ff163e28e5d8fa7257e5ce370fcc06b4ebf89eae32021f"
+}
