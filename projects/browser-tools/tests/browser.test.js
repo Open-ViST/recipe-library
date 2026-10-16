@@ -15,10 +15,10 @@ const server = http.createServer((req,res) => {
     res.setHeader('Content-Type',file.endsWith('.css')?'text/css':'application/javascript');res.end(fs.readFileSync(file));return;
   }
   const slug=url.pathname.slice(1)||'index';
-  if (slug!=='index'&&!tools.includes(slug)) {res.writeHead(404);res.end();return;}
+  if (slug!=='index'&&!tools.includes(slug)&&slug!=='code-to-image') {res.writeHead(404);res.end();return;}
   const html=execFileSync('php',[path.join(__dirname,'integration.test.php'),'--render',slug],{encoding:'utf8'});
   res.setHeader('Content-Type','text/html; charset=utf-8');
-  res.end('<!doctype html><html lang="en"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="/assets/tools.css"><body>'+html+'<script>window.ovtConfig={worker:"/assets/tools-worker.js?ver=0.2.0"}</script><script src="/assets/sitemap-dom.js"></script><script src="/assets/tools-ui.js"></script></body></html>');
+  res.end('<!doctype html><html lang="en"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="/assets/tools.css"><body>'+html+'<script>window.ovtConfig={worker:"/assets/tools-worker.js?ver=0.2.0"}</script><script src="/assets/sitemap-dom.js"></script><script src="/assets/tools-ui.js"></script><script src="/assets/code-image.js"></script></body></html>');
 });
 
 (async()=>{
@@ -57,6 +57,31 @@ const server = http.createServer((req,res) => {
         console.log('PASS browser example, download, copy, clear and layout:',slug,width);
       }
     }
+    await page.goto(base+'/code-to-image');
+    assert.equal(await page.locator('form').count(),0);
+    await page.locator('[data-image-sample]').click();
+    for(const width of [375,1280]){
+      await page.setViewportSize({width,height:1000});
+      for(const theme of ['ocean','midnight','paper']){
+        await page.locator('#ovt-image-theme').selectOption(theme);
+        await page.locator('[data-image-render]').click();await page.locator('[data-image-result]').waitFor({state:'visible'});
+        const dimensions=await page.locator('canvas').evaluate(c=>({w:c.width,h:c.height}));
+        assert(dimensions.w>=1280&&dimensions.h>200);
+        const done=page.waitForEvent('download');await page.locator('[data-image-download]').click();const png=fs.readFileSync(await (await done).path());
+        assert.equal(png.subarray(1,4).toString(),'PNG');assert.equal(png.readUInt32BE(16),dimensions.w);assert.equal(png.readUInt32BE(20),dimensions.h);
+        assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Code image horizontal overflow');
+      }
+    }
+    await page.locator('#ovt-image-scale').selectOption('1');await page.locator('[data-image-render]').click();await page.locator('[data-image-result]').waitFor({state:'visible'});
+    const small=await page.locator('canvas').evaluate(c=>c.width);
+    await page.locator('#ovt-image-scale').selectOption('2');assert.equal(await page.locator('[data-image-result]').isVisible(),false);
+    await page.locator('[data-image-render]').click();await page.locator('[data-image-result]').waitFor({state:'visible'});assert.equal(await page.locator('canvas').evaluate(c=>c.width),small*2);
+    await page.locator('#ovt-image-code').fill('</script><img src=x onerror=alert(1)>');await page.locator('[data-image-render]').click();await page.locator('[data-image-result]').waitFor({state:'visible'});assert.equal(await page.locator('[data-ovt-image] img').count(),0);
+    for(const invalid of ['x'.repeat(141),Array(61).fill('x').join('\n'),'a\u202eb']){
+      await page.locator('#ovt-image-code').fill(invalid);await page.locator('[data-image-render]').click();await page.locator('[data-image-status].is-error').waitFor();assert.equal(await page.locator('[data-image-result]').isVisible(),false);
+    }
+    await page.locator('[data-image-clear]').click();assert.equal(await page.locator('#ovt-image-code').inputValue(),'');
+    console.log('PASS code image styles, PNG signatures and dimensions, 1x/2x, mobile layout, invalid input rejection and inert code.');
     await page.goto(base+'/json-compare');
     await page.locator('#ovt-input').fill('{"a":1,"b":2}');await page.locator('#ovt-second').fill('{"b":2,"a":1}');
     await page.locator('[data-ovt-run]').click();await page.locator('[data-ovt-result]').waitFor({state:'visible'});

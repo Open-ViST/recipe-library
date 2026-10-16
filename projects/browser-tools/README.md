@@ -1,7 +1,8 @@
-# OpenViST Tools 0.3.1
+# OpenViST Tools 0.4.0
 
-A WordPress plugin providing ten free, browser-local data tools:
+A WordPress plugin providing eleven free, browser-local data tools:
 
+- `/tools/code-to-image/`: local Canvas PNG export of short plain-text code examples.
 - `/tools/json-compare/`: structural JSON comparison with exact numeric tokens and JSON Pointer paths.
 - `/tools/base64/`: strict Base64 and unpadded Base64url encoding/decoding; UTF-8 or binary output.
 - `/tools/url-encoder/`: URL component encoding/decoding and ordered query inspection.
@@ -14,13 +15,13 @@ A WordPress plugin providing ten free, browser-local data tools:
 - `/tools/sitemap-inspector/`: local sitemap XML structural checks.
 
 The landing page is `/tools/`. Install and activate this plugin from its ZIP.
-OpenViST Home 0.3.12 adds the Tools navigation integration; older Home versions
+OpenViST Home 0.4.02 adds the Tools navigation integration; older Home versions
 still permit direct access to the tool URLs. No VPS service, REST processing
 endpoint, OpenAI call, paid dependency or user account is required.
 
 ## Processing and privacy
 
-Browser workers process pasted text or UTF-8 files. Sitemap XML is parsed first in the main browser context with an inert native DOMParser document that is never inserted into the page. DTD and entity declarations are rejected before parsing. Its processing code does not
+Browser workers process pasted data or UTF-8 files. Code to Image draws pasted text locally using Canvas. Sitemap XML is parsed first in the main browser context with an inert native DOMParser document that is never inserted into the page. DTD and entity declarations are rejected before parsing. Its processing code does not
 send input to a server, execute it, use localStorage or persist it between page
 loads. File selection alone does not run the tool. Results can be copied or
 downloaded as JSON. Clipboard failure falls back to manual selection. The UI
@@ -50,14 +51,14 @@ are outside the plugin's local-processing guarantee.
 
 ## WordPress integration
 
-WordPress 6.5+, PHP 8.0+. Activation registers eleven virtual routes and refreshes
+WordPress 6.5+, PHP 8.0+. Activation registers twelve virtual routes and refreshes
 rewrite rules. The plugin creates no posts, user-data options, cron events or database
 tables. A tiny route-version option refreshes rewrite rules once when the plugin is updated. The plugin does not alter recipe or listing publication schedules. Tools URLs
 are added to the native WordPress sitemap provider. Page titles, descriptions
 and canonical metadata are provided for these routes; the OpenViST Directory
 UI's generic metadata is suppressed only on Tools pages. Existing theme header
 and footer templates are retained. The navigation filter adds Tools after
-Recipes when OpenViST Home 0.3.12 is active.
+Recipes when OpenViST Home 0.4.02 is active.
 
 If `/tools/` returns 404 after activation, save **Settings → Permalinks** once
 without changing its values. Custom sitemap plugins may require separate
@@ -115,7 +116,7 @@ No remote sitemap indexes, listed URLs, images or external entities are fetched.
 Gzip files are not accepted.
 
 The browser integration suite renders the PHP templates against a minimal
-WordPress contract harness and tests all ten tools at desktop/mobile widths.
+WordPress contract harness and tests all ten data tools and Code to Image at desktop/mobile widths.
 It checks native XML parsing, worker messages, examples, file input, downloads,
 clipboard copy, clearing, overflow and related-button hover states. Tests use
 local fixture pages and no private data; they do not replace live checks with
@@ -155,3 +156,19 @@ A type change is one modification. Paths follow JSON Pointer (`~0`, `~1`), and
 an empty path identifies the root. `before_json` and `after_json` are JSON source
 strings, preserving original numeric tokens. The report is not executable and
 is not a JSON Patch. No URLs, input data or comparison results are uploaded.
+
+## Code to Image
+
+Canvas-only PNG export with OpenViST blue, Midnight and Paper styles; editable
+window title; optional line numbers and signature; font sizes 14/16/18/20 px;
+1×/2× resolution. Inputs are plain text, not executed or highlighted. No external
+fonts, assets, URLs, libraries or servers are needed. Glyphs depend on installed
+fonts. Tabs display as four spaces; CRLF/CR become LF. Limits: 20 KiB UTF-8,
+60 lines (including trailing blanks), 140 Unicode code points per expanded line,
+80 title characters, at most 1800×1800 layout px and 13 million export pixels.
+Measured long lines or oversized layouts are rejected, not silently clipped.
+Control characters and directional overrides/isolates are rejected. PNG blobs
+above 10 MiB are rejected. Preview invalidates on edits, old object URLs are
+revoked, and clearing/reloading removes results. Clipboard image support is
+optional; denied clipboard access directs users to Download PNG. Review secrets
+before sharing. Input stays local; analytics should never collect input fields.

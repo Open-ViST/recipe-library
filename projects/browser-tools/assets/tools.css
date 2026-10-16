@@ -8,3 +8,7 @@
 @media(max-width:480px){.ovt-link-actions{flex-direction:column;align-items:stretch}.ovt-shell .ovt-link-button{width:100%}}
 
 .ovt-shell .ovt-checkbox{display:flex;align-items:center;gap:10px;font-size:12px;max-width:100%;align-self:flex-end;padding:10px 0}.ovt-checkbox input{flex:none;width:18px;height:18px}
+
+.ovt-image-canvas{display:block;width:100%;max-width:100%;height:auto;border-radius:12px;margin:0 0 20px;background:#eaf2ff}
+[data-ovt-image]{border-top:3px solid #93c5fd}
+[data-ovt-image] textarea{white-space:pre;overflow:auto}

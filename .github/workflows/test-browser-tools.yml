@@ -1,7 +1,7 @@
 name: Test browser tools
 on:
   push:
-    branches: [main, tools-encoding-030, tools-json-compare-031]
+    branches: [main, tools-encoding-030, tools-json-compare-031, tools-code-image-040]
     paths: ['projects/browser-tools/**', '.github/workflows/test-browser-tools.yml']
   workflow_dispatch:
 permissions:
@@ -18,6 +18,7 @@ jobs:
         run: |
           php -l projects/browser-tools/openvist-tools.php
           php -l projects/browser-tools/template.php
+          php -l projects/browser-tools/code-image-template.php
           php projects/browser-tools/tests/integration.test.php
       - name: JavaScript syntax and processing checks
         run: |

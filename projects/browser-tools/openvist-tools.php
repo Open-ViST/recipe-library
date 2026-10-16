@@ -2,7 +2,7 @@
 /**
  * Plugin Name: OpenViST Tools
  * Description: Free local data, encoding and checksum tools. Processing runs locally in the browser.
- * Version: 0.3.1
+ * Version: 0.4.0
  * Requires at least: 6.5
  * Requires PHP: 8.0
  * Author: OpenViST
@@ -10,9 +10,10 @@
  */
 defined('ABSPATH') || exit;
 final class OpenViST_Tools {
-    const VERSION = '0.3.1';
+    const VERSION = '0.4.0';
     public static function catalogue() {
         return [
+            'code-to-image'=>['title'=>'Code to Image','intro'=>'Turn a short code example into a polished PNG for documentation, tutorials or social posts, locally in your browser.','detail'=>'Three styles, editable title, optional line numbers and signature, and 1× or 2× PNG export. All languages are accepted as plain text; no syntax highlighting or execution. Maximum 60 lines, 140 characters per expanded line and 20 KiB of UTF-8 input.'],
             'json-compare'=>['title'=>'JSON Compare','intro'=>'Compare two JSON documents by structure and find added, removed or modified values.','detail'=>'Object key order is ignored. Arrays are compared by zero-based index. Number spellings are exact: 1 and 1.0 differ, with no rounding of large numbers. Strings are compared after JSON unescaping. Duplicate keys are rejected. Maximum 100 nesting levels, 100,000 values per input and 10,000 changes. Paths use JSON Pointer; an empty path means the root. Added or removed containers are reported once. Result snippets are JSON source strings, not rounded parsed values. The report is not a JSON Patch.'],
             'base64'=>['title'=>'Base64 Encoder & Decoder','intro'=>'Encode text or a file as Base64, or decode Base64 as UTF-8 text or a binary download.','detail'=>'Standard Base64 requires padding; Base64url uses the unpadded URL-safe alphabet. Whitespace and noncanonical padding bits are rejected. Text is encoded as UTF-8. Files are read as their exact bytes. Base64 is not encryption.'],
             'url-encoder'=>['title'=>'URL Encoder & Decoder','intro'=>'Encode or decode a URL component and inspect query parameters, including repeated names.','detail'=>'Component encoding uses percent escapes and %20 for spaces. Component decoding preserves literal + signs; query inspection treats + as a space. Query inspection accepts at most 20,000 parameters. Results preserve parameter order and repeated names. No URL is requested. Malformed percent escapes and invalid UTF-8 are rejected.'],
@@ -55,6 +56,7 @@ final class OpenViST_Tools {
         add_action('wp_enqueue_scripts',static function(){
             if(!self::route())return;
             wp_enqueue_style('openvist-tools',plugins_url('assets/tools.css',__FILE__),[],self::VERSION);
+            if(self::route()==='code-to-image'){wp_enqueue_script('openvist-code-image',plugins_url('assets/code-image.js',__FILE__),[],self::VERSION,true);return;}
             $deps=[];
             if(self::route()==='sitemap-inspector'){wp_enqueue_script('openvist-tools-xml',plugins_url('assets/sitemap-dom.js',__FILE__),[],self::VERSION,true);$deps[]='openvist-tools-xml';}
             wp_enqueue_script('openvist-tools',plugins_url('assets/tools-ui.js',__FILE__),$deps,self::VERSION,true);
