@@ -11,6 +11,7 @@ Only publicly published recipes are included. Each version retains its exact cod
 | javascript | [Find repeated keys in configuration assignments with JavaScript](recipes/javascript/audit-config-assignment-keys-javascript/v0.1.0/README.md) | 0.1.0 |
 | javascript | [Audit request and result pairing in JSON tool events with JavaScript](recipes/javascript/audit-tool-event-pairing-javascript/v0.1.0/README.md) | 0.1.0 |
 | javascript | [Find case-insensitive collisions in tool names with JavaScript](recipes/javascript/audit-tool-name-collisions-javascript/v0.1.0/README.md) | 0.1.0 |
+| javascript | [Audit required configuration keys without exposing values with JavaScript](recipes/javascript/check-env-required-key-manifest-javascript/v0.1.0/README.md) | 0.1.0 |
 | javascript | [Compare declared permission sets with JavaScript](recipes/javascript/compare-permission-sets-javascript/v0.1.0/README.md) | 0.1.0 |
 | javascript | [Find segment-boundary prefix overlaps in route paths with JavaScript](recipes/javascript/find-route-prefix-overlaps-javascript/v0.1.0/README.md) | 0.1.0 |
 | javascript | [Sort numeric version cores with JavaScript](recipes/javascript/sort-numeric-version-cores-javascript/v0.1.0/README.md) | 0.1.0 |
@@ -20,6 +21,7 @@ Only publicly published recipes are included. Each version retains its exact cod
 | python | [Audit parent references in JSON task records with Python](recipes/python/audit-parent-references-python/v0.1.0/README.md) | 0.1.0 |
 | python | [Check byte ranges against a declared payload size with Python](recipes/python/audit-payload-byte-ranges-python/v0.1.0/README.md) | 0.1.0 |
 | python | [Call an installed local model](recipes/python/call-a-local-model/v1.0.0/README.md) | 1.0.0 |
+| python | [Audit required configuration keys without exposing values with Python](recipes/python/check-env-required-key-manifest-python/v0.1.0/README.md) | 0.1.0 |
 | python | [Check a JSON array for missing, empty, or duplicate string IDs](recipes/python/check-json-record-ids/v0.1.0/README.md) | 0.1.0 |
 | python | [Check required keys in a local JSON configuration file](recipes/python/check-required-keys-in-local-json-config/v0.1.0/README.md) | 0.1.0 |
 | python | [Compare Local CSV Records by a Chosen Key](recipes/python/compare-csv-records-by-key/v0.1.1/README.md) | 0.1.1 |
@@ -38,6 +40,7 @@ Only publicly published recipes are included. Each version retains its exact cod
 | python | [Query market data with stable asset IDs](recipes/python/query-market-data-by-id/v1.0.0/README.md) | 1.0.0 |
 | python | [Read a saved CoinGecko price for an explicit asset and currency](recipes/python/read-saved-coingecko-simple-price/v0.1.0/README.md) | 0.1.0 |
 | python | [Build a read-only Solana balance tool](recipes/python/read-solana-balance/v1.0.0/README.md) | 1.0.0 |
+| python | [Redact selected configuration assignment values with Python](recipes/python/redact-selected-config-values-python/v0.1.0/README.md) | 0.1.0 |
 | python | [List Bitcoin Core RPC method names from saved reference text](recipes/python/summarize-bitcoin-rpc-method-names/v0.1.0/README.md) | 0.1.0 |
 | python | [Summarize finite numbers in a local JSON array](recipes/python/summarize-finite-numbers-from-json/v0.1.0/README.md) | 0.1.0 |
 | python | [Summarize field presence and value types in JSON records with Python](recipes/python/summarize-json-field-types-python/v0.1.0/README.md) | 0.1.0 |
@@ -53,6 +56,7 @@ Only publicly published recipes are included. Each version retains its exact cod
 | rust | [Sort and deduplicate line-separated port numbers with Rust](recipes/rust/audit-port-number-lines-rust/v0.1.0/README.md) | 0.1.0 |
 | rust | [Detect a UTF-8 Byte-Order Mark in Saved Text](recipes/rust/audit-utf8-bom/v0.1.0/README.md) | 0.1.0 |
 | rust | [Build sorted integer frequency tables with Rust](recipes/rust/build-integer-frequency-table-rust/v0.1.0/README.md) | 0.1.0 |
+| rust | [Audit required configuration keys without exposing values with Rust](recipes/rust/check-env-required-key-manifest-rust/v0.1.0/README.md) | 0.1.0 |
 | rust | [Check literal bracket nesting in text lines with Rust](recipes/rust/check-literal-bracket-balance-rust/v0.1.0/README.md) | 0.1.0 |
 | rust | [Classify ASCII identifier spellings with Rust](recipes/rust/classify-ascii-identifiers-rust/v0.1.0/README.md) | 0.1.0 |
 | rust | [Classify canonical dotted IPv4 text with Rust](recipes/rust/classify-ipv4-octet-text-rust/v0.1.0/README.md) | 0.1.0 |
@@ -77,6 +81,7 @@ Only publicly published recipes are included. Each version retains its exact cod
 | rust | [Locate trailing spaces and tabs in text lines with Rust](recipes/rust/locate-trailing-ascii-space-rust/v0.1.0/README.md) | 0.1.0 |
 | rust | [Measure UTF-8 byte and scalar widths of text lines with Rust](recipes/rust/measure-utf8-line-widths-rust/v0.1.0/README.md) | 0.1.0 |
 | rust | [Partition bounded integers by parity with Rust](recipes/rust/partition-integer-parity-rust/v0.1.0/README.md) | 0.1.0 |
+| rust | [Redact selected configuration assignment values with Rust](recipes/rust/redact-selected-config-values-rust/v0.1.0/README.md) | 0.1.0 |
 | rust | [Count Lines in a Local UTF-8 File or Standard Input](recipes/rust/rust-stream-line-counts/v0.1.0/README.md) | 0.1.0 |
 | rust | [Audit Tabs in Saved Text](recipes/rust/saved-text-tab-audit/v0.1.0/README.md) | 0.1.0 |
 | rust | [Summarize Saved Text by Final-Character Group](recipes/rust/summarize-saved-text-by-final-character/v0.1.0/README.md) | 0.1.0 |

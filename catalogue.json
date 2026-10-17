@@ -38,6 +38,18 @@
       "code_sha256": "5470f002a256cb03fb3621df8be0765e211e74136ce7aea7b09b820e6e240e7f"
     },
     {
+      "slug": "check-env-required-key-manifest-javascript",
+      "title": "Audit required configuration keys without exposing values with JavaScript",
+      "language": "javascript",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/check-env-required-key-manifest-javascript/",
+      "code": "recipes/javascript/check-env-required-key-manifest-javascript/v0.1.0/recipe.cjs",
+      "documentation": "recipes/javascript/check-env-required-key-manifest-javascript/v0.1.0/README.md",
+      "metadata": "recipes/javascript/check-env-required-key-manifest-javascript/v0.1.0/recipe.json",
+      "code_sha256": "42220a9ad15fac0f4f1b696de6670f7350ec200ed1c8b1500956cb099760810a"
+    },
+    {
       "slug": "compare-permission-sets-javascript",
       "title": "Compare declared permission sets with JavaScript",
       "language": "javascript",
@@ -144,6 +156,18 @@
       "documentation": "recipes/python/call-a-local-model/v1.0.0/README.md",
       "metadata": "recipes/python/call-a-local-model/v1.0.0/recipe.json",
       "code_sha256": "f549e0161165270c904c35701878aa51423b3242669314be6aedc13958a0115b"
+    },
+    {
+      "slug": "check-env-required-key-manifest-python",
+      "title": "Audit required configuration keys without exposing values with Python",
+      "language": "python",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/check-env-required-key-manifest-python/",
+      "code": "recipes/python/check-env-required-key-manifest-python/v0.1.0/recipe.py",
+      "documentation": "recipes/python/check-env-required-key-manifest-python/v0.1.0/README.md",
+      "metadata": "recipes/python/check-env-required-key-manifest-python/v0.1.0/recipe.json",
+      "code_sha256": "00609cd7b8cf530cbe04af299a3bb20bc56761be74554a96aba1a74cd0c278f9"
     },
     {
       "slug": "check-json-record-ids",
@@ -362,6 +386,18 @@
       "code_sha256": "7b1831c4c5f2f0c32bed11b89bfad5e95b6daad0a400cf19dc40fe957cb9f566"
     },
     {
+      "slug": "redact-selected-config-values-python",
+      "title": "Redact selected configuration assignment values with Python",
+      "language": "python",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/redact-selected-config-values-python/",
+      "code": "recipes/python/redact-selected-config-values-python/v0.1.0/recipe.py",
+      "documentation": "recipes/python/redact-selected-config-values-python/v0.1.0/README.md",
+      "metadata": "recipes/python/redact-selected-config-values-python/v0.1.0/recipe.json",
+      "code_sha256": "844e1739bd114ac43505c7adda4b135351abba684d9803e1b6fbff83cb70e1ca"
+    },
+    {
       "slug": "summarize-bitcoin-rpc-method-names",
       "title": "List Bitcoin Core RPC method names from saved reference text",
       "language": "python",
@@ -540,6 +576,18 @@
       "documentation": "recipes/rust/build-integer-frequency-table-rust/v0.1.0/README.md",
       "metadata": "recipes/rust/build-integer-frequency-table-rust/v0.1.0/recipe.json",
       "code_sha256": "36030bc8d4f54c8fa550a3f2f3a64f9f78d395c0b7ece1ed8ada769ec9dec398"
+    },
+    {
+      "slug": "check-env-required-key-manifest-rust",
+      "title": "Audit required configuration keys without exposing values with Rust",
+      "language": "rust",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/check-env-required-key-manifest-rust/",
+      "code": "recipes/rust/check-env-required-key-manifest-rust/v0.1.0/recipe.rs",
+      "documentation": "recipes/rust/check-env-required-key-manifest-rust/v0.1.0/README.md",
+      "metadata": "recipes/rust/check-env-required-key-manifest-rust/v0.1.0/recipe.json",
+      "code_sha256": "a4f613fc3a508ad7ed31919ee60b05889c71611fe60b529d2191b62e2b9d780c"
     },
     {
       "slug": "check-literal-bracket-balance-rust",
@@ -828,6 +876,18 @@
       "documentation": "recipes/rust/partition-integer-parity-rust/v0.1.0/README.md",
       "metadata": "recipes/rust/partition-integer-parity-rust/v0.1.0/recipe.json",
       "code_sha256": "18f6cc51a56c3541e11c6d10c9c0708a7ec18f7c51fa4f6afce160db122d4a47"
+    },
+    {
+      "slug": "redact-selected-config-values-rust",
+      "title": "Redact selected configuration assignment values with Rust",
+      "language": "rust",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/redact-selected-config-values-rust/",
+      "code": "recipes/rust/redact-selected-config-values-rust/v0.1.0/recipe.rs",
+      "documentation": "recipes/rust/redact-selected-config-values-rust/v0.1.0/README.md",
+      "metadata": "recipes/rust/redact-selected-config-values-rust/v0.1.0/recipe.json",
+      "code_sha256": "2b0e54f8fddab273d0ca947dd09de66efed707b159a60e73a2588d21fb5d6992"
     },
     {
       "slug": "rust-stream-line-counts",
