@@ -14,6 +14,7 @@ Only publicly published recipes are included. Each version retains its exact cod
 | javascript | [Audit required configuration keys without exposing values with JavaScript](recipes/javascript/check-env-required-key-manifest-javascript/v0.1.0/README.md) | 0.1.0 |
 | javascript | [Compare declared permission sets with JavaScript](recipes/javascript/compare-permission-sets-javascript/v0.1.0/README.md) | 0.1.0 |
 | javascript | [Find segment-boundary prefix overlaps in route paths with JavaScript](recipes/javascript/find-route-prefix-overlaps-javascript/v0.1.0/README.md) | 0.1.0 |
+| javascript | [Redact selected configuration assignment values with JavaScript](recipes/javascript/redact-selected-config-values-javascript/v0.1.0/README.md) | 0.1.0 |
 | javascript | [Sort numeric version cores with JavaScript](recipes/javascript/sort-numeric-version-cores-javascript/v0.1.0/README.md) | 0.1.0 |
 | javascript | [Group HTTP(S) URLs by Hostname from a Local Text File](recipes/javascript/summarize-http-urls-by-hostname/v0.1.0/README.md) | 0.1.0 |
 | javascript | [Validate Hexadecimal Event IDs and Find Duplicates](recipes/javascript/validate-hex-event-ids/v0.1.0/README.md) | 0.1.0 |
@@ -22,6 +23,7 @@ Only publicly published recipes are included. Each version retains its exact cod
 | python | [Check byte ranges against a declared payload size with Python](recipes/python/audit-payload-byte-ranges-python/v0.1.0/README.md) | 0.1.0 |
 | python | [Call an installed local model](recipes/python/call-a-local-model/v1.0.0/README.md) | 1.0.0 |
 | python | [Audit required configuration keys without exposing values with Python](recipes/python/check-env-required-key-manifest-python/v0.1.0/README.md) | 0.1.0 |
+| python | [Check IPv4 address membership in canonical CIDR ranges with Python](recipes/python/check-ipv4-cidr-membership-python/v0.1.0/README.md) | 0.1.0 |
 | python | [Check a JSON array for missing, empty, or duplicate string IDs](recipes/python/check-json-record-ids/v0.1.0/README.md) | 0.1.0 |
 | python | [Check required keys in a local JSON configuration file](recipes/python/check-required-keys-in-local-json-config/v0.1.0/README.md) | 0.1.0 |
 | python | [Compare Local CSV Records by a Chosen Key](recipes/python/compare-csv-records-by-key/v0.1.1/README.md) | 0.1.1 |

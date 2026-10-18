@@ -74,6 +74,18 @@
       "code_sha256": "25ac2b55ae8243193bc4911997428cca0e2a4bbd753bd15d85d256e71dcb9253"
     },
     {
+      "slug": "redact-selected-config-values-javascript",
+      "title": "Redact selected configuration assignment values with JavaScript",
+      "language": "javascript",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/redact-selected-config-values-javascript/",
+      "code": "recipes/javascript/redact-selected-config-values-javascript/v0.1.0/recipe.cjs",
+      "documentation": "recipes/javascript/redact-selected-config-values-javascript/v0.1.0/README.md",
+      "metadata": "recipes/javascript/redact-selected-config-values-javascript/v0.1.0/recipe.json",
+      "code_sha256": "d866e6fca5114199bc91a6d52655a27c61de053f1d7e56f83ba88318b2c067c4"
+    },
+    {
       "slug": "sort-numeric-version-cores-javascript",
       "title": "Sort numeric version cores with JavaScript",
       "language": "javascript",
@@ -168,6 +180,18 @@
       "documentation": "recipes/python/check-env-required-key-manifest-python/v0.1.0/README.md",
       "metadata": "recipes/python/check-env-required-key-manifest-python/v0.1.0/recipe.json",
       "code_sha256": "00609cd7b8cf530cbe04af299a3bb20bc56761be74554a96aba1a74cd0c278f9"
+    },
+    {
+      "slug": "check-ipv4-cidr-membership-python",
+      "title": "Check IPv4 address membership in canonical CIDR ranges with Python",
+      "language": "python",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/check-ipv4-cidr-membership-python/",
+      "code": "recipes/python/check-ipv4-cidr-membership-python/v0.1.0/recipe.py",
+      "documentation": "recipes/python/check-ipv4-cidr-membership-python/v0.1.0/README.md",
+      "metadata": "recipes/python/check-ipv4-cidr-membership-python/v0.1.0/recipe.json",
+      "code_sha256": "e227957b696bebb011e3992739383a3872618ae1009b68e3d05f6d6c62a579f7"
     },
     {
       "slug": "check-json-record-ids",
