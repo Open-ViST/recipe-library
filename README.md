@@ -59,6 +59,7 @@ Only publicly published recipes are included. Each version retains its exact cod
 | rust | [Detect a UTF-8 Byte-Order Mark in Saved Text](recipes/rust/audit-utf8-bom/v0.1.0/README.md) | 0.1.0 |
 | rust | [Build sorted integer frequency tables with Rust](recipes/rust/build-integer-frequency-table-rust/v0.1.0/README.md) | 0.1.0 |
 | rust | [Audit required configuration keys without exposing values with Rust](recipes/rust/check-env-required-key-manifest-rust/v0.1.0/README.md) | 0.1.0 |
+| rust | [Check IPv4 address membership in canonical CIDR ranges with Rust](recipes/rust/check-ipv4-cidr-membership-rust/v0.1.0/README.md) | 0.1.0 |
 | rust | [Check literal bracket nesting in text lines with Rust](recipes/rust/check-literal-bracket-balance-rust/v0.1.0/README.md) | 0.1.0 |
 | rust | [Classify ASCII identifier spellings with Rust](recipes/rust/classify-ascii-identifiers-rust/v0.1.0/README.md) | 0.1.0 |
 | rust | [Classify canonical dotted IPv4 text with Rust](recipes/rust/classify-ipv4-octet-text-rust/v0.1.0/README.md) | 0.1.0 |

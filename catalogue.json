@@ -614,6 +614,18 @@
       "code_sha256": "a4f613fc3a508ad7ed31919ee60b05889c71611fe60b529d2191b62e2b9d780c"
     },
     {
+      "slug": "check-ipv4-cidr-membership-rust",
+      "title": "Check IPv4 address membership in canonical CIDR ranges with Rust",
+      "language": "rust",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/check-ipv4-cidr-membership-rust/",
+      "code": "recipes/rust/check-ipv4-cidr-membership-rust/v0.1.0/recipe.rs",
+      "documentation": "recipes/rust/check-ipv4-cidr-membership-rust/v0.1.0/README.md",
+      "metadata": "recipes/rust/check-ipv4-cidr-membership-rust/v0.1.0/recipe.json",
+      "code_sha256": "2135bdb3ccbef8b1f355ee25de24a02ef52e961fe8fe9b549db293711bb4cda6"
+    },
+    {
       "slug": "check-literal-bracket-balance-rust",
       "title": "Check literal bracket nesting in text lines with Rust",
       "language": "rust",

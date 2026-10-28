@@ -1,0 +1,71 @@
+# Check IPv4 address membership in canonical CIDR ranges with Rust
+
+Report inclusive membership for saved address and canonical network pairs without DNS, socket access or changing firewall rules.
+
+Published recipe: [check-ipv4-cidr-membership-rust](https://openvist.com/recipes/check-ipv4-cidr-membership-rust/)
+
+**Language:** rust · **Version:** 0.1.0 · **License:** MIT
+
+## Usage
+
+Code file: `recipe.rs`
+
+rustc recipe.rs -O -o recipe && ./recipe < input.txt
+
+## Requirements
+
+- Save as recipe.rs and compile with Rust 1.99.0 using: rustc --edition=2021 recipe.rs -o recipe
+- Run ./recipe without arguments, supplying records on stdin. Each nonempty line must be exactly ADDRESS NETWORK/PREFIX, with one ASCII space and canonical decimal spellings. Exactly empty lines are ignored.
+- Success writes exactly one compact JSON object followed by LF, preserves record order and duplicates, exits 0, and leaves stderr empty. Empty input produces {"checks":[]}.
+- All input is validated before successful stdout is written. Invalid input, extra arguments, invalid UTF-8, or stdin read failure produces empty stdout, exit 2, and exactly error: invalid input followed by LF on stderr.
+- Membership uses u64 integer arithmetic without host enumeration. Noncanonical networks are rejected, not normalized. Both network and inclusive last addresses are included.
+
+## Steps
+
+- Save the example as recipe.rs.
+- Create input.txt with records in the documented exact format.
+- Run the documented command; inspect the JSON result.
+- Exit 2 means rejected input; no partial successful output is emitted.
+
+## Checks
+
+- Compare the supplied example with its expected output.
+- Check /0, /31 and /32, inclusive boundaries and malformed-input rejection.
+- Review the recorded test evidence before adapting the code.
+
+## Limits
+
+- Standard library only; no Cargo, dependencies, filesystem access, environment inspection, DNS, networking, subprocesses, or firewall changes. Argument access is used only to reject extra arguments.
+- Reads at most 65537 bytes and rejects input larger than 65536 bytes. Accepts at most 100 nonempty records. Requires strict UTF-8 and ASCII records; rejects a leading BOM, CRLF, whitespace variations, comments, and malformed fields.
+- IPv4 only. Prefixes must be canonical decimal integers from 0 through 32. IPv6, hostnames, URLs, wildcard masks, and netmask spellings are unsupported.
+- /0 covers all 4294967296 IPv4 bit patterns; /31 includes both addresses; /32 includes exactly one address. These sizes are not usable-host capacities and are not additional output fields.
+- Results express membership only, not routability, trust, reachability, security, or device availability.
+- Output-write and allocation failures are outside the input-error guarantee.
+- IPv4 text only; no DNS, sockets, IPv6, firewall configuration or security/routability assessment.
+- LF-only ASCII input, at most 65536 bytes and 100 nonempty records. Blank lines ignored; duplicates retained.
+- Network input must have zero host bits. Both network and inclusive last addresses count as members.
+
+## Example input
+
+```text
+192.0.2.129 192.0.2.0/24
+
+```
+
+## Expected output
+
+```text
+{"checks":[{"address":"192.0.2.129","cidr":"192.0.2.0/24","contains":true}]}
+```
+
+## Recorded validation scope
+
+The release gate requires six primary fixtures and 29 supplementary checks in the pinned offline runtime. Actual passing evidence must be recorded for this candidate before approval. This does not prove exhaustive correctness or portability to every runtime.
+
+This scope is copied from the published recipe. Exporting does not rerun its tests or establish additional guarantees.
+
+## Sources
+
+- https://www.rfc-editor.org/rfc/rfc4632
+- https://doc.rust-lang.org/std/io/trait.Read.html
+- https://doc.rust-lang.org/std/primitive.u64.html
