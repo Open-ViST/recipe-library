@@ -36,6 +36,7 @@ Only publicly published recipes are included. Each version retains its exact cod
 | python | [Extract a small project record as JSON](recipes/python/extract-project-json/v1.0.0/README.md) | 1.0.0 |
 | python | [Find overlaps between bounded integer intervals with Python](recipes/python/find-interval-overlaps-python/v0.1.0/README.md) | 0.1.0 |
 | python | [Find compressed gaps in increasing event offsets with Python](recipes/python/find-sequence-gaps-python/v0.1.0/README.md) | 0.1.0 |
+| python | [Inspect IPv4 CIDR network boundaries with Python](recipes/python/inspect-canonical-ipv4-cidr-python/v0.1.0/README.md) | 0.1.0 |
 | python | [Print a concise Chainlink CRE overview from saved documentation](recipes/python/inspect-chainlink-cre-overview/v0.1.0/README.md) | 0.1.0 |
 | python | [Inspect Agent Workflow Nodes in a Local XML File](recipes/python/inspect-xml-agent-workflow-nodes/v0.1.0/README.md) | 0.1.0 |
 | python | [Calculate effective PumpSwap quote reserves from pool values](recipes/python/pump-read-effective-pool-reserves/v0.1.1/README.md) | 0.1.1 |

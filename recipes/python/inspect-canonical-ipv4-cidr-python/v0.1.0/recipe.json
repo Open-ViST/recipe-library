@@ -1,0 +1,55 @@
+{
+  "slug": "inspect-canonical-ipv4-cidr-python",
+  "kind": "static",
+  "title": "Inspect IPv4 CIDR network boundaries with Python",
+  "goal": "Calculate network boundaries, inclusive last addresses and address counts from saved IPv4 CIDR strings without enumerating hosts.",
+  "language": "python",
+  "version": "0.1.0",
+  "license": "MIT",
+  "reviewed_at": "2026-10-18",
+  "intro": "Calculate network boundaries, inclusive last addresses and address counts from saved IPv4 CIDR strings without enumerating hosts. Reads saved text only; never sends network requests.",
+  "requirements": [
+    "Run with Python 3.12 and no CLI arguments. Supply LF-separated CIDR records through standard input; read the compact JSON result from standard output.",
+    "Uses only sys and json. Reads stdin once with sys.stdin.buffer.read(65537), rejects more than 65536 bytes, decodes strict UTF-8, and rejects a leading BOM and all non-ASCII input.",
+    "Ignores exactly empty lines, accepts at most 100 nonempty records, and preserves their order and duplicates. Empty input returns {\"networks\":[]}.",
+    "Requires canonical dotted-decimal IPv4 and a canonical decimal prefix from 0 through 32. Whitespace, comments, membership delimiters, and all other malformed forms are rejected.",
+    "Accepts addresses with host bits set. Computes the network, inclusive last address, address count, and host_bits_set using bounded integer arithmetic without enumerating hosts.",
+    "Validates all input before writing success output. Invalid input, extra arguments, decoding errors, or stdin read failures produce exit status 2, empty stdout, and exactly error: invalid input followed by LF on stderr.",
+    "Success produces exactly the specified networks object followed by LF, exit status 0, and empty stderr."
+  ],
+  "limits": [
+    "IPv4 CIDR records only; no IPv6, hostname resolution, wildcard masks, netmask notation, URL forms, or membership queries.",
+    "Address counts include every bit pattern, not usable-host capacity: /0 contains 4294967296 addresses and /32 contains 1.",
+    "No routability, trust, reachability, security, or device-availability classification is performed.",
+    "No file access, environment inspection, network access, subprocesses, or external dependencies.",
+    "Output-write and allocation failures are outside the input-error guarantee.",
+    "IPv4 text only; no DNS, sockets, IPv6, firewall configuration or security/routability assessment.",
+    "LF-only ASCII input, at most 65536 bytes and 100 nonempty records. Blank lines ignored; duplicates retained.",
+    "Address counts include all bit patterns, not usable hosts."
+  ],
+  "steps": [
+    "Save the example as recipe.py.",
+    "Create input.txt with records in the documented exact format.",
+    "Run the documented command; inspect the JSON result.",
+    "Exit 2 means rejected input; no partial successful output is emitted."
+  ],
+  "checks": [
+    "Compare the supplied example with its expected output.",
+    "Check /0, /31 and /32, inclusive boundaries and malformed-input rejection.",
+    "Review the recorded test evidence before adapting the code."
+  ],
+  "usage": "python3 recipe.py < input.txt",
+  "example_input": "192.0.2.129/24\n",
+  "expected_output": "{\"networks\":[{\"input\":\"192.0.2.129/24\",\"network\":\"192.0.2.0\",\"last\":\"192.0.2.255\",\"prefix\":24,\"address_count\":256,\"host_bits_set\":true}]}",
+  "tested_scope": "The release gate requires six primary fixtures and 29 supplementary checks in the pinned offline runtime. Actual passing evidence must be recorded for this candidate before approval. This does not prove exhaustive correctness or portability to every runtime.",
+  "sources": [
+    "https://www.rfc-editor.org/rfc/rfc4632",
+    "https://docs.python.org/3.12/library/sys.html",
+    "https://docs.python.org/3.12/library/json.html"
+  ],
+  "projects": [],
+  "url": "https://openvist.com/recipes/inspect-canonical-ipv4-cidr-python/",
+  "code_file": "recipe.py",
+  "code_sha256": "75788254cb6b6df3c06f59ccdb27f570dd48924bfba0af583297f1bac49fb941",
+  "published_record_sha256": "1b235abb086b6ea2ecd72a4c1e55126afde4d50b6035342604db74a7a5bdd540"
+}

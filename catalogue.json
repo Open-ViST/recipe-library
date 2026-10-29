@@ -338,6 +338,18 @@
       "code_sha256": "78ee82036ed2520e7a2ea9431df5034ea21920e37eced31d0a09d9c28c960f09"
     },
     {
+      "slug": "inspect-canonical-ipv4-cidr-python",
+      "title": "Inspect IPv4 CIDR network boundaries with Python",
+      "language": "python",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/inspect-canonical-ipv4-cidr-python/",
+      "code": "recipes/python/inspect-canonical-ipv4-cidr-python/v0.1.0/recipe.py",
+      "documentation": "recipes/python/inspect-canonical-ipv4-cidr-python/v0.1.0/README.md",
+      "metadata": "recipes/python/inspect-canonical-ipv4-cidr-python/v0.1.0/recipe.json",
+      "code_sha256": "75788254cb6b6df3c06f59ccdb27f570dd48924bfba0af583297f1bac49fb941"
+    },
+    {
       "slug": "inspect-chainlink-cre-overview",
       "title": "Print a concise Chainlink CRE overview from saved documentation",
       "language": "python",
