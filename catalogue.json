@@ -842,6 +842,18 @@
       "code_sha256": "a2b01842bd192d6f4621aac5332a56c60118abcb7a24e23bc7f52aeb853bfa7b"
     },
     {
+      "slug": "inspect-canonical-ipv4-cidr-rust",
+      "title": "Inspect IPv4 CIDR network boundaries with Rust",
+      "language": "rust",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/inspect-canonical-ipv4-cidr-rust/",
+      "code": "recipes/rust/inspect-canonical-ipv4-cidr-rust/v0.1.0/recipe.rs",
+      "documentation": "recipes/rust/inspect-canonical-ipv4-cidr-rust/v0.1.0/README.md",
+      "metadata": "recipes/rust/inspect-canonical-ipv4-cidr-rust/v0.1.0/recipe.json",
+      "code_sha256": "df04c1964f3f1a20592818041da8dbdf894d34eaa8dac4e441556d6560530d3c"
+    },
+    {
       "slug": "locate-ascii-control-lines-rust",
       "title": "Locate lines containing ASCII control characters with Rust",
       "language": "rust",
