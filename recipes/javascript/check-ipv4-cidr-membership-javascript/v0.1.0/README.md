@@ -1,0 +1,72 @@
+# Check IPv4 address membership in canonical CIDR ranges with JavaScript
+
+Report inclusive membership for saved address and canonical network pairs without DNS, socket access or changing firewall rules.
+
+Published recipe: [check-ipv4-cidr-membership-javascript](https://openvist.com/recipes/check-ipv4-cidr-membership-javascript/)
+
+**Language:** javascript · **Version:** 0.1.0 · **License:** MIT
+
+## Usage
+
+Code file: `recipe.cjs`
+
+node recipe.cjs < input.txt
+
+## Requirements
+
+- Save as recipe.cjs and run with Node.js 22: node recipe.cjs < input.txt. Supply no CLI arguments.
+- Each nonempty LF-separated record must be exactly ADDRESS NETWORK/PREFIX, with one ASCII space. Exactly empty lines are ignored; whitespace is not trimmed. CR, tabs, NUL, comments and non-ASCII characters are rejected.
+- IPv4 addresses must contain exactly four decimal octets from 0 through 255, with no leading zeros except the single digit 0. Prefixes must use canonical decimal spelling from 0 through 32. Networks with nonzero host bits are rejected rather than normalized.
+- Reads at most 65537 stdin bytes and rejects input exceeding 65536 bytes. Accepts at most 100 nonempty records.
+- Uses TextDecoder from node:util with fatal:true and ignoreBOM:true for strict UTF-8 decoding, followed by explicit leading BOM rejection.
+- Validates all input before emitting exactly one compact JSON object followed by LF. Output has only a checks array of objects containing address, cidr and boolean contains. Original spellings, order and duplicates are preserved; empty input produces {"checks":[]}. Success exits 0 with empty stderr.
+- Membership includes network and inclusive last addresses, including both /31 addresses and the sole /32 address. Arithmetic uses exact integers, powers of two and Math.floor without bitwise operations or host enumeration.
+- Invalid input, extra arguments, decoding errors and stdin read failures produce empty stdout, exactly error: invalid input followed by LF on stderr, and exit status 2.
+
+## Steps
+
+- Save the example as recipe.cjs.
+- Create input.txt with records in the documented exact format.
+- Run the documented command; inspect the JSON result.
+- Exit 2 means rejected input; no partial successful output is emitted.
+
+## Checks
+
+- Compare the supplied example with its expected output.
+- Check /0, /31 and /32, inclusive boundaries and malformed-input rejection.
+- Review the recorded test evidence before adapting the code.
+
+## Limits
+
+- Only node:fs and node:util are loaded, for bounded stdin reads and strict decoding. There is no file-path access, environment inspection, network access, DNS, subprocess execution, dependency use or firewall modification.
+- IPv4 membership only; no IPv6, hostnames, URL forms, wildcard masks, alternate netmask forms or silent normalization.
+- Membership makes no statement about routability, trust, reachability, security or device availability. Ranges include all bit patterns, not merely usable hosts; /0 covers 4294967296 addresses and /32 covers one.
+- Output-write and allocation failures are outside the input-error guarantee.
+- IPv4 text only; no DNS, sockets, IPv6, firewall configuration or security/routability assessment.
+- LF-only ASCII input, at most 65536 bytes and 100 nonempty records. Blank lines ignored; duplicates retained.
+- Network input must have zero host bits. Both network and inclusive last addresses count as members.
+
+## Example input
+
+```text
+192.0.2.129 192.0.2.0/24
+
+```
+
+## Expected output
+
+```text
+{"checks":[{"address":"192.0.2.129","cidr":"192.0.2.0/24","contains":true}]}
+```
+
+## Recorded validation scope
+
+The release gate requires six primary fixtures and 29 supplementary checks in the pinned offline runtime. Actual passing evidence must be recorded for this candidate before approval. This does not prove exhaustive correctness or portability to every runtime.
+
+This scope is copied from the published recipe. Exporting does not rerun its tests or establish additional guarantees.
+
+## Sources
+
+- https://www.rfc-editor.org/rfc/rfc4632
+- https://nodejs.org/api/fs.html
+- https://nodejs.org/api/util.html#class-utiltextdecoder

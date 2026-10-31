@@ -12,6 +12,7 @@ Only publicly published recipes are included. Each version retains its exact cod
 | javascript | [Audit request and result pairing in JSON tool events with JavaScript](recipes/javascript/audit-tool-event-pairing-javascript/v0.1.0/README.md) | 0.1.0 |
 | javascript | [Find case-insensitive collisions in tool names with JavaScript](recipes/javascript/audit-tool-name-collisions-javascript/v0.1.0/README.md) | 0.1.0 |
 | javascript | [Audit required configuration keys without exposing values with JavaScript](recipes/javascript/check-env-required-key-manifest-javascript/v0.1.0/README.md) | 0.1.0 |
+| javascript | [Check IPv4 address membership in canonical CIDR ranges with JavaScript](recipes/javascript/check-ipv4-cidr-membership-javascript/v0.1.0/README.md) | 0.1.0 |
 | javascript | [Compare declared permission sets with JavaScript](recipes/javascript/compare-permission-sets-javascript/v0.1.0/README.md) | 0.1.0 |
 | javascript | [Find segment-boundary prefix overlaps in route paths with JavaScript](recipes/javascript/find-route-prefix-overlaps-javascript/v0.1.0/README.md) | 0.1.0 |
 | javascript | [Redact selected configuration assignment values with JavaScript](recipes/javascript/redact-selected-config-values-javascript/v0.1.0/README.md) | 0.1.0 |

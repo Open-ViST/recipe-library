@@ -50,6 +50,18 @@
       "code_sha256": "42220a9ad15fac0f4f1b696de6670f7350ec200ed1c8b1500956cb099760810a"
     },
     {
+      "slug": "check-ipv4-cidr-membership-javascript",
+      "title": "Check IPv4 address membership in canonical CIDR ranges with JavaScript",
+      "language": "javascript",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/check-ipv4-cidr-membership-javascript/",
+      "code": "recipes/javascript/check-ipv4-cidr-membership-javascript/v0.1.0/recipe.cjs",
+      "documentation": "recipes/javascript/check-ipv4-cidr-membership-javascript/v0.1.0/README.md",
+      "metadata": "recipes/javascript/check-ipv4-cidr-membership-javascript/v0.1.0/recipe.json",
+      "code_sha256": "8f49e66559b85003a247afb780043a13ac07e3771dbccfce22de88bae2aaaf18"
+    },
+    {
       "slug": "compare-permission-sets-javascript",
       "title": "Compare declared permission sets with JavaScript",
       "language": "javascript",
