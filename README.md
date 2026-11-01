@@ -15,6 +15,7 @@ Only publicly published recipes are included. Each version retains its exact cod
 | javascript | [Check IPv4 address membership in canonical CIDR ranges with JavaScript](recipes/javascript/check-ipv4-cidr-membership-javascript/v0.1.0/README.md) | 0.1.0 |
 | javascript | [Compare declared permission sets with JavaScript](recipes/javascript/compare-permission-sets-javascript/v0.1.0/README.md) | 0.1.0 |
 | javascript | [Find segment-boundary prefix overlaps in route paths with JavaScript](recipes/javascript/find-route-prefix-overlaps-javascript/v0.1.0/README.md) | 0.1.0 |
+| javascript | [Inspect IPv4 CIDR network boundaries with JavaScript](recipes/javascript/inspect-canonical-ipv4-cidr-javascript/v0.1.0/README.md) | 0.1.0 |
 | javascript | [Redact selected configuration assignment values with JavaScript](recipes/javascript/redact-selected-config-values-javascript/v0.1.0/README.md) | 0.1.0 |
 | javascript | [Sort numeric version cores with JavaScript](recipes/javascript/sort-numeric-version-cores-javascript/v0.1.0/README.md) | 0.1.0 |
 | javascript | [Group HTTP(S) URLs by Hostname from a Local Text File](recipes/javascript/summarize-http-urls-by-hostname/v0.1.0/README.md) | 0.1.0 |

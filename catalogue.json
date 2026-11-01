@@ -86,6 +86,18 @@
       "code_sha256": "25ac2b55ae8243193bc4911997428cca0e2a4bbd753bd15d85d256e71dcb9253"
     },
     {
+      "slug": "inspect-canonical-ipv4-cidr-javascript",
+      "title": "Inspect IPv4 CIDR network boundaries with JavaScript",
+      "language": "javascript",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/inspect-canonical-ipv4-cidr-javascript/",
+      "code": "recipes/javascript/inspect-canonical-ipv4-cidr-javascript/v0.1.0/recipe.cjs",
+      "documentation": "recipes/javascript/inspect-canonical-ipv4-cidr-javascript/v0.1.0/README.md",
+      "metadata": "recipes/javascript/inspect-canonical-ipv4-cidr-javascript/v0.1.0/recipe.json",
+      "code_sha256": "c126d8ae2c104ac5a989b36dcd9706efc77198214ce68cddd1f3cc4786e8c115"
+    },
+    {
       "slug": "redact-selected-config-values-javascript",
       "title": "Redact selected configuration assignment values with JavaScript",
       "language": "javascript",
