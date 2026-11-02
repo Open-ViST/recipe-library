@@ -182,6 +182,18 @@
       "code_sha256": "659f0ac2f225cf81bcc83aee6c3d6a1b35a7fdad04d2437fc04f9af7bd1a1bf8"
     },
     {
+      "slug": "auto-data-a98a82f7bcb47af2b73a",
+      "title": "Calculate signed event balances by group with Python – OpenViST",
+      "language": "python",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/auto-data-a98a82f7bcb47af2b73a/",
+      "code": "recipes/python/auto-data-a98a82f7bcb47af2b73a/v0.1.0/recipe.py",
+      "documentation": "recipes/python/auto-data-a98a82f7bcb47af2b73a/v0.1.0/README.md",
+      "metadata": "recipes/python/auto-data-a98a82f7bcb47af2b73a/v0.1.0/recipe.json",
+      "code_sha256": "5be4ee6894d79ca85ca98bd6d8e4c2221323c6209b075d9247800f7c8289cbe3"
+    },
+    {
       "slug": "call-a-local-model",
       "title": "Call an installed local model",
       "language": "python",

@@ -23,6 +23,7 @@ Only publicly published recipes are included. Each version retains its exact cod
 | python | [Find conflicting values assigned to record IDs with Python](recipes/python/audit-identifier-value-conflicts-python/v0.1.0/README.md) | 0.1.0 |
 | python | [Audit parent references in JSON task records with Python](recipes/python/audit-parent-references-python/v0.1.0/README.md) | 0.1.0 |
 | python | [Check byte ranges against a declared payload size with Python](recipes/python/audit-payload-byte-ranges-python/v0.1.0/README.md) | 0.1.0 |
+| python | [Calculate signed event balances by group with Python – OpenViST](recipes/python/auto-data-a98a82f7bcb47af2b73a/v0.1.0/README.md) | 0.1.0 |
 | python | [Call an installed local model](recipes/python/call-a-local-model/v1.0.0/README.md) | 1.0.0 |
 | python | [Audit required configuration keys without exposing values with Python](recipes/python/check-env-required-key-manifest-python/v0.1.0/README.md) | 0.1.0 |
 | python | [Check IPv4 address membership in canonical CIDR ranges with Python](recipes/python/check-ipv4-cidr-membership-python/v0.1.0/README.md) | 0.1.0 |
