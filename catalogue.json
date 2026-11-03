@@ -182,6 +182,18 @@
       "code_sha256": "659f0ac2f225cf81bcc83aee6c3d6a1b35a7fdad04d2437fc04f9af7bd1a1bf8"
     },
     {
+      "slug": "auto-data-05234cc86013ae69da7d",
+      "title": "Measure event value ranges for each group with Python – OpenViST",
+      "language": "python",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/auto-data-05234cc86013ae69da7d/",
+      "code": "recipes/python/auto-data-05234cc86013ae69da7d/v0.1.0/recipe.py",
+      "documentation": "recipes/python/auto-data-05234cc86013ae69da7d/v0.1.0/README.md",
+      "metadata": "recipes/python/auto-data-05234cc86013ae69da7d/v0.1.0/recipe.json",
+      "code_sha256": "94161e042883537d28634a0acb3f3bb141018178d92469b712ca40dc88ba698a"
+    },
+    {
       "slug": "auto-data-a98a82f7bcb47af2b73a",
       "title": "Calculate signed event balances by group with Python – OpenViST",
       "language": "python",
