@@ -1,0 +1,67 @@
+# Inventory distinct event tags by group after positive values with Python – OpenViST
+
+Keep records whose value is strictly greater than zero. Then build sorted inventories of observed tag names within each group.
+
+Published recipe: [auto-data-b836f230669269d9531b](https://openvist.com/recipes/auto-data-b836f230669269d9531b/)
+
+**Language:** python · **Version:** 0.1.0 · **License:** MIT
+
+## Usage
+
+Code file: `recipe.py`
+
+python3 recipe.py < records.json
+
+## Requirements
+
+- Usage: run with Python 3.12 and no CLI arguments; supply the JSON array on standard input.
+- Uses only sys, json and re. Performs no file access, networking, process creation or dynamic execution.
+- Validates the entire input before filtering or writing stdout, including records with nonpositive values.
+- Keeps only records with value strictly greater than zero, then outputs distinct sorted tags for each surviving group, with groups sorted ascending.
+- Success emits exactly one JSON object and exits 0 without stderr. Input-validation or input-read errors emit no stdout, write one short line beginning error: to stderr, and exit 2.
+
+## Steps
+
+- Save the tested code as recipe.py.
+- Prepare records.json using the exact input schema below.
+- Run python3 recipe.py < records.json.
+- Check exit status before consuming the JSON result; exit 2 indicates rejected input.
+
+## Checks
+
+- Initial examples are compared with a trusted reference result.
+- Additional tests cover input boundaries, invalid encodings and generated record sets. Consult the bound test reports for actual results.
+
+## Limits
+
+- Reads at most 65537 bytes and rejects input longer than 65536 bytes. Input must be strict UTF-8 without a leading BOM.
+- Accepts only a JSON array of 0 to 40 objects with exactly group, value, weight and tag. Rejects duplicate keys at every depth, malformed JSON, trailing non-whitespace, floats and non-finite numeric values.
+- Group and tag must match [a-z][a-z0-9_-]{0,19}. Value must be an integer from -1000000 to 1000000; weight must be an integer from -1000 to 1000. Booleans are rejected.
+- Only distinct_tags is implemented. Groups without surviving records are omitted; no surviving records produces {"groups":[]}.
+- Output write failures are outside the input-error guarantee.
+- All validated input is held in memory; 65536 input bytes and 40 records maximum.
+- The stdin byte limit is not a deadline; reading can wait for EOF. Output write failures are outside the input error contract.
+- Only the documented record schema and this exact workflow are supported; no external data, authentication or integration is provided.
+
+## Example input
+
+```text
+[{"group":"beta","value":5,"weight":2,"tag":"keep"},{"group":"alpha","value":-3,"weight":4,"tag":"ignore"},{"group":"beta","value":5,"weight":2,"tag":"keep"},{"group":"alpha","value":0,"weight":0,"tag":"zero"},{"group":"beta","value":2,"weight":-1,"tag":"other"},{"group":"alpha","value":8,"weight":1,"tag":"keep"}]
+```
+
+## Expected output
+
+```text
+{"groups": [{"group": "alpha", "tags": ["keep"]}, {"group": "beta", "tags": ["keep", "other"]}]}
+```
+
+## Recorded validation scope
+
+Six primary fixtures and 21 supplementary checks in the configured pinned offline Python image. The publication gate requires their passing reports for the exact code, input plan and documentation. These checks do not prove exhaustive correctness or general usefulness.
+
+This scope is copied from the published recipe. Exporting does not rerun its tests or establish additional guarantees.
+
+## Sources
+
+- https://docs.python.org/3.12/library/json.html
+- https://docs.python.org/3.12/library/sys.html

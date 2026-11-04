@@ -194,6 +194,66 @@
       "code_sha256": "94161e042883537d28634a0acb3f3bb141018178d92469b712ca40dc88ba698a"
     },
     {
+      "slug": "auto-data-1d2fc944342f4fd14f78",
+      "title": "Inventory distinct event tags by group with Python – OpenViST",
+      "language": "python",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/auto-data-1d2fc944342f4fd14f78/",
+      "code": "recipes/python/auto-data-1d2fc944342f4fd14f78/v0.1.0/recipe.py",
+      "documentation": "recipes/python/auto-data-1d2fc944342f4fd14f78/v0.1.0/README.md",
+      "metadata": "recipes/python/auto-data-1d2fc944342f4fd14f78/v0.1.0/recipe.json",
+      "code_sha256": "0c15eb56a22c01e02596de62699543c6430304a53e1562a35a8a04a7765be143"
+    },
+    {
+      "slug": "auto-data-414e8cdbdb143d7aa100",
+      "title": "Select each group’s highest-value event with Python – OpenViST",
+      "language": "python",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/auto-data-414e8cdbdb143d7aa100/",
+      "code": "recipes/python/auto-data-414e8cdbdb143d7aa100/v0.1.0/recipe.py",
+      "documentation": "recipes/python/auto-data-414e8cdbdb143d7aa100/v0.1.0/README.md",
+      "metadata": "recipes/python/auto-data-414e8cdbdb143d7aa100/v0.1.0/recipe.json",
+      "code_sha256": "485c5e604941980ff23ffa4de0e70732fe32945904aeaa020777944fb14be929"
+    },
+    {
+      "slug": "auto-data-4ddb24cd3f8435dac51c",
+      "title": "Track running balances within interleaved event groups with Python – OpenViST",
+      "language": "python",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/auto-data-4ddb24cd3f8435dac51c/",
+      "code": "recipes/python/auto-data-4ddb24cd3f8435dac51c/v0.1.0/recipe.py",
+      "documentation": "recipes/python/auto-data-4ddb24cd3f8435dac51c/v0.1.0/README.md",
+      "metadata": "recipes/python/auto-data-4ddb24cd3f8435dac51c/v0.1.0/recipe.json",
+      "code_sha256": "832dac356cd16c7b51f21c7be94b8817a42c70d1a783e589b632ad10fd93e9c6"
+    },
+    {
+      "slug": "auto-data-5308d66ad4da4bdb9ded",
+      "title": "Measure event value ranges for each group after positive values with Python – OpenViST",
+      "language": "python",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/auto-data-5308d66ad4da4bdb9ded/",
+      "code": "recipes/python/auto-data-5308d66ad4da4bdb9ded/v0.1.0/recipe.py",
+      "documentation": "recipes/python/auto-data-5308d66ad4da4bdb9ded/v0.1.0/README.md",
+      "metadata": "recipes/python/auto-data-5308d66ad4da4bdb9ded/v0.1.0/recipe.json",
+      "code_sha256": "7c6ba24b2b21d590aac4f1c3b20d75f4b1721407027e24d06af63a5ac4d6d2d1"
+    },
+    {
+      "slug": "auto-data-5ade2ee50ed0ba50a9f1",
+      "title": "Calculate weighted event totals by group after positive values with Python – OpenViST",
+      "language": "python",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/auto-data-5ade2ee50ed0ba50a9f1/",
+      "code": "recipes/python/auto-data-5ade2ee50ed0ba50a9f1/v0.1.0/recipe.py",
+      "documentation": "recipes/python/auto-data-5ade2ee50ed0ba50a9f1/v0.1.0/README.md",
+      "metadata": "recipes/python/auto-data-5ade2ee50ed0ba50a9f1/v0.1.0/recipe.json",
+      "code_sha256": "7205c5d5240955bfb8482636ac30b2c550e0e0682c28a1c02c33d403d89cc5b1"
+    },
+    {
       "slug": "auto-data-a98a82f7bcb47af2b73a",
       "title": "Calculate signed event balances by group with Python – OpenViST",
       "language": "python",
@@ -204,6 +264,18 @@
       "documentation": "recipes/python/auto-data-a98a82f7bcb47af2b73a/v0.1.0/README.md",
       "metadata": "recipes/python/auto-data-a98a82f7bcb47af2b73a/v0.1.0/recipe.json",
       "code_sha256": "5be4ee6894d79ca85ca98bd6d8e4c2221323c6209b075d9247800f7c8289cbe3"
+    },
+    {
+      "slug": "auto-data-b836f230669269d9531b",
+      "title": "Inventory distinct event tags by group after positive values with Python – OpenViST",
+      "language": "python",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/auto-data-b836f230669269d9531b/",
+      "code": "recipes/python/auto-data-b836f230669269d9531b/v0.1.0/recipe.py",
+      "documentation": "recipes/python/auto-data-b836f230669269d9531b/v0.1.0/README.md",
+      "metadata": "recipes/python/auto-data-b836f230669269d9531b/v0.1.0/recipe.json",
+      "code_sha256": "a1a36f144bf074173b63e06adb81a69561f8e2c7eab8a9ebef681a662b97a8ac"
     },
     {
       "slug": "auto-data-d3f0dc420414baa9bf0f",

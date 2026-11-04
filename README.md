@@ -24,7 +24,13 @@ Only publicly published recipes are included. Each version retains its exact cod
 | python | [Audit parent references in JSON task records with Python](recipes/python/audit-parent-references-python/v0.1.0/README.md) | 0.1.0 |
 | python | [Check byte ranges against a declared payload size with Python](recipes/python/audit-payload-byte-ranges-python/v0.1.0/README.md) | 0.1.0 |
 | python | [Measure event value ranges for each group with Python – OpenViST](recipes/python/auto-data-05234cc86013ae69da7d/v0.1.0/README.md) | 0.1.0 |
+| python | [Inventory distinct event tags by group with Python – OpenViST](recipes/python/auto-data-1d2fc944342f4fd14f78/v0.1.0/README.md) | 0.1.0 |
+| python | [Select each group’s highest-value event with Python – OpenViST](recipes/python/auto-data-414e8cdbdb143d7aa100/v0.1.0/README.md) | 0.1.0 |
+| python | [Track running balances within interleaved event groups with Python – OpenViST](recipes/python/auto-data-4ddb24cd3f8435dac51c/v0.1.0/README.md) | 0.1.0 |
+| python | [Measure event value ranges for each group after positive values with Python – OpenViST](recipes/python/auto-data-5308d66ad4da4bdb9ded/v0.1.0/README.md) | 0.1.0 |
+| python | [Calculate weighted event totals by group after positive values with Python – OpenViST](recipes/python/auto-data-5ade2ee50ed0ba50a9f1/v0.1.0/README.md) | 0.1.0 |
 | python | [Calculate signed event balances by group with Python – OpenViST](recipes/python/auto-data-a98a82f7bcb47af2b73a/v0.1.0/README.md) | 0.1.0 |
+| python | [Inventory distinct event tags by group after positive values with Python – OpenViST](recipes/python/auto-data-b836f230669269d9531b/v0.1.0/README.md) | 0.1.0 |
 | python | [Calculate weighted event totals by group with Python – OpenViST](recipes/python/auto-data-d3f0dc420414baa9bf0f/v0.1.0/README.md) | 0.1.0 |
 | python | [Call an installed local model](recipes/python/call-a-local-model/v1.0.0/README.md) | 1.0.0 |
 | python | [Audit required configuration keys without exposing values with Python](recipes/python/check-env-required-key-manifest-python/v0.1.0/README.md) | 0.1.0 |
