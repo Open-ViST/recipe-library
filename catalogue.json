@@ -290,6 +290,18 @@
       "code_sha256": "ba8e7633f12e12e1e5617caa07c0590aed1cb46eb483fa0aef34e326a0e26777"
     },
     {
+      "slug": "auto-data-e8fe6621ae6783c3ed40",
+      "title": "Track running balances within interleaved event groups after positive values with Python – OpenViST",
+      "language": "python",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/auto-data-e8fe6621ae6783c3ed40/",
+      "code": "recipes/python/auto-data-e8fe6621ae6783c3ed40/v0.1.0/recipe.py",
+      "documentation": "recipes/python/auto-data-e8fe6621ae6783c3ed40/v0.1.0/README.md",
+      "metadata": "recipes/python/auto-data-e8fe6621ae6783c3ed40/v0.1.0/recipe.json",
+      "code_sha256": "ce58518d2ec8b73893b2e2cb00568a45a446c53f4115a51a484636756743335a"
+    },
+    {
       "slug": "call-a-local-model",
       "title": "Call an installed local model",
       "language": "python",

@@ -32,6 +32,7 @@ Only publicly published recipes are included. Each version retains its exact cod
 | python | [Calculate signed event balances by group with Python – OpenViST](recipes/python/auto-data-a98a82f7bcb47af2b73a/v0.1.0/README.md) | 0.1.0 |
 | python | [Inventory distinct event tags by group after positive values with Python – OpenViST](recipes/python/auto-data-b836f230669269d9531b/v0.1.0/README.md) | 0.1.0 |
 | python | [Calculate weighted event totals by group with Python – OpenViST](recipes/python/auto-data-d3f0dc420414baa9bf0f/v0.1.0/README.md) | 0.1.0 |
+| python | [Track running balances within interleaved event groups after positive values with Python – OpenViST](recipes/python/auto-data-e8fe6621ae6783c3ed40/v0.1.0/README.md) | 0.1.0 |
 | python | [Call an installed local model](recipes/python/call-a-local-model/v1.0.0/README.md) | 1.0.0 |
 | python | [Audit required configuration keys without exposing values with Python](recipes/python/check-env-required-key-manifest-python/v0.1.0/README.md) | 0.1.0 |
 | python | [Check IPv4 address membership in canonical CIDR ranges with Python](recipes/python/check-ipv4-cidr-membership-python/v0.1.0/README.md) | 0.1.0 |
