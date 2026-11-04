@@ -206,6 +206,18 @@
       "code_sha256": "5be4ee6894d79ca85ca98bd6d8e4c2221323c6209b075d9247800f7c8289cbe3"
     },
     {
+      "slug": "auto-data-d3f0dc420414baa9bf0f",
+      "title": "Calculate weighted event totals by group with Python – OpenViST",
+      "language": "python",
+      "version": "0.1.0",
+      "license": "MIT",
+      "url": "https://openvist.com/recipes/auto-data-d3f0dc420414baa9bf0f/",
+      "code": "recipes/python/auto-data-d3f0dc420414baa9bf0f/v0.1.0/recipe.py",
+      "documentation": "recipes/python/auto-data-d3f0dc420414baa9bf0f/v0.1.0/README.md",
+      "metadata": "recipes/python/auto-data-d3f0dc420414baa9bf0f/v0.1.0/recipe.json",
+      "code_sha256": "ba8e7633f12e12e1e5617caa07c0590aed1cb46eb483fa0aef34e326a0e26777"
+    },
+    {
       "slug": "call-a-local-model",
       "title": "Call an installed local model",
       "language": "python",
